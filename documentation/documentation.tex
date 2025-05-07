@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{amsmath, amssymb, braket}
 \usepackage{listings}
+\usepackage{mdframed}
 \usepackage{tikz}
 \usetikzlibrary{shapes, arrows, automata, petri, decorations.markings, decorations.pathreplacing, positioning, calc}
 
@@ -18,6 +19,9 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+
+
 
 \lstdefinestyle{mystyle}{
 	backgroundcolor=\color{backcolour},
@@ -69,5 +73,29 @@ Irimie Fabio - VR501504
 \pagebreak
 
 \section{Requisiti e Use Case}
+
+\subsection{Note generali}
+
+Il software che si andrà a sviluppare è un sistema di telemedicina di un servizio clinico per la gestione
+di pazienti diabetici. Gli attori principali del sistema sono i \textit{medici} (diabetologi) e i \textit{pazienti}; questi ultimi
+hanno credenziali di accesso al sistema fornite dagli amministratori del servizio con cui possono autenticarsi.
+Se l'autenticazione va a buon fine allora l'utente verrà indirizzato alla propria \textit{home page} in cui potrà
+visualizzare le informazioni relative al loro ruolo. Nel seguente diagramma dei casi d'uso sono rappresentati
+i principali attori e le loro interazioni con il sistema. Notare che diamo per scontato che tutti gli autori siano già autenticati
+per semplificare il diagramma.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{usecase}
+	\caption{Diagramma dei casi d'uso}
+	\label{fig:usecase}
+\end{figure}
+
+\subsection{Casi d'uso del paziente}
+
+Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, 
+
+
+
 
 \end{document}
