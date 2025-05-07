@@ -3,10 +3,11 @@
 \graphicspath{{./figures/}}
 \usepackage[italian]{babel}
 \usepackage{float}
-\usepackage{amsmath, amssymb, braket}
+\usepackage{braket}
 \usepackage{listings}
 \usepackage{mdframed}
 \usepackage{tikz}
+\usepackage{enumitem}
 \usetikzlibrary{shapes, arrows, automata, petri, decorations.markings, decorations.pathreplacing, positioning, calc}
 
 \usepackage{hyperref}
@@ -19,9 +20,6 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.95}
-
-
-
 
 \lstdefinestyle{mystyle}{
 	backgroundcolor=\color{backcolour},
@@ -95,7 +93,15 @@ per semplificare il diagramma.
 
 Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, 
 
-
-
+\begin{mdframed}
+  \textbf{Attore}: Medico\\
+  \textbf{Precondizioni}: Il medico deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item 
+    \item 
+  \end{enumerate}
+  \textbf{Postcondizioni}:
+\end{mdframed}
 
 \end{document}

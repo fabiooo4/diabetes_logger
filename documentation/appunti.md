@@ -35,7 +35,7 @@ Autenticazione necessaria per l'utente
 - Autenticarsi
 - Memorizzare rilevazioni giornalere di glicemia (prima e dopo ogni pasto)
   - Sintomi
-  - Assuzione della terapia
+  - Rilevazione glicemia
   - Eventuali altre patologie o terapie
 
 ## Medico
@@ -47,12 +47,12 @@ Autenticazione necessaria per l'utente
   - Quantità da assumere
   - Eventuali indicazioni
 - Vedere i dati dei pazienti
+- Modificare dati del paziente
 - Aggiungere o modificare la terapia di un paziente
 - Aggiungere o modificare info extra sul paziente
   - Fattori di rischio
   - Patologie pregresse
   - Comorbidità
-- Vedere o modificare dati del paziente
 
 ## Sistema
 - Verificare che i pazienti seguano le terapie dei medici
