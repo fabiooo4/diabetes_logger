@@ -91,17 +91,225 @@ per semplificare il diagramma.
 
 \subsection{Casi d'uso del paziente}
 
-Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, 
+Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, egli può
+inserire i dati giornalieri relativi alla sua glicemia (prima e dopo ogni pasto); per fare questo
+ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali altre patologie o terapie.
+
+\subsubsection{Inserimento dei dati giornalieri}
 
 \begin{mdframed}
-  \textbf{Attore}: Medico\\
-  \textbf{Precondizioni}: Il medico deve essere autenticato\\
+  \textbf{Attore}: Paziente\\
+  \textbf{Precondizioni}: Il paziente deve essere autenticato\\
   \textbf{Passi}: 
   \begin{enumerate}[nosep]
-    \item 
-    \item 
+    \item Il paziente accede alla sua home page
+    \item Il paziente entra dentro l'area di inserimento dei dati giornalieri
+    \item  Il paziente inserisce il dato della sua glicemia prima pasto e dopo pasto
+    \begin{itemize}
+		\item  Il paziente può aprire un ulteriore finestra per inserire i sintomi, le terapie e le patologie, con oppurtuna data 
+		\item  Può anche inserire le assunzioni di insulina o qualsiasi farmaco prescritto dal diabetologo, specificandone giorno, ora, farmaco e quantità assunta
+	\end{itemize}
+	\item Il paziente inserisce la data e ora di rilevazione
+	\item Il paziente conferma l'inserimento dei dati
   \end{enumerate}
-  \textbf{Postcondizioni}:
+  \textbf{Postcondizioni}: La rilevazione è inserita 
 \end{mdframed}
+\noindent
+Andiamo a specificare come viene gestito \textbf{l'inserimento dei dati} del paziente: i dati glicemici sono quelli
+che il paziente inserisce giornalmente e obbligatori per inviare le rilevazioni. Dopo aver inserito i dati, l'utente può anche:
+\begin{itemize}
+	\item inserire specifiche sulla patalogia, terapia o sintomi
+	\item inserire le assunzioni di insulina o qualsiasi altro farmo prescritto dal diabetologo
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{sdPaziente}
+	\caption{Sequence Diagram della rilevazione del paziente}
+	\label{fig:sdPaziente}
+\end{figure}
+
+\subsection{Casi d'uso del medico}
+
+\subsubsection{Visualizzare i dati del paziente}
+
+\begin{mdframed}
+	\textbf{Attore}: Medico\\
+	\textbf{Precondizioni}: Il medico deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item Il medico accede alla sua area riservata
+	  \item Il medico può accedere alla lista dei pazienti
+	  \item Il medico può visualizzare i dati del paziente e lo storico delle rilevazioni
+	\end{enumerate}
+	\textbf{Postcondizioni}: nessuna
+  \end{mdframed}
+\noindent
+Il medico una volta che ha acceduto alla sua area riservata può visualizzare i dati di tutti i pazienti. 
+
+\subsubsection{Modificare i dati del paziente}
+\begin{mdframed}
+	\textbf{Attore}: Medico\\
+	\textbf{Precondizioni}: Il medico deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item Il medico accede alla sua area riservata
+	  \item Il medico accede alla lista dei pazienti
+	  \item Il medico seleziona il paziente che vuole gestire
+	  \item Il medico può decidere tra le seguenti opzioni:
+	  \begin{itemize}
+		\item Aggiungere o modificare la terapia del paziente
+		\item Aggiungere o modificare le note di un paziente
+	  \end{itemize}
+	  \item Il medico conferma le modifiche
+	  \item Il sistema aggiorna i dati del paziente
+	\end{enumerate}
+	\textbf{Postcondizioni}: La modifica è effettuata\\
+	\textbf{Sequenza alternativa 1}: il medico può in qualunque momento decidere di annullare le modifiche
+	e ritornare alla lista dei pazienti\\
+	\textbf{Postcondizioni}: La modifica non è effettuata
+  \end{mdframed}
+  \noindent
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{sdMedico}
+	\caption{Sequence Diagram del medico}
+	\label{fig:sdMedico}
+\end{figure}
+
+\subsection{Ricezione delle notifiche}
+
+Il paziente può ricevere notifiche dal sistema; se il pazienta si dimentica di assumere i farmaci
+il sistema può inviare una notifica per ricordarglielo. 
+
+\begin{mdframed}
+	\textbf{Attore}: Paziente o Medico\\
+	\textbf{Precondizioni}: Il paziente o medico deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item Il paziente o medico accede alla sua home page
+	  \item Il paziente o medico entra dentro la sezione delle notifiche
+	  \item  Il paziente o medico può visualizzare:
+	  \begin{itemize}
+		  \item  Notifiche già lette
+		  \item  Notifiche non lette
+	  \end{itemize}
+	\end{enumerate}
+	\textbf{Postcondizioni}: Se viene visualizzata una notifica, questa viene marcata come letta
+  \end{mdframed}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{sdNotifList.pdf}
+	\caption{Sequence Diagram della notifica con lista}
+	\label{fig:sdNotifList}
+\end{figure}
+\noindent
+Il sistema invia delle notifiche ai seguenti attori:
+\begin{itemize}
+	\item \textbf{Al paziente}: per ricordargli di inserire i dati giornalieri
+	\item \textbf{Al medico di riferimento del paziente}: per avvisare che il paziente  
+	non ha seguito per più di tre giorni consecutivi le prescrizioni.
+	\item \textbf{A tutti i medici}: per segnalare i pazienti che registrano
+	livelli di glicemia sopra le soglie indicate.
+\end{itemize}
+
+\subsection{Casi d'uso dell'amministratore}
+
+L'amministratore del servizio può gestire gli utenti del sistema. Si occupa di creare, modificare e cancellare
+gli account dei pazienti e dei medici. Per agevolare l'aggiunta di utenti, ci si può registrare
+tramite un form di registrazione (che specificherà il ruolo), ma l'amministratore deve comunque
+approvare la registrazione per rendere l'utente attivo nel sistema.
+
+\subsubsection{Gestione dell'utente}
+
+\begin{mdframed}
+	\textbf{Attore}: Amministratore\\
+	\textbf{Precondizioni}: L'amministratore deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item L'amministratore accede alla sua area riservata
+	  \item L'amministratore visualizza la lista degli utenti
+	  \item L'amministratore può:
+	  \begin{itemize}
+		  \item  Creare un nuovo utente
+		  \item  Modificare un utente
+		  \item  Cancellare un utente
+	  \end{itemize}
+	\end{enumerate}
+	\textbf{Postcondizioni}: L'utente è creato, modificato o cancellato
+  \end{mdframed}
+
+\subsubsection{Gestione delle richieste di registrazione}
+
+\begin{mdframed}
+	\textbf{Attore}: Amministratore\\
+	\textbf{Precondizioni}: L'amministratore deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item L'amministratore accede alla sua area riservata
+	  \item L'amministratore visualizza la lista delle richieste
+	  \item Seleziona una richiesta di registrazione
+	  \item L'amministratore può:
+	  \begin{itemize}
+		  \item  Accettare una registrazione
+		  \item  Rifiutare una registrazione
+	  \end{itemize}
+	\end{enumerate}
+	\textbf{Postcondizioni}: L'utente è accettato o rifiutato
+  \end{mdframed}
+
+\subsection{Visualizzazione della traccia dei medici}
+
+Il sistema tiene traccia di ogni cambiamento o modifica che i medici effettuano sui pazienti, per 
+ragioni di sicurezza.
+
+\begin{itemize}
+	\item L'amministratore può visualizzare questa traccia per verificare 
+	che i medici non stiano effettuando operazioni non autorizzate.
+	\item Il medico può visualizzare la traccia per verificare le operazioni effettuate
+	precedentemente su un paziente da parte di altri medici
+\end{itemize}
+
+\begin{mdframed}
+	\textbf{Attore}: Amministratore\\
+	\textbf{Precondizioni}: L'amministratore deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item L'amministratore accede alla sua area riservata
+	  \item L'amministratore accede alla pagina di visualizzazione delle tracce 
+	\end{enumerate}
+	\textbf{Postcondizioni}: nessuna
+\end{mdframed}
+
+\begin{mdframed}
+	\textbf{Attore}: Medico\\
+	\textbf{Precondizioni}: Il medico deve essere autenticato\\
+	\textbf{Passi}: 
+	\begin{enumerate}[nosep]
+	  \item Il medico accede alla sua area riservata
+	  \item Il medico accede alla pagina di visualizzazione dei pazienti
+	  \item Il medico seleziona il paziente di cui vuole visualizzare la traccia
+	  \item Il medico accede alla schermata di visualizzazione della traccia dell'utente
+	\end{enumerate}
+	\textbf{Postcondizioni}: nessuna
+\end{mdframed}
+
+
+\subsection{Activity diagram}
+I seguenti diagrammi delle attività 
+
+\subsubsection{Registrazione di un utente}
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{adRegistrazione}
+  \end{center}
+  \caption{Activity diagram della registrazione di un utente}
+  \label{fig:adRegistrazione}
+\end{figure}
+
+
 
 \end{document}
