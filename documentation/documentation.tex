@@ -12,7 +12,7 @@
 
 \usepackage{hyperref}
 \hypersetup{
-    colorlinks=false,
+  colorlinks=false,
 }
 
 % Code blocks
@@ -22,22 +22,22 @@
 \definecolor{backcolour}{rgb}{0.95,0.95,0.95}
 
 \lstdefinestyle{mystyle}{
-	backgroundcolor=\color{backcolour},
-	commentstyle=\color{codegreen},
-	keywordstyle=\color{magenta},
-	numberstyle=\tiny\color{codegray},
-	stringstyle=\color{codepurple},
-	basicstyle=\ttfamily\footnotesize,
-	breakatwhitespace=false,
-	breaklines=true,
-	captionpos=b,
-	keepspaces=true,
-	numbers=left,
-	numbersep=5pt,
-	showspaces=false,
-	showstringspaces=false,
-	showtabs=false,
-	tabsize=2
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2
 }
 
 \lstset{style=mystyle}
@@ -46,19 +46,19 @@
 
 % Title ------------------------------------------------------------------------------
 \title{Documentazione progetto Ingegneria del Software\\[1ex]
-\large Software di gestione dei pazienti diabetici
+  \large Software di gestione dei pazienti diabetici
 }
 
 \author{
-\vspace{0.8cm}
-Università di Verona\\
-Imbriani Paolo - VR500437\\
-Irimie Fabio - VR501504
+  \vspace{0.8cm}
+  Università di Verona\\
+  Imbriani Paolo - VR500437\\
+  Irimie Fabio - VR501504
 }
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.3\textwidth]{UniversityofVerona}
+  \centering
+  \includegraphics[width=0.3\textwidth]{UniversityofVerona}
 \end{figure}
 
 \maketitle 
@@ -83,10 +83,10 @@ i principali attori e le loro interazioni con il sistema. Notare che diamo per s
 per semplificare il diagramma.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{usecase}
-	\caption{Diagramma dei casi d'uso}
-	\label{fig:usecase}
+  \centering
+  \includegraphics[width=0.7\textwidth]{usecase}
+  \caption{Diagramma dei casi d'uso}
+  \label{fig:usecase}
 \end{figure}
 
 \subsection{Casi d'uso del paziente}
@@ -105,12 +105,12 @@ ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali alt
     \item Il paziente accede alla sua home page
     \item Il paziente entra dentro l'area di inserimento dei dati giornalieri
     \item  Il paziente inserisce il dato della sua glicemia prima pasto e dopo pasto
-    \begin{itemize}
-		\item  Il paziente può aprire un ulteriore finestra per inserire i sintomi, le terapie e le patologie, con oppurtuna data 
-		\item  Può anche inserire le assunzioni di insulina o qualsiasi farmaco prescritto dal diabetologo, specificandone giorno, ora, farmaco e quantità assunta
-	\end{itemize}
-	\item Il paziente inserisce la data e ora di rilevazione
-	\item Il paziente conferma l'inserimento dei dati
+      \begin{itemize}
+        \item  Il paziente può aprire un ulteriore finestra per inserire i sintomi, le terapie e le patologie, con oppurtuna data 
+        \item  Può anche inserire le assunzioni di insulina o qualsiasi farmaco prescritto dal diabetologo, specificandone giorno, ora, farmaco e quantità assunta
+      \end{itemize}
+    \item Il paziente inserisce la data e ora di rilevazione
+    \item Il paziente conferma l'inserimento dei dati
   \end{enumerate}
   \textbf{Postcondizioni}: La rilevazione è inserita 
 \end{mdframed}
@@ -118,15 +118,15 @@ ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali alt
 Andiamo a specificare come viene gestito \textbf{l'inserimento dei dati} del paziente: i dati glicemici sono quelli
 che il paziente inserisce giornalmente e obbligatori per inviare le rilevazioni. Dopo aver inserito i dati, l'utente può anche:
 \begin{itemize}
-	\item inserire specifiche sulla patalogia, terapia o sintomi
-	\item inserire le assunzioni di insulina o qualsiasi altro farmo prescritto dal diabetologo
+  \item inserire specifiche sulla patalogia, terapia o sintomi
+  \item inserire le assunzioni di insulina o qualsiasi altro farmo prescritto dal diabetologo
 \end{itemize}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{sdPaziente}
-	\caption{Sequence Diagram della rilevazione del paziente}
-	\label{fig:sdPaziente}
+  \centering
+  \includegraphics[width=0.7\textwidth]{sdPaziente}
+  \caption{Sequence Diagram della rilevazione del paziente}
+  \label{fig:sdPaziente}
 \end{figure}
 
 \subsection{Casi d'uso del medico}
@@ -134,48 +134,48 @@ che il paziente inserisce giornalmente e obbligatori per inviare le rilevazioni.
 \subsubsection{Visualizzare i dati del paziente}
 
 \begin{mdframed}
-	\textbf{Attore}: Medico\\
-	\textbf{Precondizioni}: Il medico deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item Il medico accede alla sua area riservata
-	  \item Il medico può accedere alla lista dei pazienti
-	  \item Il medico può visualizzare i dati del paziente e lo storico delle rilevazioni
-	\end{enumerate}
-	\textbf{Postcondizioni}: nessuna
-  \end{mdframed}
+  \textbf{Attore}: Medico\\
+  \textbf{Precondizioni}: Il medico deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item Il medico accede alla sua area riservata
+    \item Il medico può accedere alla lista dei pazienti
+    \item Il medico può visualizzare i dati del paziente e lo storico delle rilevazioni
+  \end{enumerate}
+  \textbf{Postcondizioni}: nessuna
+\end{mdframed}
 \noindent
 Il medico una volta che ha acceduto alla sua area riservata può visualizzare i dati di tutti i pazienti. 
 
 \subsubsection{Modificare i dati del paziente}
 \begin{mdframed}
-	\textbf{Attore}: Medico\\
-	\textbf{Precondizioni}: Il medico deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item Il medico accede alla sua area riservata
-	  \item Il medico accede alla lista dei pazienti
-	  \item Il medico seleziona il paziente che vuole gestire
-	  \item Il medico può decidere tra le seguenti opzioni:
-	  \begin{itemize}
-		\item Aggiungere o modificare la terapia del paziente
-		\item Aggiungere o modificare le note di un paziente
-	  \end{itemize}
-	  \item Il medico conferma le modifiche
-	  \item Il sistema aggiorna i dati del paziente
-	\end{enumerate}
-	\textbf{Postcondizioni}: La modifica è effettuata\\
-	\textbf{Sequenza alternativa 1}: il medico può in qualunque momento decidere di annullare le modifiche
-	e ritornare alla lista dei pazienti\\
-	\textbf{Postcondizioni}: La modifica non è effettuata
-  \end{mdframed}
-  \noindent
+  \textbf{Attore}: Medico\\
+  \textbf{Precondizioni}: Il medico deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item Il medico accede alla sua area riservata
+    \item Il medico accede alla lista dei pazienti
+    \item Il medico seleziona il paziente che vuole gestire
+    \item Il medico può decidere tra le seguenti opzioni:
+      \begin{itemize}
+        \item Aggiungere o modificare la terapia del paziente
+        \item Aggiungere o modificare le note di un paziente
+      \end{itemize}
+    \item Il medico conferma le modifiche
+    \item Il sistema aggiorna i dati del paziente
+  \end{enumerate}
+  \textbf{Postcondizioni}: La modifica è effettuata\\
+  \textbf{Sequenza alternativa 1}: il medico può in qualunque momento decidere di annullare le modifiche
+  e ritornare alla lista dei pazienti\\
+  \textbf{Postcondizioni}: La modifica non è effettuata
+\end{mdframed}
+\noindent
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.65\textwidth]{sdMedico}
-	\caption{Sequence Diagram del medico}
-	\label{fig:sdMedico}
+  \centering
+  \includegraphics[width=0.65\textwidth]{sdMedico}
+  \caption{Sequence Diagram del medico}
+  \label{fig:sdMedico}
 \end{figure}
 
 \subsection{Ricezione delle notifiche}
@@ -184,36 +184,36 @@ Il paziente può ricevere notifiche dal sistema; se il pazienta si dimentica di 
 il sistema può inviare una notifica per ricordarglielo. 
 
 \begin{mdframed}
-	\textbf{Attore}: Paziente o Medico\\
-	\textbf{Precondizioni}: Il paziente o medico deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item Il paziente o medico accede alla sua home page
-	  \item Il paziente o medico entra dentro la sezione delle notifiche
-	  \item  Il paziente o medico può visualizzare:
-	  \begin{itemize}
-		  \item  Notifiche già lette
-		  \item  Notifiche non lette
-	  \end{itemize}
-	\end{enumerate}
-	\textbf{Postcondizioni}: Se viene visualizzata una notifica, questa viene marcata come letta
-  \end{mdframed}
+  \textbf{Attore}: Paziente o Medico\\
+  \textbf{Precondizioni}: Il paziente o medico deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item Il paziente o medico accede alla sua home page
+    \item Il paziente o medico entra dentro la sezione delle notifiche
+    \item  Il paziente o medico può visualizzare:
+      \begin{itemize}
+        \item  Notifiche già lette
+        \item  Notifiche non lette
+      \end{itemize}
+  \end{enumerate}
+  \textbf{Postcondizioni}: Se viene visualizzata una notifica, questa viene marcata come letta
+\end{mdframed}
 
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{sdNotifList.pdf}
-	\caption{Sequence Diagram della notifica con lista}
-	\label{fig:sdNotifList}
+  \centering
+  \includegraphics[width=0.7\textwidth]{sdNotifList.pdf}
+  \caption{Sequence Diagram della notifica con lista}
+  \label{fig:sdNotifList}
 \end{figure}
 \noindent
 Il sistema invia delle notifiche ai seguenti attori:
 \begin{itemize}
-	\item \textbf{Al paziente}: per ricordargli di inserire i dati giornalieri
-	\item \textbf{Al medico di riferimento del paziente}: per avvisare che il paziente  
-	non ha seguito per più di tre giorni consecutivi le prescrizioni.
-	\item \textbf{A tutti i medici}: per segnalare i pazienti che registrano
-	livelli di glicemia sopra le soglie indicate.
+  \item \textbf{Al paziente}: per ricordargli di inserire i dati giornalieri
+  \item \textbf{Al medico di riferimento del paziente}: per avvisare che il paziente  
+    non ha seguito per più di tre giorni consecutivi le prescrizioni.
+  \item \textbf{A tutti i medici}: per segnalare i pazienti che registrano
+    livelli di glicemia sopra le soglie indicate.
 \end{itemize}
 
 \subsection{Casi d'uso dell'amministratore}
@@ -226,40 +226,40 @@ approvare la registrazione per rendere l'utente attivo nel sistema.
 \subsubsection{Gestione dell'utente}
 
 \begin{mdframed}
-	\textbf{Attore}: Amministratore\\
-	\textbf{Precondizioni}: L'amministratore deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item L'amministratore accede alla sua area riservata
-	  \item L'amministratore visualizza la lista degli utenti
-	  \item L'amministratore può:
-	  \begin{itemize}
-		  \item  Creare un nuovo utente
-		  \item  Modificare un utente
-		  \item  Cancellare un utente
-	  \end{itemize}
-	\end{enumerate}
-	\textbf{Postcondizioni}: L'utente è creato, modificato o cancellato
-  \end{mdframed}
+  \textbf{Attore}: Amministratore\\
+  \textbf{Precondizioni}: L'amministratore deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item L'amministratore accede alla sua area riservata
+    \item L'amministratore visualizza la lista degli utenti
+    \item L'amministratore può:
+      \begin{itemize}
+        \item  Creare un nuovo utente
+        \item  Modificare un utente
+        \item  Cancellare un utente
+      \end{itemize}
+  \end{enumerate}
+  \textbf{Postcondizioni}: L'utente è creato, modificato o cancellato
+\end{mdframed}
 
 \subsubsection{Gestione delle richieste di registrazione}
 
 \begin{mdframed}
-	\textbf{Attore}: Amministratore\\
-	\textbf{Precondizioni}: L'amministratore deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item L'amministratore accede alla sua area riservata
-	  \item L'amministratore visualizza la lista delle richieste
-	  \item Seleziona una richiesta di registrazione
-	  \item L'amministratore può:
-	  \begin{itemize}
-		  \item  Accettare una registrazione
-		  \item  Rifiutare una registrazione
-	  \end{itemize}
-	\end{enumerate}
-	\textbf{Postcondizioni}: L'utente è accettato o rifiutato
-  \end{mdframed}
+  \textbf{Attore}: Amministratore\\
+  \textbf{Precondizioni}: L'amministratore deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item L'amministratore accede alla sua area riservata
+    \item L'amministratore visualizza la lista delle richieste
+    \item Seleziona una richiesta di registrazione
+    \item L'amministratore può:
+      \begin{itemize}
+        \item  Accettare una registrazione
+        \item  Rifiutare una registrazione
+      \end{itemize}
+  \end{enumerate}
+  \textbf{Postcondizioni}: L'utente è accettato o rifiutato
+\end{mdframed}
 
 \subsection{Visualizzazione della traccia dei medici}
 
@@ -267,49 +267,84 @@ Il sistema tiene traccia di ogni cambiamento o modifica che i medici effettuano 
 ragioni di sicurezza.
 
 \begin{itemize}
-	\item L'amministratore può visualizzare questa traccia per verificare 
-	che i medici non stiano effettuando operazioni non autorizzate.
-	\item Il medico può visualizzare la traccia per verificare le operazioni effettuate
-	precedentemente su un paziente da parte di altri medici
+  \item L'amministratore può visualizzare questa traccia per verificare 
+    che i medici non stiano effettuando operazioni non autorizzate.
+  \item Il medico può visualizzare la traccia per verificare le operazioni effettuate
+    precedentemente su un paziente da parte di altri medici
 \end{itemize}
 
 \begin{mdframed}
-	\textbf{Attore}: Amministratore\\
-	\textbf{Precondizioni}: L'amministratore deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item L'amministratore accede alla sua area riservata
-	  \item L'amministratore accede alla pagina di visualizzazione delle tracce 
-	\end{enumerate}
-	\textbf{Postcondizioni}: nessuna
+  \textbf{Attore}: Amministratore\\
+  \textbf{Precondizioni}: L'amministratore deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item L'amministratore accede alla sua area riservata
+    \item L'amministratore accede alla pagina di visualizzazione delle tracce 
+  \end{enumerate}
+  \textbf{Postcondizioni}: nessuna
 \end{mdframed}
 
 \begin{mdframed}
-	\textbf{Attore}: Medico\\
-	\textbf{Precondizioni}: Il medico deve essere autenticato\\
-	\textbf{Passi}: 
-	\begin{enumerate}[nosep]
-	  \item Il medico accede alla sua area riservata
-	  \item Il medico accede alla pagina di visualizzazione dei pazienti
-	  \item Il medico seleziona il paziente di cui vuole visualizzare la traccia
-	  \item Il medico accede alla schermata di visualizzazione della traccia dell'utente
-	\end{enumerate}
-	\textbf{Postcondizioni}: nessuna
+  \textbf{Attore}: Medico\\
+  \textbf{Precondizioni}: Il medico deve essere autenticato\\
+  \textbf{Passi}: 
+  \begin{enumerate}[nosep]
+    \item Il medico accede alla sua area riservata
+    \item Il medico accede alla pagina di visualizzazione dei pazienti
+    \item Il medico seleziona il paziente di cui vuole visualizzare la traccia
+    \item Il medico accede alla schermata di visualizzazione della traccia dell'utente
+  \end{enumerate}
+  \textbf{Postcondizioni}: nessuna
 \end{mdframed}
 
 
 \subsection{Activity diagram}
-I seguenti diagrammi delle attività 
+
+Per semplicità non verrà rappresentato il fatto di poter ripetere le operazioni più volte,
+ma si darà per scontato che l'utente possa tornare indietro e ripetere senza riavviare
+il software. Vengono quindi rappresentate soltanto le singole attività di operazione.
+
+Si da inoltre per scontato che per ogni attività (tranne la registrazione) l'utente sia
+già autenticato e che non ci siano errori di autenticazione.
 
 \subsubsection{Registrazione di un utente}
+
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{adRegistrazione}
+    \includegraphics[width=0.4\textwidth]{adRegistrazione}
   \end{center}
   \caption{Activity diagram della registrazione di un utente}
   \label{fig:adRegistrazione}
 \end{figure}
 
+\subsubsection{Attività del paziente}
 
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{adPaziente}
+  \end{center}
+  \caption{Activity diagram del paziente}
+  \label{fig:adPaziente}
+\end{figure}
+
+\subsubsection{Attività del medico}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{adMedico}
+  \end{center}
+  \caption{Activity diagram del medico}
+  \label{fig:adMedico}
+\end{figure}
+
+\subsubsection{Attività dell'amministratore}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{adAmministratore}
+  \end{center}
+  \caption{Activity diagram dell'amministratore}
+  \label{fig:adAmministratore}
+\end{figure}
 
 \end{document}
