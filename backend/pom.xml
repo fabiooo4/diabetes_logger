@@ -81,7 +81,9 @@
           <jsonLibrary>jackson2</jsonLibrary>
           <classes>
             <!-- Insert here the classes to convert into Typescript Types -->
-            <class>com.univr.diabetes_logger.DiabetesLoggerApplication</class>
+            <class>com.univr.diabetes_logger.model.Patient</class>
+            <class>com.univr.diabetes_logger.model.Medic</class>
+            <class>com.univr.diabetes_logger.model.Therapy</class>
           </classes>
           <outputFileType>implementationFile</outputFileType>
           <outputFile>../frontend/src/lib/types.ts</outputFile>
