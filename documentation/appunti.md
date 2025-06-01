@@ -47,7 +47,7 @@ Autenticazione necessaria per l'utente
   - Quantità da assumere
   - Eventuali indicazioni
 - Vedere i dati dei pazienti
-- Modificare dati del paziente
+- Modificare dati dei pazienti
 - Aggiungere o modificare la terapia di un paziente
 - Aggiungere o modificare info extra sul paziente
   - Fattori di rischio
