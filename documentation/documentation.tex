@@ -91,17 +91,40 @@ per semplificare il diagramma.
 
 \subsection{Casi d'uso del paziente}
 
-Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, 
-
+Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, egli può
+inserire i dati giornalieri relativi alla sua glicemia (prima e dopo ogni pasto); per fare questo
+ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali altre patologie o terapie.
 \begin{mdframed}
-  \textbf{Attore}: Medico\\
-  \textbf{Precondizioni}: Il medico deve essere autenticato\\
+  \textbf{Attore}: Paziente\\
+  \textbf{Precondizioni}: Il paziente deve essere autenticato\\
   \textbf{Passi}: 
   \begin{enumerate}[nosep]
-    \item 
-    \item 
+    \item Il paziente accede alla sua home page
+    \item Il paziente entra dentro l'area di inserimento dei dati giornalieri
+    \item  Il paziente inserisce il dato della sua glicemia prima pasto e dopo pasto
+    \begin{itemize}
+		\item  Il paziente può aprire un ulteriore finestra per inserire i sintomi, le terapie e le patologie, con oppurtuna data 
+		\item  Può anche inserire le assunzioni di insulina o qualsiasi farmaco prescritto dal diabetologo, specificandone giorno, ora, farmaco e quantità assunta
+	\end{itemize}
+	\item Il paziente inserisce la data e ora di rilevazione
+	\item Il paziente conferma l'inserimento dei dati
   \end{enumerate}
-  \textbf{Postcondizioni}:
+  \textbf{Postcondizioni}: La rilevazione è inserita 
 \end{mdframed}
+\noindent
+Andiamo a specificare come viene gestito l'inserimetno dei dati del paziente: i dati glicemici sono quelli
+che il paziente inserisce giornalmente e obbligatori per inviare la rilevazioni. Dopo aver inserito i dati ha due possibili opzioni:
+\begin{itemize}
+	\item Inserimento all'interno di un textbox della patalogia, terapia o sintomi che il paziente sta avendo in quel momento
+	\item La possibilità di inserire le assunzioni di insulina o qualsiasi altro farmo prescritto dal diabetologo (data, ora, farmaco, quantità) 
+\end{itemize}
+Le rilevazioni possiedono un ID univoco che le identificano inequivocabilmente e sono associate ad un paziente.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{sdPaziente}
+	\caption{Sequence Diagram della rilevazione del paziente}
+	\label{fig:usecase}
+\end{figure}
 
 \end{document}
