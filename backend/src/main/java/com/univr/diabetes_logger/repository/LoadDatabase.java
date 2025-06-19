@@ -20,8 +20,10 @@ public class LoadDatabase {
       log.info("Clearing database");
       repository.deleteAll();
 
-      log.info("Preloading " + repository.save(new Patient("Fabio", "Fabio", 99, new Medic("Medic1"))));
-      log.info("Preloading " + repository.save(new Patient("Paolo", "Paolo", 66, new Medic("Medic2"))));
+      log.info(
+          "Preloading " + repository.save(new Patient("Fabio", "Fabio", 99, "fabio@gmail.com", new Medic("Medic1"))));
+      log.info(
+          "Preloading " + repository.save(new Patient("Paolo", "Paolo", 66, "paolo@gmail.com", new Medic("Medic2"))));
     };
   }
 

@@ -27,6 +27,8 @@ public class Patient {
   private String lastName;
   @Column(name = "age")
   private int age;
+  @Column(name = "email")
+  private String email;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "medic_id", referencedColumnName = "id")
@@ -35,10 +37,11 @@ public class Patient {
   protected Patient() {
   }
 
-  public Patient(String firstName, String lastName, int age, Medic referralMedic) {
+  public Patient(String firstName, String lastName, int age, String email, Medic referralMedic) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.age = age;
+    this.email = email;
     this.referralMedic = referralMedic;
   }
 
@@ -76,6 +79,24 @@ public class Patient {
 
   public void setReferralMedic(Medic medic) {
     this.referralMedic = medic;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public String toString() {
+    return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + ", email="
+        + email + ", referralMedic=" + referralMedic + "]";
   }
 
 }

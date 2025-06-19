@@ -24,7 +24,7 @@ ensure_mysql() {
   echo -n "Checking MySQL service status... "
   if ! systemctl is-active --quiet mysqld; then
     echo "stopped"
-    echo "Attempting to start MySQL service..."
+    echo -n "Attempting to start MySQL service..."
     sudo systemctl start mysqld
     echo -n "Waiting for MySQL to be active... "
     until systemctl is-active --quiet mysql; do
@@ -38,23 +38,23 @@ ensure_mysql() {
 setup_database() {
   echo -n "Setting up database '${db_name}' and user '${db_user}'... "
   sudo mysql --protocol=socket <<SQL
-CREATE DATABASE IF NOT EXISTS \`${db_name}\`;
-CREATE USER IF NOT EXISTS '${db_user}'@'localhost' IDENTIFIED BY '${db_pass}';
-GRANT ALL PRIVILEGES ON \`${db_name}\`.* TO '${db_user}'@'localhost';
-FLUSH PRIVILEGES;
+  CREATE DATABASE IF NOT EXISTS \`${db_name}\`;
+  CREATE USER IF NOT EXISTS '${db_user}'@'localhost' IDENTIFIED BY '${db_pass}';
+  GRANT ALL PRIVILEGES ON \`${db_name}\`.* TO '${db_user}'@'localhost';
+  FLUSH PRIVILEGES;
 SQL
-  echo "done"
+echo "done"
 }
 
 # Check connectivity with provided credentials
 check_mysql() {
   echo -n "Verifying MySQL connectivity... "
   if ! mysql --host="${db_host}" --port="${db_port}" \
-            --user="${db_user}" --password="${db_pass}" \
-            --database="${db_name}" --execute="SELECT 1;" &>/dev/null; then
-    echo "failed"
-    echo "Error: Cannot connect to MySQL as '${db_user}'." >&2
-    exit 1
+    --user="${db_user}" --password="${db_pass}" \
+    --database="${db_name}" --execute="SELECT 1;" &>/dev/null; then
+  echo "failed"
+  echo "Error: Cannot connect to MySQL as '${db_user}'." >&2
+  exit 1
   fi
   echo "ok"
 }
@@ -76,38 +76,58 @@ wait_for_port() {
   echo "ok"
 }
 
+test_backend() {
+  echo "Testing backend..."
+  cd backend
+  export SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
+  ./mvnw test
+
+  exit 0
+}
+
+start_applications() {
+  echo "Starting frontend..."
+  (
+    cd frontend
+    export FORCE_COLOR=1
+    npm run dev
+    ) &
+    frontend_pid=$!
+    wait_for_port "${frontend_port}" frontend "${frontend_pid}"
+
+    echo "Starting backend..."
+    (
+      cd backend
+      export SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
+      ./mvnw clean spring-boot:run
+      ) &
+      backend_pid=$!
+      wait_for_port "${backend_port}" backend "${backend_pid}"
+
+      echo "Frontend running at http://localhost:${frontend_port}"
+      echo "Backend running at http://localhost:${backend_port}"
+
+      echo;
+      echo "Services up. Press Ctrl+C to stop."
+
+      if ! wait -n "${backend_pid}" "${frontend_pid}"; then
+        echo "One service exited unexpectedly." >&2
+        exit 1
+      fi
+
+      exit 0
+
+    }
+
 # Main flow
 ensure_mysql
 setup_database
 check_mysql
 
-echo "Starting frontend..."
-(
-  cd frontend
-  export FORCE_COLOR=1
-  npm run dev
-) &
-frontend_pid=$!
-wait_for_port "${frontend_port}" frontend "${frontend_pid}"
-
-echo "Starting backend..."
-(
-  cd backend
-  export SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
-  ./mvnw clean spring-boot:run
-) &
-backend_pid=$!
-wait_for_port "${backend_port}" backend "${backend_pid}"
-
-echo "Frontend running at http://localhost:${frontend_port}"
-echo "Backend running at http://localhost:${backend_port}"
-
-echo;
-echo "Services up. Press Ctrl+C to stop."
-
-if ! wait -n "${backend_pid}" "${frontend_pid}"; then
-  echo "One service exited unexpectedly." >&2
-  exit 1
+if [[ "${1:-}" == "test-backend" ]]; then
+  test_backend
+else
+  start_applications
 fi
 
 exit 0

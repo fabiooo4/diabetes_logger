@@ -1,6 +1,5 @@
 package com.univr.diabetes_logger.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class PatientServiceImpl implements PatientService {
   }
 
   @Override
-  public List<Patient> getAllPatients() {
+  public Iterable<Patient> getAllPatients() {
     return repository.findAll();
   }
 
@@ -31,7 +30,31 @@ public class PatientServiceImpl implements PatientService {
 
   @Override
   public Patient createPatient(Patient patient) {
+    if (repository.findByEmail(patient.getEmail()).isPresent()) {
+      throw new RuntimeException("Patient already exists");
+    }
+
     return repository.save(patient);
   }
 
+  @Override
+  public Patient updatePatient(Integer id, Patient patient) {
+    Patient existingPatient = this.getPatientById(id).orElseThrow();
+
+    existingPatient.setFirstName(patient.getFirstName());
+    existingPatient.setLastName(patient.getLastName());
+    existingPatient.setAge(patient.getAge());
+    existingPatient.setEmail(patient.getEmail());
+
+    return repository.save(existingPatient);
+  }
+
+  @Override
+  public Patient deletePatient(Integer id) {
+    Patient deleted = this.getPatientById(id).orElseThrow();
+
+    repository.deleteById(id);
+
+    return deleted;
+  }
 }

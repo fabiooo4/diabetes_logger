@@ -40,4 +40,9 @@ public class Medic {
     this.name = name;
   }
 
+  @Override
+  public String toString() {
+    return "Medic [id=" + id + ", name=" + name + "]";
+  }
+
 }

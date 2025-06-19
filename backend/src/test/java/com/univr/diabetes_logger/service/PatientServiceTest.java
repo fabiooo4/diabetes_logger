@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
 
 /**
  * PatientServiceTest
@@ -34,7 +31,7 @@ public class PatientServiceTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient("John", "Cena", 40, new Medic("CenaMedic"));
+    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic"));
   }
 
   @Test
@@ -63,5 +60,51 @@ public class PatientServiceTest {
     // verify
     System.out.println(existingPatient);
     assertThat(existingPatient).isNotNull();
+  }
+
+  @Test
+  @Order(3)
+  public void getAllPatients() {
+    // precondition
+    given(patientRepository.findAll()).willReturn(List.of(patient));
+
+    // action
+    Iterable<Patient> existingPatients = patientService.getAllPatients();
+
+    // verify
+    System.out.println(existingPatients);
+    assertThat(existingPatients).isNotNull();
+  }
+
+  @Test
+  @Order(4)
+  public void updatePatient() {
+    // precondition
+    given(patientRepository.findById(patient.getId())).willReturn(Optional.of(patient));
+    patient.setFirstName("UpdatedFirst");
+    patient.setLastName("UpdatedLast");
+    given(patientRepository.save(patient)).willReturn(patient);
+
+    // action
+    Patient updatedPatient = patientService.updatePatient(patient.getId(), patient);
+
+    // verify
+    System.out.println(updatedPatient);
+    assertThat(updatedPatient.getFirstName()).isEqualTo("UpdatedFirst");
+    assertThat(updatedPatient.getLastName()).isEqualTo("UpdatedLast");
+  }
+
+  @Test
+  @Order(5)
+  public void deletePatient() {
+    // precondition
+    given(patientRepository.findById(patient.getId())).willReturn(Optional.of(patient));
+
+    // action
+    Patient deletedPatient = patientService.deletePatient(patient.getId());
+
+    // verify
+    System.out.println(deletedPatient);
+    assertThat(deletedPatient).isEqualTo(patient);
   }
 }

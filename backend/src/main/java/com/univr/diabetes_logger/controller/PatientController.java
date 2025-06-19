@@ -1,20 +1,21 @@
 package com.univr.diabetes_logger.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.service.PatientService;
+import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  * PatientController
@@ -31,18 +32,36 @@ public class PatientController {
   }
 
   @GetMapping
-  public List<Patient> getAllPatients() {
+  public Iterable<Patient> getAllPatients() {
     return patientService.getAllPatients();
   }
 
   @GetMapping("/{id}")
-  public Optional<Patient> getPatient(@PathVariable Integer id) {
-    return patientService.getPatientById(id);
+  public ResponseEntity<Patient> getPatientById(@PathVariable Integer id) {
+    Optional<Patient> patient = patientService.getPatientById(id);
+
+    if (patient.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.ok(patient.get());
   }
 
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public Patient createPatient(@RequestBody Patient patient) {
-    return patientService.createPatient(patient);
+  public ResponseEntity<Patient> createPatient(@RequestBody Patient patient, UriComponentsBuilder uriBuilder) {
+    Patient created = patientService.createPatient(patient);
+
+    var uri = uriBuilder.path("/patients/{id}").buildAndExpand(created.getId()).toUri();
+    return ResponseEntity.created(uri).body(created);
+  }
+
+  @PutMapping("/{id}")
+  public Patient updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
+    return patientService.updatePatient(id, patient);
+  }
+
+  @DeleteMapping("/{id}")
+  public Patient deletePatient(@PathVariable Integer id) {
+    return patientService.deletePatient(id);
   }
 }
