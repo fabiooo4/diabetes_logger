@@ -1,6 +1,6 @@
 package com.univr.diabetes_logger.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,9 +37,11 @@ public class User {
   private Role role;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Patient patient;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Medic medic;
 
   public Patient getPatient() {
