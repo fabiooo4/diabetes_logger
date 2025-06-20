@@ -1,6 +1,8 @@
 package com.univr.diabetes_logger.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
+import com.univr.diabetes_logger.model.User;
 
 /**
  * PatientRepositoryTest
@@ -28,7 +31,8 @@ public class PatientRepositoryTest {
   public void createPatientTest() {
 
     // Action
-    Patient patient = new Patient("TestFirstName", "TestLastName", 11, "testemail@gmail.com", new Medic("TestMedic", "lastname", "email"));
+    Patient patient = new Patient(new User("testmail", "pass"), "TestFirstName", "TestLastName",
+        LocalDate.of(2000, 1, 1), new Medic(new User("medicmail", "pass"), "TestMedic", "lastname"));
     patientRepository.save(patient);
 
     // Verify

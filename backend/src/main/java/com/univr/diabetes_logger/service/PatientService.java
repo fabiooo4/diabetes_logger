@@ -30,10 +30,6 @@ public class PatientService implements CrudService<Patient> {
 
   @Override
   public Patient create(Patient patient) {
-    if (repository.findByEmail(patient.getEmail()).isPresent()) {
-      throw new RuntimeException("Patient already exists");
-    }
-
     return repository.save(patient);
   }
 
@@ -43,8 +39,7 @@ public class PatientService implements CrudService<Patient> {
 
     existingPatient.setFirstName(patient.getFirstName());
     existingPatient.setLastName(patient.getLastName());
-    existingPatient.setAge(patient.getAge());
-    existingPatient.setEmail(patient.getEmail());
+    existingPatient.setBirthDate(patient.getBirthDate());
 
     return repository.save(existingPatient);
   }

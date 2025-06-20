@@ -30,10 +30,6 @@ public class MedicService implements CrudService<Medic> {
 
   @Override
   public Medic create(Medic medic) {
-    if (repository.findByEmail(medic.getEmail()).isPresent()) {
-      throw new RuntimeException("Medic already exists");
-    }
-
     return repository.save(medic);
   }
 
@@ -43,7 +39,6 @@ public class MedicService implements CrudService<Medic> {
 
     existingMedic.setFirstName(medic.getFirstName());
     existingMedic.setLastName(medic.getLastName());
-    existingMedic.setEmail(medic.getEmail());
 
     return repository.save(existingMedic);
   }

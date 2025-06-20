@@ -8,8 +8,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
+import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.repository.PatientRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +33,8 @@ public class PatientServiceTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic", "lastname", "email"));
+    patient = new Patient(new User("testmail", "testpass"), "test", "test", LocalDate.of(2000, 1, 1),
+        new Medic(new User("medicmail", "medicpass"), "testMedic", "lastname"));
   }
 
   @Test

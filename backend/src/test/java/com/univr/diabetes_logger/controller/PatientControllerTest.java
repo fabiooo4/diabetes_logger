@@ -3,6 +3,7 @@ package com.univr.diabetes_logger.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
+import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.service.PatientService;
 
 import org.junit.jupiter.api.*;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +46,8 @@ public class PatientControllerTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic", "LastName", "email"));
+    patient = new Patient(new User("usermail", "pass1"), "John", "Cena", LocalDate.of(2000, 1, 1),
+        new Medic(new User("medicmail", "medicpass"), "CenaMedic", "LastName"));
     patient.setId(1); // Set a mock ID for testing
   }
 
@@ -65,12 +69,9 @@ public class PatientControllerTest {
             is(patient.getFirstName())))
         .andExpect(jsonPath("$.lastName",
             is(patient.getLastName())))
-        .andExpect(jsonPath("$.age",
-            is(patient.getAge())))
-        .andExpect(jsonPath("$.email",
-            is(patient.getEmail())))
-        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())));
   }
 
   // Get Controller
@@ -81,7 +82,8 @@ public class PatientControllerTest {
     List<Patient> patientsList = new ArrayList<>();
     patientsList.add(patient);
     patientsList
-        .add(new Patient("Kanye", "West", 33, "kanyewest@gmail.com", new Medic("KanyeMedic", "lastname", "email")));
+        .add(new Patient(new User("testmail", "testpass"), "test", "test", LocalDate.of(2000, 1, 1),
+            new Medic(new User("testmedicmail", ""), "testMedic", "lastname")));
     given(patientService.getAll()).willReturn(patientsList);
 
     // action
@@ -111,12 +113,9 @@ public class PatientControllerTest {
             is(patient.getFirstName())))
         .andExpect(jsonPath("$.lastName",
             is(patient.getLastName())))
-        .andExpect(jsonPath("$.age",
-            is(patient.getAge())))
-        .andExpect(jsonPath("$.email",
-            is(patient.getEmail())))
-        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())));
   }
 
   // Put Controller
@@ -140,12 +139,9 @@ public class PatientControllerTest {
             is(patient.getFirstName())))
         .andExpect(jsonPath("$.lastName",
             is(patient.getLastName())))
-        .andExpect(jsonPath("$.age",
-            is(patient.getAge())))
-        .andExpect(jsonPath("$.email",
-            is(patient.getEmail())))
-        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())));
   }
 
   // Delete Controller
@@ -165,12 +161,9 @@ public class PatientControllerTest {
             is(patient.getFirstName())))
         .andExpect(jsonPath("$.lastName",
             is(patient.getLastName())))
-        .andExpect(jsonPath("$.age",
-            is(patient.getAge())))
-        .andExpect(jsonPath("$.email",
-            is(patient.getEmail())))
-        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())));
   }
 
 }

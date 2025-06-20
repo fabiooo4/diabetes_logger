@@ -1,10 +1,22 @@
 package com.univr.diabetes_logger.model;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -16,22 +28,30 @@ public class Medic {
   @Id // Primary key
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
+  @JsonIgnore
   private Integer id;
 
   @Column(name = "firstName")
   private String firstName;
   @Column(name = "lastName")
   private String lastName;
-  @Column(name = "email")
-  private String email;
+
+  @OneToMany(mappedBy = "referralMedic")
+  private Set<Patient> patients = new LinkedHashSet<Patient>();
+
+  @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JsonIgnore
+  private User user;
 
   protected Medic() {
   }
 
-  public Medic(String firstName, String lastName, String email) {
+  public Medic(User user, String firstName, String lastName) {
+    this.user = user;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.email = email;
   }
 
   public Integer getId() {
@@ -48,19 +68,11 @@ public class Medic {
 
   @Override
   public String toString() {
-    return "Medic [id=" + id + ", name=" + firstName + "]";
+    return "Medic [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", user=" + user + "]";
   }
 
   public void setId(Integer id) {
     this.id = id;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public String getLastName() {
@@ -69,6 +81,22 @@ public class Medic {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Set<Patient> getPatients() {
+    return patients;
+  }
+
+  public void setPatients(Set<Patient> patients) {
+    this.patients = patients;
   }
 
 }

@@ -1,5 +1,12 @@
 package com.univr.diabetes_logger.model;
 
+import java.time.LocalDate;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -19,29 +27,35 @@ public class Patient {
   @Id // Primary key
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
+  @JsonIgnore
   private Integer id;
 
   @Column(name = "firstName")
   private String firstName;
   @Column(name = "lastName")
   private String lastName;
-  @Column(name = "age")
-  private int age;
-  @Column(name = "email")
-  private String email;
+  @Column(name = "birthDate")
+  private LocalDate birthDate;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "medic_id", referencedColumnName = "id")
+  @ManyToOne
+  @JoinColumn(name = "medic_id", referencedColumnName = "id", nullable = true)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private Medic referralMedic;
+
+  @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JsonIgnore
+  private User user;
 
   protected Patient() {
   }
 
-  public Patient(String firstName, String lastName, int age, String email, Medic referralMedic) {
+  public Patient(User user, String firstName, String lastName, LocalDate birthDate, Medic referralMedic) {
+    this.user = user;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.age = age;
-    this.email = email;
+    this.birthDate = birthDate;
     this.referralMedic = referralMedic;
   }
 
@@ -65,12 +79,12 @@ public class Patient {
     this.lastName = surname;
   }
 
-  public int getAge() {
-    return age;
+  public LocalDate getBirthDate() {
+    return birthDate;
   }
 
-  public void setAge(int age) {
-    this.age = age;
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
   }
 
   public Medic getReferralMedic() {
@@ -85,18 +99,18 @@ public class Patient {
     this.id = id;
   }
 
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   @Override
   public String toString() {
-    return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + ", email="
-        + email + ", referralMedic=" + referralMedic + "]";
+    return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate
+        + ", referralMedic=" + referralMedic + ", user=" + user + "]";
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 
 }
