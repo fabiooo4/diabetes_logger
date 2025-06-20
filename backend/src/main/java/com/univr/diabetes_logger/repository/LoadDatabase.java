@@ -21,9 +21,11 @@ public class LoadDatabase {
       repository.deleteAll();
 
       log.info(
-          "Preloading " + repository.save(new Patient("Fabio", "Fabio", 99, "fabio@gmail.com", new Medic("Medic1"))));
+          "Preloading " + repository
+              .save(new Patient("Fabio", "Fabio", 99, "fabio@gmail.com", new Medic("Medic1", "lastnaem1", "email1"))));
       log.info(
-          "Preloading " + repository.save(new Patient("Paolo", "Paolo", 66, "paolo@gmail.com", new Medic("Medic2"))));
+          "Preloading " + repository
+              .save(new Patient("Paolo", "Paolo", 66, "paolo@gmail.com", new Medic("Medic2", "lastname2", "email2"))));
     };
   }
 

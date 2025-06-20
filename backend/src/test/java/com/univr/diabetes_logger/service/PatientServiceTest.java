@@ -31,7 +31,7 @@ public class PatientServiceTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic"));
+    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic", "lastname", "email"));
   }
 
   @Test

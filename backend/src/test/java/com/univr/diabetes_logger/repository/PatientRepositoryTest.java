@@ -28,7 +28,7 @@ public class PatientRepositoryTest {
   public void createPatientTest() {
 
     // Action
-    Patient patient = new Patient("TestFirstName", "TestLastName", 11, "testemail@gmail.com", new Medic("TestMedic"));
+    Patient patient = new Patient("TestFirstName", "TestLastName", 11, "testemail@gmail.com", new Medic("TestMedic", "lastname", "email"));
     patientRepository.save(patient);
 
     // Verify

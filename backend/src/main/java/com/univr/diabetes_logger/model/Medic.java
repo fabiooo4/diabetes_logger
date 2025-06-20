@@ -18,31 +18,57 @@ public class Medic {
   @Column(name = "id")
   private Integer id;
 
-  @Column(name = "name")
-  private String name;
+  @Column(name = "firstName")
+  private String firstName;
+  @Column(name = "lastName")
+  private String lastName;
+  @Column(name = "email")
+  private String email;
 
   protected Medic() {
   }
 
-  public Medic(String name) {
-    this.name = name;
+  public Medic(String firstName, String lastName, String email) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
   }
 
   public Integer getId() {
     return id;
   }
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFirstName(String name) {
+    this.firstName = name;
   }
 
   @Override
   public String toString() {
-    return "Medic [id=" + id + ", name=" + name + "]";
+    return "Medic [id=" + id + ", name=" + firstName + "]";
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
 }

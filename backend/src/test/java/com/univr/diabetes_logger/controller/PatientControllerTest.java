@@ -43,7 +43,7 @@ public class PatientControllerTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic"));
+    patient = new Patient("John", "Cena", 40, "johncena@gmail.com", new Medic("CenaMedic", "LastName", "email"));
     patient.setId(1); // Set a mock ID for testing
   }
 
@@ -70,7 +70,7 @@ public class PatientControllerTest {
         .andExpect(jsonPath("$.email",
             is(patient.getEmail())))
         .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getName())));
+        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
   }
 
   // Get Controller
@@ -80,7 +80,8 @@ public class PatientControllerTest {
     // precondition
     List<Patient> patientsList = new ArrayList<>();
     patientsList.add(patient);
-    patientsList.add(new Patient("Kanye", "West", 33, "kanyewest@gmail.com", new Medic("KanyeMedic")));
+    patientsList
+        .add(new Patient("Kanye", "West", 33, "kanyewest@gmail.com", new Medic("KanyeMedic", "lastname", "email")));
     given(patientService.getAllPatients()).willReturn(patientsList);
 
     // action
@@ -115,7 +116,7 @@ public class PatientControllerTest {
         .andExpect(jsonPath("$.email",
             is(patient.getEmail())))
         .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getName())));
+        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
   }
 
   // Put Controller
@@ -144,7 +145,7 @@ public class PatientControllerTest {
         .andExpect(jsonPath("$.email",
             is(patient.getEmail())))
         .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getName())));
+        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
   }
 
   // Delete Controller
@@ -169,7 +170,7 @@ public class PatientControllerTest {
         .andExpect(jsonPath("$.email",
             is(patient.getEmail())))
         .andExpect(jsonPath("$.referralMedic.id", is(patient.getReferralMedic().getId())))
-        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getName())));
+        .andExpect(jsonPath("$.referralMedic.name", is(patient.getReferralMedic().getFirstName())));
   }
 
 }

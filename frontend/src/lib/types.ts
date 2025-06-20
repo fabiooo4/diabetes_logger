@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-06-20 00:43:20.
+// Generated using typescript-generator version 3.2.1263 on 2025-06-20 12:17:16.
 
 export interface Patient {
     id: number;
@@ -13,7 +13,9 @@ export interface Patient {
 
 export interface Medic {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
+    email: string;
 }
 
 export interface Therapy {

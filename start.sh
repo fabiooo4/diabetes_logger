@@ -26,10 +26,6 @@ ensure_mysql() {
     echo "stopped"
     echo -n "Attempting to start MySQL service..."
     sudo systemctl start mysqld
-    echo -n "Waiting for MySQL to be active... "
-    until systemctl is-active --quiet mysql; do
-      sleep 1
-    done
   fi
   echo "ok"
 }
