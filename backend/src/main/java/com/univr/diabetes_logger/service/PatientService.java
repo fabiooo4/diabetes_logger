@@ -2,19 +2,59 @@ package com.univr.diabetes_logger.service;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.univr.diabetes_logger.model.Patient;
+import com.univr.diabetes_logger.repository.PatientRepository;
 
 /**
- * PatientService
+ * PatientServiceImpl
  */
-public interface PatientService {
-  Iterable<Patient> getAllPatients();
+@Service
+public class PatientService implements CrudService<Patient> {
+  private PatientRepository repository;
 
-  Optional<Patient> getPatientById(Integer id);
+  public PatientService(PatientRepository repository) {
+    this.repository = repository;
+  }
 
-  Patient createPatient(Patient patient);
+  @Override
+  public Iterable<Patient> getAll() {
+    return repository.findAll();
+  }
 
-  Patient updatePatient(Integer id, Patient patient);
+  @Override
+  public Optional<Patient> getById(Integer id) {
+    return repository.findById(id);
+  }
 
-  Patient deletePatient(Integer id);
+  @Override
+  public Patient create(Patient patient) {
+    if (repository.findByEmail(patient.getEmail()).isPresent()) {
+      throw new RuntimeException("Patient already exists");
+    }
+
+    return repository.save(patient);
+  }
+
+  @Override
+  public Patient update(Integer id, Patient patient) {
+    Patient existingPatient = this.getById(id).orElseThrow();
+
+    existingPatient.setFirstName(patient.getFirstName());
+    existingPatient.setLastName(patient.getLastName());
+    existingPatient.setAge(patient.getAge());
+    existingPatient.setEmail(patient.getEmail());
+
+    return repository.save(existingPatient);
+  }
+
+  @Override
+  public Patient delete(Integer id) {
+    Patient deleted = this.getById(id).orElseThrow();
+
+    repository.deleteById(id);
+
+    return deleted;
+  }
 }

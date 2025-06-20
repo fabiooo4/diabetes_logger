@@ -52,7 +52,7 @@ public class PatientControllerTest {
   @Order(1)
   public void createPatientTest() throws Exception {
     // precondition
-    given(patientService.createPatient(any(Patient.class))).willReturn(patient);
+    given(patientService.create(any(Patient.class))).willReturn(patient);
 
     // action
     ResultActions response = mockMvc.perform(post("/patients")
@@ -82,7 +82,7 @@ public class PatientControllerTest {
     patientsList.add(patient);
     patientsList
         .add(new Patient("Kanye", "West", 33, "kanyewest@gmail.com", new Medic("KanyeMedic", "lastname", "email")));
-    given(patientService.getAllPatients()).willReturn(patientsList);
+    given(patientService.getAll()).willReturn(patientsList);
 
     // action
     ResultActions response = mockMvc.perform(get("/patients"));
@@ -99,7 +99,7 @@ public class PatientControllerTest {
   @Order(3)
   public void getPatientByIdTest() throws Exception {
     // precondition
-    given(patientService.getPatientById(patient.getId())).willReturn(Optional.of(patient));
+    given(patientService.getById(patient.getId())).willReturn(Optional.of(patient));
 
     // action
     ResultActions response = mockMvc.perform(get("/patients/{id}", patient.getId()));
@@ -126,7 +126,7 @@ public class PatientControllerTest {
     // precondition
     patient.setFirstName("UpdatedFirst");
     patient.setLastName("UpdatedLast");
-    given(patientService.updatePatient(any(Integer.class), any(Patient.class))).willReturn(patient);
+    given(patientService.update(any(Integer.class), any(Patient.class))).willReturn(patient);
 
     // action
     ResultActions response = mockMvc.perform(put("/patients/{id}", patient.getId())
@@ -153,7 +153,7 @@ public class PatientControllerTest {
   @Order(5)
   public void deletePatientTest() throws Exception {
     // precondition
-    given(patientService.deletePatient(patient.getId())).willReturn(patient);
+    given(patientService.delete(patient.getId())).willReturn(patient);
 
     // action
     ResultActions response = mockMvc.perform(delete("/patients/{id}", patient.getId()));

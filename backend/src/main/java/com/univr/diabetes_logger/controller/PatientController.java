@@ -33,12 +33,12 @@ public class PatientController {
 
   @GetMapping
   public Iterable<Patient> getAllPatients() {
-    return patientService.getAllPatients();
+    return patientService.getAll();
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<Patient> getPatientById(@PathVariable Integer id) {
-    Optional<Patient> patient = patientService.getPatientById(id);
+    Optional<Patient> patient = patientService.getById(id);
 
     if (patient.isEmpty()) {
       return ResponseEntity.notFound().build();
@@ -49,7 +49,7 @@ public class PatientController {
 
   @PostMapping
   public ResponseEntity<Patient> createPatient(@RequestBody Patient patient, UriComponentsBuilder uriBuilder) {
-    Patient created = patientService.createPatient(patient);
+    Patient created = patientService.create(patient);
 
     var uri = uriBuilder.path("/patients/{id}").buildAndExpand(created.getId()).toUri();
     return ResponseEntity.created(uri).body(created);
@@ -57,11 +57,11 @@ public class PatientController {
 
   @PutMapping("/{id}")
   public Patient updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
-    return patientService.updatePatient(id, patient);
+    return patientService.update(id, patient);
   }
 
   @DeleteMapping("/{id}")
   public Patient deletePatient(@PathVariable Integer id) {
-    return patientService.deletePatient(id);
+    return patientService.delete(id);
   }
 }

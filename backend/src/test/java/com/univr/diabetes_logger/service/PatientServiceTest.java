@@ -25,7 +25,7 @@ public class PatientServiceTest {
   private PatientRepository patientRepository;
 
   @InjectMocks
-  private PatientServiceImpl patientService;
+  private PatientService patientService;
 
   private Patient patient;
 
@@ -41,7 +41,7 @@ public class PatientServiceTest {
     given(patientRepository.save(patient)).willReturn(patient);
 
     // action
-    Patient savedPatient = patientService.createPatient(patient);
+    Patient savedPatient = patientService.create(patient);
 
     // verify the output
     System.out.println(savedPatient);
@@ -55,7 +55,7 @@ public class PatientServiceTest {
     given(patientRepository.findById(patient.getId())).willReturn(Optional.of(patient));
 
     // action
-    Patient existingPatient = patientService.getPatientById(patient.getId()).get();
+    Patient existingPatient = patientService.getById(patient.getId()).get();
 
     // verify
     System.out.println(existingPatient);
@@ -69,7 +69,7 @@ public class PatientServiceTest {
     given(patientRepository.findAll()).willReturn(List.of(patient));
 
     // action
-    Iterable<Patient> existingPatients = patientService.getAllPatients();
+    Iterable<Patient> existingPatients = patientService.getAll();
 
     // verify
     System.out.println(existingPatients);
@@ -86,7 +86,7 @@ public class PatientServiceTest {
     given(patientRepository.save(patient)).willReturn(patient);
 
     // action
-    Patient updatedPatient = patientService.updatePatient(patient.getId(), patient);
+    Patient updatedPatient = patientService.update(patient.getId(), patient);
 
     // verify
     System.out.println(updatedPatient);
@@ -101,7 +101,7 @@ public class PatientServiceTest {
     given(patientRepository.findById(patient.getId())).willReturn(Optional.of(patient));
 
     // action
-    Patient deletedPatient = patientService.deletePatient(patient.getId());
+    Patient deletedPatient = patientService.delete(patient.getId());
 
     // verify
     System.out.println(deletedPatient);

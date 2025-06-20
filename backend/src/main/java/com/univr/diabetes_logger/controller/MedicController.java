@@ -33,12 +33,12 @@ public class MedicController {
 
   @GetMapping
   public Iterable<Medic> getAllMedics() {
-    return medicService.getAllMedics();
+    return medicService.getAll();
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<Medic> getMedicById(@PathVariable Integer id) {
-    Optional<Medic> medic = medicService.getMedicById(id);
+    Optional<Medic> medic = medicService.getById(id);
 
     if (medic.isEmpty()) {
       return ResponseEntity.notFound().build();
@@ -49,7 +49,7 @@ public class MedicController {
 
   @PostMapping
   public ResponseEntity<Medic> createMedic(@RequestBody Medic medic, UriComponentsBuilder uriBuilder) {
-    Medic created = medicService.createMedic(medic);
+    Medic created = medicService.create(medic);
 
     var uri = uriBuilder.path("/medics/{id}").buildAndExpand(created.getId()).toUri();
     return ResponseEntity.created(uri).body(created);
@@ -57,11 +57,11 @@ public class MedicController {
 
   @PutMapping("/{id}")
   public Medic updateMedic(@PathVariable Integer id, @RequestBody Medic medic) {
-    return medicService.updateMedic(id, medic);
+    return medicService.update(id, medic);
   }
 
   @DeleteMapping("/{id}")
   public Medic deleteMedic(@PathVariable Integer id) {
-    return medicService.deleteMedic(id);
+    return medicService.delete(id);
   }
 }
