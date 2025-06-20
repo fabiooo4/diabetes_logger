@@ -28,7 +28,6 @@ public class Medic {
   @Id // Primary key
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  @JsonIgnore
   private Integer id;
 
   @Column(name = "firstName")
@@ -90,13 +89,4 @@ public class Medic {
   public void setUser(User user) {
     this.user = user;
   }
-
-  public Set<Patient> getPatients() {
-    return patients;
-  }
-
-  public void setPatients(Set<Patient> patients) {
-    this.patients = patients;
-  }
-
 }

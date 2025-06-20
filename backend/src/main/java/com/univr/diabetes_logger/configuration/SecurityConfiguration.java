@@ -29,7 +29,7 @@ public class SecurityConfiguration {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(customizer -> customizer.disable())
         .authorizeHttpRequests(request -> request.anyRequest().authenticated())
-        .formLogin(Customizer.withDefaults()) // For web form
+        // .formLogin(Customizer.withDefaults()) // For web form
         .httpBasic(Customizer.withDefaults()) // For non web clients
         // Create a new session for every request
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

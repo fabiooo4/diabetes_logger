@@ -1,7 +1,5 @@
 package com.univr.diabetes_logger.model;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -29,7 +27,6 @@ public class User {
   @Id // Primary key
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  @JsonIgnore
   private Integer id;
 
   @Column(name = "email")

@@ -1,7 +1,5 @@
 package com.univr.diabetes_logger.repository;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.univr.diabetes_logger.model.Medic;

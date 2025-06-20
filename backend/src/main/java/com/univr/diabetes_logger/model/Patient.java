@@ -27,7 +27,6 @@ public class Patient {
   @Id // Primary key
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  @JsonIgnore
   private Integer id;
 
   @Column(name = "firstName")

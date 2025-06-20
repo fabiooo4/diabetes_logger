@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-06-20 23:46:57.
+// Generated using typescript-generator version 3.2.1263 on 2025-06-21 00:03:13.
 
 export interface Patient {
+    id: number;
     firstName: string;
     lastName: string;
     birthDate: Date;
@@ -10,9 +11,9 @@ export interface Patient {
 }
 
 export interface Medic {
+    id: number;
     firstName: string;
     lastName: string;
-    patients: Patient[];
 }
 
 export interface Therapy {
