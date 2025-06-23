@@ -50,12 +50,9 @@ public class SecurityConfiguration {
     return provider;
   }
 
-  /*
-   * @Bean
-   * AuthenticationManager authenticationManager(AuthenticationConfiguration
-   * config) throws Exception {
-   * return config.getAuthenticationManager();
-   * }
-   */
+  @Bean
+  AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    return config.getAuthenticationManager();
+  }
 
 }

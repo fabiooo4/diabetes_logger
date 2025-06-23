@@ -34,7 +34,7 @@ public class User {
   @Column(name = "password")
   private String password;
   @Column(name = "role")
-  private Role role;
+  private String role;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -72,7 +72,12 @@ public class User {
   public User(String email, String password, Role role) {
     this.email = email;
     this.password = password;
-    this.role = role;
+
+    if (role == null) {
+      this.role = null;
+    } else {
+      this.role = role.toString();
+    }
   }
 
   public String getEmail() {
@@ -92,11 +97,17 @@ public class User {
   }
 
   public Role getRole() {
-    return role;
+    if (role == null) {
+      return null;
+    } else {
+      return Role.valueOf(role);
+    }
   }
 
   public void setRole(Role role) {
-    this.role = role;
+    if (role != null) {
+      this.role = role.toString();
+    }
   }
 
   @Override

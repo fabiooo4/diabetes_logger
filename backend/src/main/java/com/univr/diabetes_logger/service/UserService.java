@@ -2,6 +2,10 @@ package com.univr.diabetes_logger.service;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,12 @@ import com.univr.diabetes_logger.repository.UserRepository;
 @Service
 public class UserService implements CrudService<User> {
   private UserRepository repository;
+
+  @Autowired
+  private AuthenticationManager authManager;
+
+  @Autowired
+  private JwtService jwtService;
 
   private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -56,5 +66,16 @@ public class UserService implements CrudService<User> {
     repository.deleteById(id);
 
     return deleted;
+  }
+
+  public String verify(User user) {
+    Authentication authentication = authManager
+        .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+
+    if (authentication.isAuthenticated()) {
+      return jwtService.generateToken();
+    }
+
+    return "Invalid credentials";
   }
 }
