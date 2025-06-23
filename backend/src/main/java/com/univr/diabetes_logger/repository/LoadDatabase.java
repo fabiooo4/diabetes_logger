@@ -12,6 +12,9 @@ import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.model.User.Role;
+import com.univr.diabetes_logger.service.MedicService;
+import com.univr.diabetes_logger.service.PatientService;
+import com.univr.diabetes_logger.service.UserService;
 
 @Configuration
 public class LoadDatabase {
@@ -20,7 +23,8 @@ public class LoadDatabase {
 
   @Bean
   CommandLineRunner initDatabase(UserRepository userRepository, PatientRepository patientRepository,
-      MedicRepository medicRepository) {
+      MedicRepository medicRepository, UserService userService, PatientService patientService,
+      MedicService medicService) {
     return args -> {
       // TODO: Remove in production
       log.info("Clearing database");
@@ -34,21 +38,21 @@ public class LoadDatabase {
       userRepository.flush();
 
       // Preload Users
-      User user1 = userRepository.save(new User("fabio@gmail.com", "fabio"));
-      User user2 = userRepository.save(new User("paolo@gmail.com", "paolo"));
-      User medic_user = userRepository.save(new User("medic@gmail.com", "medic", Role.MEDIC));
+      User user1 = userService.create(new User("fabio@gmail.com", "fabio"));
+      User user2 = userService.create(new User("paolo@gmail.com", "paolo"));
+      User medic_user = userService.create(new User("medic@gmail.com", "medic", Role.MEDIC));
       log.info("Preloading user " + user1);
       log.info("Preloading user " + user2);
       log.info("Preloading user " + medic_user);
 
       // Preload Medics
-      Medic medic = medicRepository.save(new Medic(medic_user, "sushila", "cacata"));
+      Medic medic = medicService.create(new Medic(medic_user, "sushila", "cacata"));
       log.info("Preloading medic " + medic);
 
       // Preload Patients
-      Patient patient1 = patientRepository.save(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
-      Patient patient2 = patientRepository
-          .save(new Patient(user2, "paolo", "magidoof", LocalDate.of(2002, 2, 2), medic));
+      Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
+      Patient patient2 = patientService
+          .create(new Patient(user2, "paolo", "magidoof", LocalDate.of(2002, 2, 2), medic));
 
       log.info("Preloading patient " + patient1);
       log.info("Preloading patient " + patient2);

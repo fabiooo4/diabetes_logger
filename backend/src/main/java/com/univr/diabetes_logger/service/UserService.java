@@ -2,6 +2,7 @@ package com.univr.diabetes_logger.service;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.univr.diabetes_logger.model.User;
@@ -13,6 +14,8 @@ import com.univr.diabetes_logger.repository.UserRepository;
 @Service
 public class UserService implements CrudService<User> {
   private UserRepository repository;
+
+  private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
   public UserService(UserRepository repository) {
     this.repository = repository;
@@ -30,6 +33,9 @@ public class UserService implements CrudService<User> {
 
   @Override
   public User create(User user) {
+    // Crypt password before saving
+    user.setPassword(encoder.encode(user.getPassword()));
+
     return repository.save(user);
   }
 

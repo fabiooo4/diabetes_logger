@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-06-21 00:19:16.
+// Generated using typescript-generator version 3.2.1263 on 2025-06-23 21:27:52.
 
 export interface Patient {
     id: number;
