@@ -73,7 +73,8 @@ public class UserService implements CrudService<User> {
         .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
     if (authentication.isAuthenticated()) {
-      return jwtService.generateToken();
+      User logged_user = repository.findByEmail(user.getEmail()).orElseThrow();
+      return jwtService.generateToken(logged_user.getEmail(), logged_user.getRole());
     }
 
     return "Invalid credentials";

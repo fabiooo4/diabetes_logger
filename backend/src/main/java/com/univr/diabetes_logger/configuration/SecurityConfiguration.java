@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.univr.diabetes_logger.service.CustomUserDetailsService;
 
@@ -27,16 +28,20 @@ public class SecurityConfiguration {
   @Autowired
   private CustomUserDetailsService userDetailsService;
 
+  @Autowired
+  private JwtFilter jwtFilter;
+
   @Bean
   // Authentication configuration
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(customizer -> customizer.disable())
         .authorizeHttpRequests(
-            request -> request.requestMatchers("/login", "/register").permitAll().anyRequest().authenticated())
+            request -> request.requestMatchers("login", "register").permitAll().anyRequest().authenticated())
         // .formLogin(Customizer.withDefaults()) // For web form
         .httpBasic(Customizer.withDefaults()) // For non web clients
         // Create a new session for every request
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 
