@@ -38,8 +38,8 @@ public class LoadDatabase {
       userRepository.flush();
 
       // Preload Users
-      User user1 = userService.create(new User("fabio@gmail.com", "fabio"));
-      User user2 = userService.create(new User("paolo@gmail.com", "paolo"));
+      User user1 = userService.create(new User("fabio@gmail.com", "fabio", Role.PATIENT));
+      User user2 = userService.create(new User("paolo@gmail.com", "paolo", Role.ADMIN));
       User medic_user = userService.create(new User("medic@gmail.com", "medic", Role.MEDIC));
       log.info("Preloading user " + user1);
       log.info("Preloading user " + user2);
@@ -51,11 +51,8 @@ public class LoadDatabase {
 
       // Preload Patients
       Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
-      Patient patient2 = patientService
-          .create(new Patient(user2, "paolo", "magidoof", LocalDate.of(2002, 2, 2), medic));
 
       log.info("Preloading patient " + patient1);
-      log.info("Preloading patient " + patient2);
     };
   }
 

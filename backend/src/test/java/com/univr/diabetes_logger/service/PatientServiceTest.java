@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.User;
+import com.univr.diabetes_logger.model.User.Role;
 import com.univr.diabetes_logger.repository.PatientRepository;
 
 import java.time.LocalDate;
@@ -33,8 +34,8 @@ public class PatientServiceTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient(new User("testmail", "testpass"), "test", "test", LocalDate.of(2000, 1, 1),
-        new Medic(new User("medicmail", "medicpass"), "testMedic", "lastname"));
+    patient = new Patient(new User("testmail", "testpass", Role.PATIENT), "test", "test", LocalDate.of(2000, 1, 1),
+        new Medic(new User("medicmail", "medicpass", Role.MEDIC), "testMedic", "lastname"));
   }
 
   @Test

@@ -71,7 +71,7 @@ public class JwtService {
   private String extractRole(String token) {
     final Claims claims = extractAllClaims(token);
 
-    Role role = claims.get("role", Role.class);
+    String role = claims.get("role", String.class);
 
     if (role == null) {
       return "NONE";

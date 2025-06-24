@@ -54,7 +54,8 @@ public class UserService implements CrudService<User> {
     User existingUser = this.getById(id).orElseThrow();
 
     existingUser.setEmail(user.getEmail());
-    existingUser.setPassword(user.getPassword());
+    existingUser.setPassword(encoder.encode(user.getPassword()));
+    existingUser.setRole(user.getRole());
 
     return repository.save(existingUser);
   }
@@ -74,6 +75,7 @@ public class UserService implements CrudService<User> {
 
     if (authentication.isAuthenticated()) {
       User logged_user = repository.findByEmail(user.getEmail()).orElseThrow();
+
       return jwtService.generateToken(logged_user.getEmail(), logged_user.getRole());
     }
 
