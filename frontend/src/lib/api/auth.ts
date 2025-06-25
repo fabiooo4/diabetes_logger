@@ -1,22 +1,46 @@
 import { PUBLIC_API_BASE } from '$env/static/public';
+import type { User } from '$lib/types';
+import type { RequestEvent } from '@sveltejs/kit';
 
-export async function login(email: string, password: string): Promise<void> {
-  fetch(PUBLIC_API_BASE + '/login', {
+export async function login(email: string, password: string): Promise<Response> {
+  return fetch(PUBLIC_API_BASE + '/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ email, password })
+  });
+}
+
+export async function authenticateUser(
+  event: RequestEvent<Partial<Record<string, string>>, string | null>
+): Promise<User | null> {
+  const { cookies } = event;
+
+  const token: string | undefined = cookies.get('token');
+  const userId: number = parseInt(cookies.get('userId') || '');
+
+  // User is not authenticated if no token or userId is set
+  if (token == undefined || isNaN(userId)) {
+    return null;
+  }
+
+  // If credentials are valid a token and userId will be set
+  // To validate the token a request to the API is made
+  return fetch(PUBLIC_API_BASE + '/users/' + userId, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
   })
     .then((response) => {
-      // Error handling
       if (!response.ok) {
-        throw new Error('Login failed');
+        throw new Error('Authentication failed');
       }
-      return response.text();
+      return response.json();
     })
-    .then((jwt_token: string) => {
-      // JWT token storage
-      localStorage.setItem('jwt_token', jwt_token);
+    .then((user: User) => {
+      return user;
     });
 }

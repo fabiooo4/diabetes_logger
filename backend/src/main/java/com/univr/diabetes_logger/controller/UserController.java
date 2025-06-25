@@ -1,6 +1,9 @@
 package com.univr.diabetes_logger.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.service.UserService;
+
+import ch.qos.logback.classic.encoder.JsonEncoder;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 /**
@@ -32,9 +38,8 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public String login(@RequestBody User user, UriComponentsBuilder uriBuilder) {
+  public Properties login(@RequestBody User user, UriComponentsBuilder uriBuilder) {
     return userService.verify(user);
-
   }
 
   @PostMapping("/register")

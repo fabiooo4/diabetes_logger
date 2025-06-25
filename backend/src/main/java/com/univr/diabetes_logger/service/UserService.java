@@ -1,6 +1,9 @@
 package com.univr.diabetes_logger.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -69,16 +72,23 @@ public class UserService implements CrudService<User> {
     return deleted;
   }
 
-  public String verify(User user) {
+  public Properties verify(User user) {
+
     Authentication authentication = authManager
         .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
     if (authentication.isAuthenticated()) {
       User logged_user = repository.findByEmail(user.getEmail()).orElseThrow();
 
-      return jwtService.generateToken(logged_user.getEmail(), logged_user.getRole());
+      Properties props = new Properties();
+
+      // Return user details and JWT token
+      props.put("userId", logged_user.getId());
+      props.put("token", jwtService.generateToken(logged_user.getEmail(), logged_user.getRole()));
+
+      return props;
     }
 
-    return "Invalid credentials";
+    throw new RuntimeException("Invalid credentials");
   }
 }

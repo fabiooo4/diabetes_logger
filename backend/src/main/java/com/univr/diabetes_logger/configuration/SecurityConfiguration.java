@@ -38,16 +38,16 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
             request -> {
               request
-                  .requestMatchers("login", "register").permitAll();
+                  .requestMatchers("/login", "/register").permitAll();
 
               // Patient is allowed to
               request
-                  .requestMatchers("medics").hasAnyAuthority("PATIENT", "ADMIN");
+                  .requestMatchers("/medics").hasAnyAuthority("PATIENT", "ADMIN");
 
               // Medic is allowed to
               request
-                  .requestMatchers(HttpMethod.GET, "patients", "patients/{id}").hasAnyAuthority("MEDIC", "ADMIN")
-                  .requestMatchers(HttpMethod.PUT, "patients/{id}").hasAnyAuthority("MEDIC", "ADMIN");
+                  .requestMatchers(HttpMethod.GET, "/patients", "patients/{id}").hasAnyAuthority("MEDIC", "ADMIN")
+                  .requestMatchers(HttpMethod.PUT, "/patients/{id}").hasAnyAuthority("MEDIC", "ADMIN");
 
               // Admin is allowed to
               request.anyRequest().hasAuthority("ADMIN");
