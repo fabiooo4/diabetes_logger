@@ -1,11 +1,8 @@
 package com.univr.diabetes_logger.service;
 
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 import javax.crypto.KeyGenerator;
@@ -15,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.univr.diabetes_logger.model.CustomUserDetails;
 import com.univr.diabetes_logger.model.User.Role;
 
 import io.jsonwebtoken.Claims;

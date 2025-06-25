@@ -118,6 +118,7 @@
           <jsonLibrary>jackson2</jsonLibrary>
           <classes>
             <!-- Insert here the classes to convert into Typescript Types -->
+            <class>com.univr.diabetes_logger.model.User</class>
             <class>com.univr.diabetes_logger.model.Patient</class>
             <class>com.univr.diabetes_logger.model.Medic</class>
             <class>com.univr.diabetes_logger.model.Therapy</class>
