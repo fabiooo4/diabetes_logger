@@ -9,6 +9,24 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (!event.locals.user) {
       throw redirect(302, '/login');
     }
+
+    if (event.url.pathname.startsWith('/dashboard/admin')) {
+      if (event.locals.user.role !== 'ADMIN') {
+        throw redirect(302, '/login');
+      }
+    }
+
+    if (event.url.pathname.startsWith('/dashboard/patient')) {
+      if (event.locals.user.role !== 'PATIENT') {
+        throw redirect(302, '/login');
+      }
+    }
+
+    if (event.url.pathname.startsWith('/dashboard/medic')) {
+      if (event.locals.user.role !== 'MEDIC') {
+        throw redirect(302, '/login');
+      }
+    }
   }
 
   const response = await resolve(event);

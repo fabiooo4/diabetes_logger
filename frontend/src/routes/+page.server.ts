@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export const load = () => {
-  redirect(307, '/login');
+export const load: PageServerLoad = () => {
+  redirect(302, '/login');
 };

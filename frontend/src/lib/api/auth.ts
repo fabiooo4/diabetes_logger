@@ -36,7 +36,7 @@ export async function authenticateUser(
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Authentication failed');
+        return Error('Authentication failed');
       }
       return response.json();
     })
