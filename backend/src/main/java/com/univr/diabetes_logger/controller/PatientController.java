@@ -49,7 +49,7 @@ public class PatientController {
     return ResponseEntity.created(uri).body(created);
   }
 
-  @PutMapping("/{id}")
+  @PatchMapping("/{id}")
   public Patient updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
     return patientService.update(id, patient);
   }

@@ -1,11 +1,13 @@
 package com.univr.diabetes_logger.service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import com.univr.diabetes_logger.model.Therapy;
 import com.univr.diabetes_logger.repository.TherapyRepository;
 import org.springframework.stereotype.Service;
 
+import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.repository.PatientRepository;
 
@@ -17,8 +19,6 @@ public class PatientService implements CrudService<Patient> {
 
   private TherapyRepository therapyRepository;
   private PatientRepository repository;
-
-
 
   public PatientService(PatientRepository repository, TherapyRepository therapyRepository) {
     this.repository = repository;
@@ -44,11 +44,30 @@ public class PatientService implements CrudService<Patient> {
   public Patient update(Integer id, Patient patient) {
     Patient existingPatient = this.getById(id).orElseThrow();
 
-    existingPatient.setFirstName(patient.getFirstName());
-    existingPatient.setLastName(patient.getLastName());
-    existingPatient.setBirthDate(patient.getBirthDate());
-    existingPatient.setReferralMedic(patient.getReferralMedic());
-    existingPatient.setTherapy(patient.getTherapy());
+    String firstName = patient.getFirstName();
+    if (firstName != null) {
+      existingPatient.setFirstName(firstName);
+    }
+
+    String lastName = patient.getLastName();
+    if (lastName != null) {
+      existingPatient.setLastName(lastName);
+    }
+
+    LocalDate birthDate = patient.getBirthDate();
+    if (birthDate != null) {
+      existingPatient.setBirthDate(birthDate);
+    }
+
+    Medic referralMedic = patient.getReferralMedic();
+    if (referralMedic != null) {
+      existingPatient.setReferralMedic(referralMedic);
+    }
+
+    Therapy therapy = patient.getTherapy();
+    if (therapy != null) {
+      existingPatient.setTherapy(therapy);
+    }
 
     return repository.save(existingPatient);
   }
