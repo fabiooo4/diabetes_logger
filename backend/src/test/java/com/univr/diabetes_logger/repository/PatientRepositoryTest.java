@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.univr.diabetes_logger.model.Therapy;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,8 @@ public class PatientRepositoryTest {
 
     // Action
     Patient patient = new Patient(new User("testmail", "pass", Role.PATIENT), "TestFirstName", "TestLastName",
-        LocalDate.of(2000, 1, 1), new Medic(new User("medicmail", "pass", Role.MEDIC), "TestMedic", "lastname"));
+        LocalDate.of(2000, 1, 1), new Medic(new User("medicmail", "pass", Role.MEDIC), "TestMedic", "lastname"),
+            new Therapy("Caccolina", 100, 420.69, "aiutatemi"));
     patientRepository.save(patient);
 
     // Verify

@@ -2,6 +2,7 @@ package com.univr.diabetes_logger.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -47,15 +48,21 @@ public class Patient {
   @JsonIgnore
   private User user;
 
+  @ManyToOne(cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "therapy_id", referencedColumnName = "id", nullable = true)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
+  private Therapy therapy;
+
   protected Patient() {
   }
 
-  public Patient(User user, String firstName, String lastName, LocalDate birthDate, Medic referralMedic) {
+  public Patient(User user, String firstName, String lastName, LocalDate birthDate, Medic referralMedic, Therapy therapy) {
     this.user = user;
     this.firstName = firstName;
     this.lastName = lastName;
     this.birthDate = birthDate;
     this.referralMedic = referralMedic;
+    this.therapy = therapy;
   }
 
   public Integer getId() {
@@ -101,7 +108,7 @@ public class Patient {
   @Override
   public String toString() {
     return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate
-        + ", referralMedic=" + referralMedic + ", user=" + user + "]";
+        + ", referralMedic=" + referralMedic + ", therapy=" + therapy + ", user=" + user + "]";
   }
 
   public User getUser() {
@@ -110,6 +117,14 @@ public class Patient {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public Therapy getTherapy() {
+    return therapy;
+  }
+
+  public void setTherapy(Therapy therapy) {
+    this.therapy = therapy;
   }
 
 }

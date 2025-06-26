@@ -3,6 +3,7 @@ package com.univr.diabetes_logger.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
+import com.univr.diabetes_logger.model.Therapy;
 import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.model.User.Role;
 import com.univr.diabetes_logger.service.PatientService;
@@ -48,7 +49,8 @@ public class PatientControllerTest {
   @BeforeEach
   public void setup() {
     patient = new Patient(new User("usermail", "pass1", Role.PATIENT), "John", "Cena", LocalDate.of(2000, 1, 1),
-        new Medic(new User("medicmail", "medicpass", Role.MEDIC), "CenaMedic", "LastName"));
+        new Medic(new User("medicmail", "medicpass", Role.MEDIC), "CenaMedic", "LastName"),
+            new Therapy("Caccolina", 100, 420.69, "aiutatemi"));
     patient.setId(1); // Set a mock ID for testing
   }
 
@@ -83,8 +85,10 @@ public class PatientControllerTest {
     List<Patient> patientsList = new ArrayList<>();
     patientsList.add(patient);
     patientsList
-        .add(new Patient(new User("testmail", "testpass", Role.PATIENT), "test", "test", LocalDate.of(2000, 1, 1),
-            new Medic(new User("testmedicmail", "testpass", Role.MEDIC), "testMedic", "lastname")));
+        .add(
+                new Patient(new User("testmail", "testpass", Role.PATIENT), "test", "test", LocalDate.of(2000, 1, 1),
+                new Medic(new User("testmedicmail", "testpass", Role.MEDIC), "testMedic", "lastname"),
+                new Therapy("Caccolina", 100, 420.69, "aiutatemi")));
     given(patientService.getAll()).willReturn(patientsList);
 
     // action

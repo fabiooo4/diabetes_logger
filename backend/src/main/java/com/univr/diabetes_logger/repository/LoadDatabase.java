@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
+import com.univr.diabetes_logger.model.Therapy;
 import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.model.User.Role;
 import com.univr.diabetes_logger.service.MedicService;
+import com.univr.diabetes_logger.service.TherapyService;
 import com.univr.diabetes_logger.service.PatientService;
 import com.univr.diabetes_logger.service.UserService;
 
@@ -23,19 +25,21 @@ public class LoadDatabase {
 
   @Bean
   CommandLineRunner initDatabase(UserRepository userRepository, PatientRepository patientRepository,
-      MedicRepository medicRepository, UserService userService, PatientService patientService,
-      MedicService medicService) {
+      MedicRepository medicRepository, TherapyRepository therapyRepository, UserService userService, PatientService patientService,
+      MedicService medicService, TherapyService therapyService) {
     return args -> {
       // TODO: Remove in production
       log.info("Clearing database");
       patientRepository.deleteAll();
       medicRepository.deleteAll();
       userRepository.deleteAll();
+      therapyRepository.deleteAll();
 
       // Flush to ensure deletion is complete
       patientRepository.flush();
       medicRepository.flush();
       userRepository.flush();
+      therapyRepository.flush();
 
       // Preload Users
       User user1 = userService.create(new User("fabio@gmail.com", "fabio", Role.PATIENT));
@@ -49,9 +53,12 @@ public class LoadDatabase {
       Medic medic = medicService.create(new Medic(medic_user, "sushila", "cacata"));
       log.info("Preloading medic " + medic);
 
-      // Preload Patients
-      Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
+      // Preload Therapies
+      Therapy therapy1 = therapyService.create(new Therapy("Metformina", 2, 30.0, "Prendere durante i pasti"));
+      log.info("Preloading therapy " + therapy1 + " for user " + user1);
 
+      // Preload Patients
+      Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic, therapy1));
       log.info("Preloading patient " + patient1);
     };
   }

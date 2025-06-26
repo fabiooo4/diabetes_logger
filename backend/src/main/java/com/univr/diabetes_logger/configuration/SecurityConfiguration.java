@@ -47,9 +47,10 @@ public class SecurityConfiguration {
 
               // Medic is allowed to
               request
-                  .requestMatchers(HttpMethod.GET, "/users/{id}").hasAnyAuthority("MEDIC", "ADMIN")
-                  .requestMatchers(HttpMethod.GET, "/patients", "patients/{id}").hasAnyAuthority("MEDIC", "ADMIN")
-                  .requestMatchers(HttpMethod.PUT, "/patients/{id}").hasAnyAuthority("MEDIC", "ADMIN");
+                  .requestMatchers(HttpMethod.GET, "/patients", "patients/{id}",
+                          "/users/{id}", "/therapies", "therapies/{id}").hasAnyAuthority("MEDIC", "ADMIN")
+                  .requestMatchers(HttpMethod.POST, "/therapies", "/patients/{id}").hasAnyAuthority("MEDIC", "ADMIN")
+                  .requestMatchers(HttpMethod.PUT, "/patients/{id}", "/therapies/{id}").hasAnyAuthority("MEDIC", "ADMIN");
 
               // Admin is allowed to
               request.anyRequest().hasAuthority("ADMIN");
