@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.univr.diabetes_logger.service.CustomUserDetailsService;
@@ -42,15 +43,23 @@ public class SecurityConfiguration {
 
               // Patient is allowed to
               request
-                  .requestMatchers(HttpMethod.GET, "/users/{id}").hasAnyAuthority("PATIENT", "ADMIN")
-                  .requestMatchers("/medics").hasAnyAuthority("PATIENT", "ADMIN");
+                  .requestMatchers(HttpMethod.GET, "/users/{id}")
+                  // Allow access to users/{id} endpoint only for the authenticated id
+                  .access(new WebExpressionAuthorizationManager(
+                      "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                  .requestMatchers("/medics").hasAnyAuthority("PATIENT", "ADMIN"); // TODO: Remove
 
               // Medic is allowed to
               request
-                  .requestMatchers(HttpMethod.GET, "/patients", "patients/{id}",
-                          "/users/{id}", "/therapies", "therapies/{id}").hasAnyAuthority("MEDIC", "ADMIN")
+                  .requestMatchers(HttpMethod.GET, "/users/{id}")
+                  // Allow access to users/{id} endpoint only for the authenticated id
+                  .access(new WebExpressionAuthorizationManager(
+                      "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                  .requestMatchers(HttpMethod.GET, "/patients", "patients/{id}", "/therapies", "therapies/{id}")
+                  .hasAnyAuthority("MEDIC", "ADMIN")
                   .requestMatchers(HttpMethod.POST, "/therapies", "/patients/{id}").hasAnyAuthority("MEDIC", "ADMIN")
-                  .requestMatchers(HttpMethod.PUT, "/patients/{id}", "/therapies/{id}").hasAnyAuthority("MEDIC", "ADMIN");
+                  .requestMatchers(HttpMethod.PUT, "/patients/{id}", "/therapies/{id}")
+                  .hasAnyAuthority("MEDIC", "ADMIN");
 
               // Admin is allowed to
               request.anyRequest().hasAuthority("ADMIN");

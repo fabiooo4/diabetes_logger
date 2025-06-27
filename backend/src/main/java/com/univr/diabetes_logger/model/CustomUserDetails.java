@@ -37,6 +37,10 @@ public class CustomUserDetails implements UserDetails {
     return user.getPassword();
   }
 
+  public boolean checkId(Integer id) {
+    return id.equals(user.getId());
+  }
+
   @Override
   public String getUsername() {
     return user.getEmail();

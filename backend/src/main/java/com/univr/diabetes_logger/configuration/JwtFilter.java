@@ -1,13 +1,10 @@
 package com.univr.diabetes_logger.configuration;
 
 import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.univr.diabetes_logger.service.JwtService;
+import com.univr.diabetes_logger.model.CustomUserDetails;
 import com.univr.diabetes_logger.service.CustomUserDetailsService;
 
 /**
@@ -47,12 +45,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      UserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(email);
+      CustomUserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(email);
 
       if (jwtService.validateToken(token, userDetails)) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
             userDetails.getAuthorities());
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        authToken.setDetails(userDetails);
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
