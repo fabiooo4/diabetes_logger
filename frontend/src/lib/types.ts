@@ -1,14 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-06-26 12:08:03.
+// Generated using typescript-generator version 3.2.1263 on 2025-06-27 23:03:19.
 
 export interface User {
     id: number;
     email: string;
-    password: string;
     role: Role;
-    patient: Patient;
     medic: Medic;
+    password: string;
 }
 
 export interface Patient {
@@ -17,6 +16,7 @@ export interface Patient {
     lastName: string;
     birthDate: Date;
     referralMedic: Medic;
+    user: User;
     therapy: Therapy;
 }
 

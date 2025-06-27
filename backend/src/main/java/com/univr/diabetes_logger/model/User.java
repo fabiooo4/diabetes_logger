@@ -1,6 +1,9 @@
 package com.univr.diabetes_logger.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,6 +35,7 @@ public class User {
   @Column(name = "email")
   private String email;
   @Column(name = "password")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
   @Column(name = "role")
   private String role;
