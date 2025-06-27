@@ -53,6 +53,7 @@ Autenticazione necessaria per l'utente
   - Fattori di rischio
   - Patologie pregresse
   - Comorbidità
+- Vedere l'ultimo medico che ha modificato un dato sui pazienti ????
 
 ## Sistema
 - Verificare che i pazienti seguano le terapie dei medici
@@ -65,3 +66,37 @@ Autenticazione necessaria per l'utente
 
 ## Admin
 - Inserire i dati di autenticazione per pazienti e medici
+
+# Endpoints
+
+## Admin
+- CRUD/**
+
+## Patients
+#### UserController
+- GET/users/{loggedId} può accedere solo alle risorse dell'utente autenticato, non degli altri.
+
+#### ReportsController
+- GET+POST+PUT/reports/{loggedId}
+
+#### NotificationController
+- GET/notifications/{loggedId}
+
+## Medics
+#### UserController
+- GET/users/{loggedId} può accedere solo alle risorse dell'utente autenticato, non degli altri.
+
+#### ReportsController
+- GET/reports/{anyUserId}
+- GET/reports
+
+#### NotificationController
+- GET/notifications/{loggedId}
+
+#### TherapiesController
+- GET+POST+PUT/therapies
+- GET/therapies/{id}
+
+#### PatientsController
+- GET/patients
+- GET+PATCH/patients/{id} può modificare solo le note extra

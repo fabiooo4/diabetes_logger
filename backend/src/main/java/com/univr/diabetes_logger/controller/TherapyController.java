@@ -13,40 +13,41 @@ import java.util.Optional;
 @RequestMapping(path = "/therapies")
 public class TherapyController {
 
-    @Autowired // get the bean therapyService
-    private TherapyService therapyService;
+  @Autowired // get the bean therapyService
+  private TherapyService therapyService;
 
-    public TherapyController(TherapyService therapyService) {
-        this.therapyService = therapyService;
-    }
+  public TherapyController(TherapyService therapyService) {
+    this.therapyService = therapyService;
+  }
 
-    @GetMapping
-    public Iterable<Therapy> getAllTherapys() {
-        return therapyService.getAll();
-    }
+  @GetMapping
+  public Iterable<Therapy> getAllTherapies() {
+    return therapyService.getAll();
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Therapy> getTherapyById(@PathVariable Integer id) {
-        Optional<Therapy> therapy = therapyService.getById(id);
+  @GetMapping("/{id}")
+  public ResponseEntity<Therapy> getTherapyById(@PathVariable Integer id) {
+    Optional<Therapy> therapy = therapyService.getById(id);
 
-        return therapy.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    return therapy.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
+  }
 
-    @PostMapping
-    public ResponseEntity<Therapy> createTherapy(@RequestBody Therapy therapy, UriComponentsBuilder uriBuilder) {
-        Therapy created = therapyService.create(therapy);
+  @PostMapping
+  public ResponseEntity<Therapy> createTherapy(@RequestBody Therapy therapy, UriComponentsBuilder uriBuilder) {
+    Therapy created = therapyService.create(therapy);
 
-        var uri = uriBuilder.path("/therapies/{id}").buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uri).body(created);
-    }
+    var uri = uriBuilder.path("/therapies/{id}").buildAndExpand(created.getId()).toUri();
+    return ResponseEntity.created(uri).body(created);
+  }
 
-    @PutMapping("/{id}")
-    public Therapy updateTherapy(@PathVariable Integer id, @RequestBody Therapy therapy, UriComponentsBuilder uriBuilder) {
-        return therapyService.update(id, therapy);
-    }
+  @PutMapping("/{id}")
+  public Therapy updateTherapy(@PathVariable Integer id, @RequestBody Therapy therapy,
+      UriComponentsBuilder uriBuilder) {
+    return therapyService.update(id, therapy);
+  }
 
-    @DeleteMapping("/{id}")
-    public Therapy deleteTherapy(@PathVariable Integer id) {
-        return therapyService.delete(id);
-    }
+  @DeleteMapping("/{id}")
+  public Therapy deleteTherapy(@PathVariable Integer id) {
+    return therapyService.delete(id);
+  }
 }

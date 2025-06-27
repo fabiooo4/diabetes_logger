@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import com.univr.diabetes_logger.model.Therapy;
-import com.univr.diabetes_logger.repository.TherapyRepository;
 import org.springframework.stereotype.Service;
 
 import com.univr.diabetes_logger.model.Medic;
@@ -17,12 +16,10 @@ import com.univr.diabetes_logger.repository.PatientRepository;
 @Service
 public class PatientService implements CrudService<Patient> {
 
-  private TherapyRepository therapyRepository;
   private PatientRepository repository;
 
-  public PatientService(PatientRepository repository, TherapyRepository therapyRepository) {
+  public PatientService(PatientRepository repository) {
     this.repository = repository;
-    this.therapyRepository = therapyRepository;
   }
 
   @Override

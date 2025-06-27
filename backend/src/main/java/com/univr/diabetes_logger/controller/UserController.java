@@ -1,7 +1,5 @@
 package com.univr.diabetes_logger.controller;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -18,8 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.service.UserService;
-
-import ch.qos.logback.classic.encoder.JsonEncoder;
 
 import org.springframework.web.bind.annotation.PutMapping;
 

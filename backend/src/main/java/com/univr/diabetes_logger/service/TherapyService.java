@@ -9,43 +9,45 @@ import java.util.Optional;
 @Service
 public class TherapyService implements CrudService<Therapy> {
 
-    private TherapyRepository therapyRepository;
+  private TherapyRepository therapyRepository;
 
-    public TherapyService(TherapyRepository therapyRepository) {
-        this.therapyRepository = therapyRepository;
-    }
+  public TherapyService(TherapyRepository therapyRepository) {
+    this.therapyRepository = therapyRepository;
+  }
 
-    @Override
-    public Therapy create(Therapy therapy) {
-        return therapyRepository.save(therapy);
-    }
+  @Override
+  public Therapy create(Therapy therapy) {
+    return therapyRepository.save(therapy);
+  }
 
-    @Override
-    public Iterable<Therapy> getAll() { return therapyRepository.findAll(); }
+  @Override
+  public Iterable<Therapy> getAll() {
+    return therapyRepository.findAll();
+  }
 
-    @Override
-    public Optional<Therapy> getById(Integer id) {
-        return therapyRepository.findById(id);
-    }
+  @Override
+  public Optional<Therapy> getById(Integer id) {
+    return therapyRepository.findById(id);
+  }
 
-    @Override
-    public Therapy update(Integer id, Therapy therapy) {
-        Therapy existingTherapy = this.getById(id).orElseThrow();
+  @Override
+  public Therapy update(Integer id, Therapy therapy) {
+    Therapy existingTherapy = this.getById(id).orElseThrow();
 
-        existingTherapy.setMedicine(therapy.getMedicine());
-        existingTherapy.setDailyIntake(therapy.getDailyIntake());
-        existingTherapy.setAmount(therapy.getAmount());
-        existingTherapy.setDirections(therapy.getDirections());
+    existingTherapy.setMedicine(therapy.getMedicine());
+    existingTherapy.setDailyIntake(therapy.getDailyIntake());
+    existingTherapy.setAmount(therapy.getAmount());
+    existingTherapy.setDirections(therapy.getDirections());
 
-        return therapyRepository.save(existingTherapy);
-    }
+    return therapyRepository.save(existingTherapy);
+  }
 
-    @Override
-    public Therapy delete(Integer id) {
-        Therapy deletedTherapy = this.getById(id).orElseThrow();
+  @Override
+  public Therapy delete(Integer id) {
+    Therapy deletedTherapy = this.getById(id).orElseThrow();
 
-        therapyRepository.delete(deletedTherapy);
+    therapyRepository.delete(deletedTherapy);
 
-        return deletedTherapy;
-    }
+    return deletedTherapy;
+  }
 }

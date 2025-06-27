@@ -2,7 +2,6 @@ package com.univr.diabetes_logger.controller;
 
 import java.util.Optional;
 
-import com.univr.diabetes_logger.model.Therapy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,11 +48,10 @@ public class PatientController {
     return ResponseEntity.created(uri).body(created);
   }
 
-  @PatchMapping("/{id}")
+  @PutMapping("/{id}")
   public Patient updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
     return patientService.update(id, patient);
   }
-  
 
   @DeleteMapping("/{id}")
   public Patient deletePatient(@PathVariable Integer id) {
