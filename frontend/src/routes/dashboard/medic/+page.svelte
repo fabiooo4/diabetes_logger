@@ -1,1 +1,25 @@
-MEDIC PAGE
+<script lang="ts">
+	import type { Patient, User } from '$lib/types';
+
+	let { data }: { data: { user: User; patientsList: Promise<Patient[]> } } = $props();
+</script>
+
+<main>
+	<h1>Hello {data.user.email}</h1>
+
+	<div class="mt-8 flex">
+		{#await data.patientsList}
+			<!-- promise is pending -->
+			<p>Loading patients...</p>
+		{:then patients}
+			<!-- promise was fulfilled -->
+			<ul class="flex flex-col gap-y-4">
+				{#each patients as patient}
+					<li>
+						{JSON.stringify(patient)}
+					</li>
+				{/each}
+			</ul>
+		{/await}
+	</div>
+</main>

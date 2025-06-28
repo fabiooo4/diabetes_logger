@@ -31,16 +31,21 @@ export async function authenticateUser(
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      'Authorization': 'Bearer ' + token
     }
   })
     .then((response) => {
       if (!response.ok) {
+        console.error('Authentication failed with status:', response.status);
         return Error('Authentication failed');
       }
       return response.json();
     })
     .then((user: User) => {
       return user;
+    })
+    .catch((error) => {
+      console.error('Error during authentication:', error);
+      return null;
     });
 }

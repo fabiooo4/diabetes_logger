@@ -38,17 +38,18 @@ public class SecurityConfiguration {
     return http.csrf(customizer -> customizer.disable())
         .authorizeHttpRequests(
             request -> {
+              // Everyone is allowed to
               request
-                  .requestMatchers("/login", "/register").permitAll();
-
-              // Patient is allowed to
-              request
+                  .requestMatchers("/login", "/register").permitAll()
                   // Users -----------------------------------------------
                   .requestMatchers(HttpMethod.GET, "/users/{id}")
                   // Allow access to users/{id} endpoint only for the authenticated id
-                  .access(new WebExpressionAuthorizationManager(
-                      "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                  .access(new WebExpressionAuthorizationManager("hasAuthority('ADMIN') or authentication.getDetails().checkId(#id)"));
                   // Users -----------------------------------------------
+
+
+              // Patient is allowed to
+              // request
                   //
                   // Reports ---------------------------------------------
                   // .requestMatchers(HttpMethod.GET, "/reports/{id}")

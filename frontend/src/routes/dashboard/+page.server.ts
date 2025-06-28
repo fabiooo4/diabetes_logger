@@ -6,7 +6,8 @@ export const load: PageServerLoad = ({ locals }) => {
 	// Redirect the user to its dashboard based on its role
 	let user: User | null = locals.user;
 
-	if (!user) {
+	if (user == null) {
+    console.error('User is not authenticated');
 		throw redirect(302, '/login');
 	}
 

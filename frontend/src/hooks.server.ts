@@ -7,6 +7,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.user = await authenticateUser(event);
 
     if (!event.locals.user) {
+      console.error('User is not authenticated');
       throw redirect(302, '/login');
     }
 
