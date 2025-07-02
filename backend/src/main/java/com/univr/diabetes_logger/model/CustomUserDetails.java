@@ -38,6 +38,9 @@ public class CustomUserDetails implements UserDetails {
   }
 
   public boolean checkId(Integer id) {
+
+    System.out.println("\n\n\n\n\n Checking if user exists with id: " + id + "\n\n" + "User ID: " + user.getId());
+
     return id.equals(user.getId());
   }
 

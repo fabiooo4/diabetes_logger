@@ -64,9 +64,12 @@ public class SecurityConfiguration {
                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
                   // Reports --------------------------------------------
                   // Notifications ---------------------------------------
-                  // .requestMatchers(HttpMethod.GET, "/reports/{id}")
-                  // .access(new WebExpressionAuthorizationManager(
-                  //   "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
+                  .requestMatchers(HttpMethod.GET, "/notifications/user/{userId}/{id}", "/notifications/user/{userId}")
+                  .access(new WebExpressionAuthorizationManager(
+                     "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT', 'MEDIC') and authentication.getDetails().checkId(#userId))"))
+                  .requestMatchers(HttpMethod.DELETE, "/notifications/user/{userId}/{id}")
+                  .access(new WebExpressionAuthorizationManager(
+                    "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT', 'MEDIC') and authentication.getDetails().checkId(#userId))"))
                   // Notifications ---------------------------------------
                   ;
 
@@ -93,11 +96,6 @@ public class SecurityConfiguration {
                   .hasAnyAuthority("MEDIC", "ADMIN")
                   // Reports ---------------------------------------------
                   //
-                  // Notifications ---------------------------------------
-                  // .requestMatchers(HttpMethod.GET, "/notifications/{id}")
-                  // .access(new WebExpressionAuthorizationManager(
-                  //     "hasAnyAuthority('MEDIC', 'ADMIN') and authentication.getDetails().checkId(#id)"))
-                  // Notifications ---------------------------------------
                   ;
 
               // Admin is allowed to

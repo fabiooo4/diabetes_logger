@@ -1,23 +1,18 @@
 package com.univr.diabetes_logger.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
+import com.univr.diabetes_logger.model.*;
+import com.univr.diabetes_logger.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.univr.diabetes_logger.model.Medic;
-import com.univr.diabetes_logger.model.Patient;
-import com.univr.diabetes_logger.model.Therapy;
-import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.model.User.Role;
-import com.univr.diabetes_logger.service.MedicService;
-import com.univr.diabetes_logger.service.TherapyService;
-import com.univr.diabetes_logger.service.PatientService;
-import com.univr.diabetes_logger.service.ReportService;
-import com.univr.diabetes_logger.service.UserService;
 
 @Configuration
 public class LoadDatabase {
@@ -26,11 +21,14 @@ public class LoadDatabase {
 
   @Bean
   CommandLineRunner initDatabase(UserRepository userRepository, PatientRepository patientRepository,
-      MedicRepository medicRepository, TherapyRepository therapyRepository, ReportRepository reportRepository, UserService userService, PatientService patientService,
-      MedicService medicService, TherapyService therapyService, ReportService reportService) {
+                                 MedicRepository medicRepository, TherapyRepository therapyRepository,
+                                 ReportRepository reportRepository, UserService userService, PatientService patientService,
+                                 MedicService medicService, TherapyService therapyService, NotificationRepository notificationRepository,
+                                 NotificationService notificationService, ReportService reportService) {
     return args -> {
       // TODO: Remove in production
       log.info("Clearing database");
+      notificationRepository.deleteAll();
       reportRepository.deleteAll();
       patientRepository.deleteAll();
       medicRepository.deleteAll();
@@ -38,6 +36,7 @@ public class LoadDatabase {
       therapyRepository.deleteAll();
 
       // Flush to ensure deletion is complete
+      notificationRepository.flush();
       reportRepository.flush();
       patientRepository.flush();
       medicRepository.flush();
@@ -63,6 +62,17 @@ public class LoadDatabase {
       // Preload Patients
       Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
       log.info("Preloading patient " + patient1);
+
+      Report report = reportService.create(new Report(120, false,
+              "cacca", "aiuto", LocalDate.of(2000,1,1),
+              LocalTime.of(1,1,1), "Insuline", 100, patient1));
+      log.info("Preloading report " + report);
+
+      Notification notif = notificationService.create(new Notification("Ok.", false, LocalDateTime.of(2025, 7,
+              21, 20, 13), medic_user));
+
+      log.info("Preloading notifications " + notif);
+
     };
   }
 

@@ -80,7 +80,7 @@ Autenticazione necessaria per l'utente
 - GET+POST+PUT+DELETE/reports/{loggedId}
 
 #### NotificationController
-- GET/notifications/{loggedId}
+- GET+DELETE/notifications/{loggedId}
 
 ## Medics
 #### UserController
@@ -91,7 +91,7 @@ Autenticazione necessaria per l'utente
 - GET/reports
 
 #### NotificationController
-- GET/notifications/{loggedId}
+- GET+DELETE/notifications/{loggedId}
 
 #### TherapiesController
 - GET+POST+PUT/therapies
