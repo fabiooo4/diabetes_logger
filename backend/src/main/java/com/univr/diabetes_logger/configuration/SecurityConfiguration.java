@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,15 +50,15 @@ public class SecurityConfiguration {
               // Patient is allowed to
               request
                   // Reports ---------------------------------------------
-                  .requestMatchers(HttpMethod.GET, "/reports/{id}")
+                  .requestMatchers(HttpMethod.GET, "/reports/{userId}")
                   .access(new WebExpressionAuthorizationManager(
-                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
-                   .requestMatchers(HttpMethod.POST, "/reports/{id}")
+                       "hasAnyAuthority('ADMIN', 'MEDIC') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
+                   .requestMatchers(HttpMethod.POST, "/reports/{userId}")
                    .access(new WebExpressionAuthorizationManager(
-                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
-                   .requestMatchers(HttpMethod.PUT, "/reports/{id}")
+                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
+                   .requestMatchers(HttpMethod.PUT, "/reports/{userId}")
                    .access(new WebExpressionAuthorizationManager(
-                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
+                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
                   // Reports --------------------------------------------
                   // Notifications ---------------------------------------
                   // .requestMatchers(HttpMethod.GET, "/reports/{id}")
@@ -87,8 +86,8 @@ public class SecurityConfiguration {
                   // Therapies -------------------------------------------
                   //
                   // Reports ---------------------------------------------
-                  // .requestMatchers(HttpMethod.GET, "/reports", "/reports/{id}")
-                  // .hasAnyAuthority("MEDIC", "ADMIN")
+                  .requestMatchers(HttpMethod.GET, "/reports")
+                  .hasAnyAuthority("MEDIC", "ADMIN")
                   // Reports ---------------------------------------------
                   //
                   // Notifications ---------------------------------------
@@ -101,8 +100,6 @@ public class SecurityConfiguration {
               // Admin is allowed to
               request.anyRequest().hasAuthority("ADMIN");
             })
-        // .formLogin(Customizer.withDefaults()) // For web form
-        .httpBasic(Customizer.withDefaults()) // For non web clients
         // Create a new session for every request
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

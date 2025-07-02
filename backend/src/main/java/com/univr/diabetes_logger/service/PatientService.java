@@ -1,12 +1,9 @@
 package com.univr.diabetes_logger.service;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
-import com.univr.diabetes_logger.model.Therapy;
 import org.springframework.stereotype.Service;
 
-import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.repository.PatientRepository;
 

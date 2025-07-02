@@ -12,8 +12,6 @@ import com.univr.diabetes_logger.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.univr.diabetes_logger.repository.MedicRepository;
-
 /**
  * MedicServiceImpl
  */

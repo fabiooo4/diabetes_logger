@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.univr.diabetes_logger.model.Report;
-import com.univr.diabetes_logger.model.Therapy;
 import com.univr.diabetes_logger.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.univr.diabetes_logger.model.Medic;
-import com.univr.diabetes_logger.service.MedicService;
 import org.springframework.web.bind.annotation.PutMapping;
 
 /**
