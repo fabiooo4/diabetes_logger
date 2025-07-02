@@ -40,32 +40,7 @@ public class PatientService implements CrudService<Patient> {
   @Override
   public Patient update(Integer id, Patient patient) {
     Patient existingPatient = this.getById(id).orElseThrow();
-
-    String firstName = patient.getFirstName();
-    if (firstName != null) {
-      existingPatient.setFirstName(firstName);
-    }
-
-    String lastName = patient.getLastName();
-    if (lastName != null) {
-      existingPatient.setLastName(lastName);
-    }
-
-    LocalDate birthDate = patient.getBirthDate();
-    if (birthDate != null) {
-      existingPatient.setBirthDate(birthDate);
-    }
-
-    Medic referralMedic = patient.getReferralMedic();
-    if (referralMedic != null) {
-      existingPatient.setReferralMedic(referralMedic);
-    }
-
-    Therapy therapy = patient.getTherapy();
-    if (therapy != null) {
-      existingPatient.setTherapy(therapy);
-    }
-
+    existingPatient.updatePatient(patient);
     return repository.save(existingPatient);
   }
 

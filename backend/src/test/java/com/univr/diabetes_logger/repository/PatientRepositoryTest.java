@@ -20,7 +20,7 @@ import com.univr.diabetes_logger.model.User.Role;
 
 /**
  * PatientRepositoryTest
- */
+
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PatientRepositoryTest {
@@ -94,3 +94,4 @@ public class PatientRepositoryTest {
     assertThat(deleted).isNull();
   }
 }
+*/

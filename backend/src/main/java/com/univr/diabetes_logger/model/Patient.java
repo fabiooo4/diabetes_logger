@@ -35,6 +35,12 @@ public class Patient {
   private String lastName;
   @Column(name = "birthDate")
   private LocalDate birthDate;
+  @Column(name = "riskFactor")
+  private String riskFactor;
+  @Column(name = "previousPatologies")
+  private String previousPatologies;
+  @Column(name = "medicNotes")
+  private String medicNotes;
 
   @ManyToOne
   @JoinColumn(name = "medic_id", referencedColumnName = "id", nullable = true)
@@ -55,13 +61,51 @@ public class Patient {
   protected Patient() {
   }
 
-  public Patient(User user, String firstName, String lastName, LocalDate birthDate, Medic referralMedic, Therapy therapy) {
+  public Patient(User user, String firstName, String lastName,
+                 LocalDate birthDate, Medic referralMedic) {
     this.user = user;
     this.firstName = firstName;
     this.lastName = lastName;
     this.birthDate = birthDate;
     this.referralMedic = referralMedic;
-    this.therapy = therapy;
+  }
+
+  public void updatePatient(Patient patient) {
+
+    String firstName = patient.getFirstName();
+    if (firstName != null) {
+      setFirstName(firstName);
+    }
+
+    String lastName = patient.getLastName();
+    if (lastName != null) {
+      setLastName(lastName);
+    }
+
+    LocalDate birthDate = patient.getBirthDate();
+    if (birthDate != null) {
+      setBirthDate(birthDate);
+    }
+
+    Medic referralMedic = patient.getReferralMedic();
+    if (referralMedic != null) {
+      this.referralMedic.updateMedic(referralMedic);
+    }
+
+    Therapy therapy = patient.getTherapy();
+    if (therapy != null) {
+      this.therapy.updateTherapy(therapy);
+    }
+
+    String previousPatologies = patient.getPreviousPatologies();
+    if (previousPatologies != null) {
+      setPreviousPatologies(previousPatologies);
+    }
+
+    String riskFactor = patient.getRiskFactor();
+    if (riskFactor != null) {
+      setRiskFactor(riskFactor);
+    }
   }
 
   public Integer getId() {
@@ -126,4 +170,27 @@ public class Patient {
     this.therapy = therapy;
   }
 
+  public String getRiskFactor() {
+      return riskFactor;
+  }
+
+  public void setRiskFactor(String riskFactor) {
+      this.riskFactor = riskFactor;
+  }
+
+  public String getPreviousPatologies() {
+      return previousPatologies;
+  }
+
+  public void setPreviousPatologies(String previousPatologies) {
+      this.previousPatologies = previousPatologies;
+  }
+
+  public String getMedicNotes() {
+      return medicNotes;
+  }
+
+  public void setMedicNotes(String medicNotes) {
+      this.medicNotes = medicNotes;
+  }
 }

@@ -49,20 +49,19 @@ public class SecurityConfiguration {
 
 
               // Patient is allowed to
-              // request
+              request
                   //
                   // Reports ---------------------------------------------
-                  // .requestMatchers(HttpMethod.GET, "/reports/{id}")
-                  // .access(new WebExpressionAuthorizationManager(
-                  //     "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
-                  // .requestMatchers(HttpMethod.POST, "/reports/{id}")
-                  // .access(new WebExpressionAuthorizationManager(
-                  //     "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
-                  // .requestMatchers(HttpMethod.PUT, "/reports/{id}")
-                  // .access(new WebExpressionAuthorizationManager(
-                  //     "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
-                  // Reports ---------------------------------------------
-                  //
+                  .requestMatchers(HttpMethod.GET, "/reports/{id}")
+                  .access(new WebExpressionAuthorizationManager(
+                       "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                   .requestMatchers(HttpMethod.POST, "/reports/{id}")
+                   .access(new WebExpressionAuthorizationManager(
+                       "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                   .requestMatchers(HttpMethod.PUT, "/reports/{id}")
+                   .access(new WebExpressionAuthorizationManager(
+                       "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                  // Reports --------------------------------------------
                   // Notifications ---------------------------------------
                   // .requestMatchers(HttpMethod.GET, "/reports/{id}")
                   // .access(new WebExpressionAuthorizationManager(

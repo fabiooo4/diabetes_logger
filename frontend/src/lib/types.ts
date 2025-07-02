@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-06-28 19:49:38.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-02 12:31:12.
 
 export interface User {
     id: number;
@@ -16,6 +16,9 @@ export interface Patient {
     firstName: string;
     lastName: string;
     birthDate: Date;
+    riskFactor: string;
+    previousPatologies: string;
+    medicNotes: string;
     referralMedic: Medic;
     therapy: Therapy;
 }

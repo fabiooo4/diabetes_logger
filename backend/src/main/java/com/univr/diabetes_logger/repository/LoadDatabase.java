@@ -58,7 +58,7 @@ public class LoadDatabase {
       log.info("Preloading therapy " + therapy1 + " for user " + user1);
 
       // Preload Patients
-      Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic, therapy1));
+      Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
       log.info("Preloading patient " + patient1);
     };
   }

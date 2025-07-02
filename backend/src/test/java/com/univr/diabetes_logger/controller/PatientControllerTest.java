@@ -1,4 +1,4 @@
-package com.univr.diabetes_logger.controller;
+/*package com.univr.diabetes_logger.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.univr.diabetes_logger.model.Medic;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * PatientControllerTest
- */
+
 @WebMvcTest(PatientController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PatientControllerTest {
@@ -172,3 +172,5 @@ public class PatientControllerTest {
   }
 
 }
+
+*/

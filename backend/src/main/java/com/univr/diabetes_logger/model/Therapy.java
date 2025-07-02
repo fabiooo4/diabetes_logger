@@ -31,6 +31,29 @@ public class Therapy {
     this.directions = directions;
   }
 
+  public void updateTherapy(Therapy therapy) {
+
+    String medicine = therapy.getMedicine();
+    if(medicine != null) {
+      this.medicine = medicine;
+    }
+
+    Double amount = therapy.getAmount();
+    if(amount != null) {
+      this.amount = amount;
+    }
+
+    String directions = therapy.getDirections();
+    if(directions != null) {
+      this.directions = directions;
+    }
+
+    Integer dailyIntake = therapy.getDailyIntake();
+    if(dailyIntake != null) {
+      this.dailyIntake = dailyIntake;
+    }
+  }
+
   public Integer getId() {
       return id;
   }

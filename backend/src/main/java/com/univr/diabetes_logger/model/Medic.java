@@ -53,6 +53,20 @@ public class Medic {
     this.lastName = lastName;
   }
 
+  public void updateMedic(Medic medic) {
+
+    String firstName = medic.getFirstName();
+    if (firstName != null) {
+      setFirstName(firstName);
+    }
+
+    String lastName = medic.getLastName();
+    if (lastName != null) {
+      setLastName(lastName);
+    }
+
+  }
+
   public Integer getId() {
     return id;
   }

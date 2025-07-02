@@ -1,6 +1,7 @@
 package com.univr.diabetes_logger.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -22,18 +23,18 @@ public class Report {
 
     @Column(name = "glycemiaLevel")
     private int glycemiaLevel;
+    @Column(name = "day")
+    private LocalDate day;
+    @Column(name = "time")
+    private LocalTime time;
     @Column(name = "isBeforeMeal")
     private boolean beforeMeal;
     @Column(name = "symptoms")
     private String symptoms;
     @Column(name = "notes")
-    private String notes;
+    private String notes; // Extra
 
     // Insulin Intake or any other prescription
-    @Column(name = "day")
-    private LocalDate day;
-    @Column(name = "time")
-    private LocalTime time;
     @Column(name = "medicine")
     private String medicine;
     @Column(name = "amount")
@@ -43,22 +44,26 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
     @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Patient patient;
+
+    protected Report() {
+
+    }
 
     public Report(int glycemiaLevel, boolean beforeMeal, String symptoms, String notes,
                   LocalDate day, LocalTime time, String medicine, int amount, Patient patient) {
         this.glycemiaLevel = glycemiaLevel;
         this.beforeMeal = beforeMeal;
-
+        this.patient = patient;
         // if beforeMeal ... > 130 ... sendNotif ...
-
         this.symptoms = symptoms;
         this.notes = notes;
         this.day = day;
         this.time = time;
         this.medicine = medicine;
         this.amount = amount;
-        this.patient = patient;
+
     }
 
     public int getGlycemiaLevel() {
@@ -151,5 +156,13 @@ public class Report {
                 ", amount=" + amount +
                 ", patient=" + (patient != null ? patient.toString() : "null") +
                 '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

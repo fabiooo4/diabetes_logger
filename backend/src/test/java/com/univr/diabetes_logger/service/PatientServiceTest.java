@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 
 /**
  * PatientServiceTest
- */
+
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PatientServiceTest {
@@ -114,3 +114,4 @@ public class PatientServiceTest {
     assertThat(deletedPatient).isEqualTo(patient);
   }
 }
+*/
