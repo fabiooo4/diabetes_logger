@@ -114,11 +114,11 @@ public class NotificationService implements CrudService<Notification> {
                     .toList();
 
             // Find the most recent report by date
-            Optional<Report> mostRecent = reportPerPatient.stream().max(Comparator.comparing(Report::getDay));
+            Optional<Report> mostRecent = reportPerPatient.stream().max(Comparator.comparing(Report::getDateTime));
 
             if(mostRecent.isPresent()) {
                 // 2000-01-01 ... 2000-01-04 (Oggi)
-                if(mostRecent.get().getDay().isBefore(LocalDate.now().minusDays(3))) {
+                if(mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
                     notificationRepository.save(
                             new Notification("Son passati più di 3 giorni da quando non scrivi una rilevazione.",
                                     false, LocalDateTime.now(), patient.getUser())

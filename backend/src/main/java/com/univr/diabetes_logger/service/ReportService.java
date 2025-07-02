@@ -88,8 +88,7 @@ public class ReportService implements CrudService<Report> {
         existingReport.setBeforeMeal(report.getBeforeMeal());
         existingReport.setSymptoms(report.getSymptoms());
         existingReport.setNotes(report.getNotes());
-        existingReport.setDay(report.getDay());
-        existingReport.setTime(report.getTime());
+        existingReport.setDateTime(report.getDateTime());
         existingReport.setMedicine(report.getMedicine());
         existingReport.setAmount(report.getAmount());
         existingReport.setPatient(report.getPatient());
@@ -105,8 +104,7 @@ public class ReportService implements CrudService<Report> {
         existingReport.setBeforeMeal(report.getBeforeMeal());
         existingReport.setSymptoms(report.getSymptoms());
         existingReport.setNotes(report.getNotes());
-        existingReport.setDay(report.getDay());
-        existingReport.setTime(report.getTime());
+        existingReport.setDateTime(report.getDateTime());
         existingReport.setMedicine(report.getMedicine());
         existingReport.setAmount(report.getAmount());
         // Cannot change patient

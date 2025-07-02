@@ -122,7 +122,11 @@
             <class>com.univr.diabetes_logger.model.Patient</class>
             <class>com.univr.diabetes_logger.model.Medic</class>
             <class>com.univr.diabetes_logger.model.Therapy</class>
+            <class>com.univr.diabetes_logger.model.Report</class>
           </classes>
+          <customTypeMappings>
+            <mapping>java.time.LocalDateTime:string</mapping>
+          </customTypeMappings>
           <outputFileType>implementationFile</outputFileType>
           <outputFile>../frontend/src/lib/types.ts</outputFile>
           <outputKind>module</outputKind>
