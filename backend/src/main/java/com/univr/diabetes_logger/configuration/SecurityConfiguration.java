@@ -50,33 +50,26 @@ public class SecurityConfiguration {
 
               // Patient is allowed to
               request
-                  //
                   // Reports ---------------------------------------------
                   .requestMatchers(HttpMethod.GET, "/reports/{id}")
                   .access(new WebExpressionAuthorizationManager(
-                       "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
                    .requestMatchers(HttpMethod.POST, "/reports/{id}")
                    .access(new WebExpressionAuthorizationManager(
-                       "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
                    .requestMatchers(HttpMethod.PUT, "/reports/{id}")
                    .access(new WebExpressionAuthorizationManager(
-                       "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
                   // Reports --------------------------------------------
                   // Notifications ---------------------------------------
                   // .requestMatchers(HttpMethod.GET, "/reports/{id}")
                   // .access(new WebExpressionAuthorizationManager(
-                  //     "hasAnyAuthority('PATIENT', 'ADMIN') and authentication.getDetails().checkId(#id)"))
+                  //   "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#id))"))
                   // Notifications ---------------------------------------
                   ;
 
               // Medic is allowed to
               request
-                  // Users -----------------------------------------------
-                  .requestMatchers(HttpMethod.GET, "/users/{id}")
-                  .access(new WebExpressionAuthorizationManager(
-                      "hasAnyAuthority('MEDIC', 'ADMIN') and authentication.getDetails().checkId(#id)"))
-                  // Users -----------------------------------------------
-                  //
                   // Patients --------------------------------------------
                   .requestMatchers(HttpMethod.GET, "/patients", "/patients/{id}")
                   .hasAnyAuthority("MEDIC", "ADMIN")

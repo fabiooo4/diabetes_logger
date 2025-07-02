@@ -16,6 +16,7 @@ import com.univr.diabetes_logger.model.User.Role;
 import com.univr.diabetes_logger.service.MedicService;
 import com.univr.diabetes_logger.service.TherapyService;
 import com.univr.diabetes_logger.service.PatientService;
+import com.univr.diabetes_logger.service.ReportService;
 import com.univr.diabetes_logger.service.UserService;
 
 @Configuration
@@ -25,17 +26,19 @@ public class LoadDatabase {
 
   @Bean
   CommandLineRunner initDatabase(UserRepository userRepository, PatientRepository patientRepository,
-      MedicRepository medicRepository, TherapyRepository therapyRepository, UserService userService, PatientService patientService,
-      MedicService medicService, TherapyService therapyService) {
+      MedicRepository medicRepository, TherapyRepository therapyRepository, ReportRepository reportRepository, UserService userService, PatientService patientService,
+      MedicService medicService, TherapyService therapyService, ReportService reportService) {
     return args -> {
       // TODO: Remove in production
       log.info("Clearing database");
+      reportRepository.deleteAll();
       patientRepository.deleteAll();
       medicRepository.deleteAll();
       userRepository.deleteAll();
       therapyRepository.deleteAll();
 
       // Flush to ensure deletion is complete
+      reportRepository.flush();
       patientRepository.flush();
       medicRepository.flush();
       userRepository.flush();
