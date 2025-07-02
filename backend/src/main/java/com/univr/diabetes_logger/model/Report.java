@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 /**
  * Rilevazione
@@ -22,10 +21,8 @@ public class Report {
 
     @Column(name = "glycemiaLevel")
     private int glycemiaLevel;
-    @Column(name = "day")
-    private LocalDate day;
-    @Column(name = "time")
-    private LocalTime time;
+    @Column(name = "dateTime")
+    private LocalDateTime dateTime;
     @Column(name = "isBeforeMeal")
     private boolean beforeMeal;
     @Column(name = "symptoms")
@@ -51,15 +48,14 @@ public class Report {
     }
 
     public Report(int glycemiaLevel, boolean beforeMeal, String symptoms, String notes,
-                  LocalDate day, LocalTime time, String medicine, int amount, Patient patient) {
+                  LocalDateTime dateTime, String medicine, int amount, Patient patient) {
         this.glycemiaLevel = glycemiaLevel;
         this.beforeMeal = beforeMeal;
         this.patient = patient;
         // if beforeMeal ... > 130 ... sendNotif ...
         this.symptoms = symptoms;
         this.notes = notes;
-        this.day = day;
-        this.time = time;
+        this.dateTime = dateTime;
         this.medicine = medicine;
         this.amount = amount;
 
@@ -101,20 +97,12 @@ public class Report {
         this.notes = notes;
     }
 
-    public LocalDate getDay() {
-        return day;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDay(LocalDate day) {
-        this.day = day;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getMedicine() {
@@ -149,8 +137,7 @@ public class Report {
                 ", beforeMeal=" + (beforeMeal ? "before meal" : "after meal") +
                 ", symptoms='" + symptoms + '\'' +
                 ", notes='" + notes + '\'' +
-                ", day=" + day +
-                ", time=" + time +
+                ", dateTime=" + dateTime +
                 ", medicine='" + medicine + '\'' +
                 ", amount=" + amount +
                 ", patient=" + (patient != null ? patient.toString() : "null") +

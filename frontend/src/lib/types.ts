@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-02 13:27:35.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-02 17:48:59.
 
 export interface User {
     id: number;
@@ -35,6 +35,18 @@ export interface Therapy {
     dailyIntake: number;
     amount: number;
     directions: string;
+}
+
+export interface Report {
+    id: number;
+    glycemiaLevel: number;
+    dateTime: string;
+    beforeMeal: boolean;
+    symptoms: string;
+    notes: string;
+    medicine: string;
+    amount: number;
+    patient: Patient;
 }
 
 export type Role = "PATIENT" | "MEDIC" | "ADMIN";

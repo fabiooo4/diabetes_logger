@@ -20,7 +20,7 @@ export async function getAllPatients(token: string | undefined): Promise<Patient
       return data;
     })
     .catch((error) => {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching patients:', error);
       return [];
     });
 }
