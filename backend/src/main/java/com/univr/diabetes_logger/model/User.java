@@ -1,5 +1,7 @@
 package com.univr.diabetes_logger.model;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
@@ -8,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -44,6 +47,10 @@ public class User {
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private Medic medic;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Set<Notification> notifications;
 
   public Patient getPatient() {
     return patient;
