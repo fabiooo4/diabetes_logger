@@ -50,15 +50,18 @@ public class SecurityConfiguration {
               // Patient is allowed to
               request
                   // Reports ---------------------------------------------
-                  .requestMatchers(HttpMethod.GET, "/reports/{userId}")
+                  .requestMatchers(HttpMethod.GET, "/reports/user/{userId}", "/reports/user/{userId}/{id}")
                   .access(new WebExpressionAuthorizationManager(
-                       "hasAnyAuthority('ADMIN', 'MEDIC') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
-                   .requestMatchers(HttpMethod.POST, "/reports/{userId}")
-                   .access(new WebExpressionAuthorizationManager(
-                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
-                   .requestMatchers(HttpMethod.PUT, "/reports/{userId}")
-                   .access(new WebExpressionAuthorizationManager(
-                       "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
+                      "hasAnyAuthority('ADMIN', 'MEDIC') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
+                  .requestMatchers(HttpMethod.POST, "/reports/user/{userId}")
+                  .access(new WebExpressionAuthorizationManager(
+                      "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
+                  .requestMatchers(HttpMethod.PUT, "/reports/user/{userId}/{id}")
+                  .access(new WebExpressionAuthorizationManager(
+                      "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
+                  .requestMatchers(HttpMethod.DELETE, "/reports/user/{userId}/{id}")
+                  .access(new WebExpressionAuthorizationManager(
+                      "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT') and authentication.getDetails().checkId(#userId))"))
                   // Reports --------------------------------------------
                   // Notifications ---------------------------------------
                   // .requestMatchers(HttpMethod.GET, "/reports/{id}")
@@ -86,7 +89,7 @@ public class SecurityConfiguration {
                   // Therapies -------------------------------------------
                   //
                   // Reports ---------------------------------------------
-                  .requestMatchers(HttpMethod.GET, "/reports")
+                  .requestMatchers(HttpMethod.GET, "/reports", "/reports/{id}")
                   .hasAnyAuthority("MEDIC", "ADMIN")
                   // Reports ---------------------------------------------
                   //

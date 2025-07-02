@@ -77,7 +77,7 @@ Autenticazione necessaria per l'utente
 - GET/users/{loggedId} può accedere solo alle risorse dell'utente autenticato, non degli altri.
 
 #### ReportsController
-- GET+POST+PUT/reports/{loggedId}
+- GET+POST+PUT+DELETE/reports/{loggedId}
 
 #### NotificationController
 - GET/notifications/{loggedId}

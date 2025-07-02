@@ -97,6 +97,23 @@ public class ReportService implements CrudService<Report> {
         return repository.save(existingReport);
     }
 
+    public Report updateOnUser(Integer id, Report report) {
+        Report existingReport = this.getById(id).orElseThrow();
+
+        // TODO: Modify the update
+        existingReport.setGlycemiaLevel(report.getGlycemiaLevel());
+        existingReport.setBeforeMeal(report.getBeforeMeal());
+        existingReport.setSymptoms(report.getSymptoms());
+        existingReport.setNotes(report.getNotes());
+        existingReport.setDay(report.getDay());
+        existingReport.setTime(report.getTime());
+        existingReport.setMedicine(report.getMedicine());
+        existingReport.setAmount(report.getAmount());
+        // Cannot change patient
+
+        return repository.save(existingReport);
+    }
+
     @Override
     public Report delete(Integer id) {
         Report deleted = this.getById(id).orElseThrow();
