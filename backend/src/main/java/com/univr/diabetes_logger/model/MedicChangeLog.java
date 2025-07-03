@@ -15,14 +15,12 @@ public class MedicChangeLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "medic_id", referencedColumnName = "id", nullable = true)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @ManyToOne
+    @JoinColumn(name = "medic_id", referencedColumnName = "id", nullable = false)
     private Medic medic; // who made the change
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @ManyToOne
+    @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
     private Patient patient; // to whom the change was made
 
     @Column(name = "action")
