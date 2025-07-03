@@ -21,27 +21,36 @@ public class LoadDatabase {
 
   @Bean
   CommandLineRunner initDatabase(UserRepository userRepository, PatientRepository patientRepository,
-                                 MedicRepository medicRepository, TherapyRepository therapyRepository,
-                                 ReportRepository reportRepository, UserService userService, PatientService patientService,
-                                 MedicService medicService, TherapyService therapyService, NotificationRepository notificationRepository,
-                                 NotificationService notificationService, ReportService reportService) {
+      MedicRepository medicRepository, TherapyRepository therapyRepository,
+      ReportRepository reportRepository, UserService userService, PatientService patientService,
+      MedicService medicService, TherapyService therapyService, NotificationRepository notificationRepository,
+      NotificationService notificationService, ReportService reportService) {
     return args -> {
       // TODO: Remove in production
       log.info("Clearing database");
       notificationRepository.deleteAll();
-      reportRepository.deleteAll();
-      patientRepository.deleteAll();
-      medicRepository.deleteAll();
-      therapyRepository.deleteAll();
-      userRepository.deleteAll();
-
-      // Flush to ensure deletion is complete
       notificationRepository.flush();
+      log.info("Cleared notifications");
+
+      reportRepository.deleteAll();
       reportRepository.flush();
+      log.info("Cleared reports");
+
+      patientRepository.deleteAll();
       patientRepository.flush();
+      log.info("Cleared patients");
+
+      medicRepository.deleteAll();
       medicRepository.flush();
-      therapyRepository.flush();
+      log.info("Cleared medics");
+
+      userRepository.deleteAll();
       userRepository.flush();
+      log.info("Cleared users");
+
+      therapyRepository.deleteAll();
+      therapyRepository.flush();
+      log.info("Cleared therapies");
 
       // Preload Users
       User user1 = userService.create(new User("fabio@gmail.com", "fabio", Role.PATIENT));
@@ -64,16 +73,16 @@ public class LoadDatabase {
       log.info("Preloading patient " + patient1);
 
       Report report = reportService.create(new Report(120, false,
-              "cacca", "aiuto", LocalDateTime.of(LocalDate.of(2000,1,1),
-              LocalTime.of(1,1,1)), "Insuline", 100, patient1));
+          "cacca", "aiuto", LocalDateTime.of(LocalDate.of(2000, 1, 1),
+              LocalTime.of(1, 1, 1)),
+          "Insuline", 100, patient1));
       log.info("Preloading report " + report);
 
       Notification notif = notificationService.create(new Notification("Ok.", false, LocalDateTime.of(2025, 7,
-              21, 20, 13), medic_user));
+          21, 20, 13), medic_user));
 
       log.info("Preloading notifications " + notif);
 
     };
   }
-
 }

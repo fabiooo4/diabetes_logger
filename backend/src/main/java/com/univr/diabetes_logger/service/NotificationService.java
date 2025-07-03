@@ -22,12 +22,12 @@ public class NotificationService implements CrudService<Notification> {
   private final MedicRepository medicRepository;
 
   public NotificationService(NotificationRepository notificationRepository, ReportRepository reportRepository,
-                             UserRepository userRepository, PatientRepository patientRepository, MedicRepository medicRepository) {
+      UserRepository userRepository, PatientRepository patientRepository, MedicRepository medicRepository) {
     this.notificationRepository = notificationRepository;
     this.reportRepository = reportRepository;
     this.userRepository = userRepository;
     this.patientRepository = patientRepository;
-      this.medicRepository = medicRepository;
+    this.medicRepository = medicRepository;
   }
 
   @Override
@@ -97,7 +97,8 @@ public class NotificationService implements CrudService<Notification> {
   }
 
   // Run this every fixed amount of time
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1)
+  // @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 30)
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1, initialDelay = 1) // TODO: ONLY USED FOR TESTING SO REMOVE
   public void checkMissingReports() {
     List<Report> reports = reportRepository.findAll();
     List<Patient> patients = patientRepository.findAll();
@@ -113,27 +114,26 @@ public class NotificationService implements CrudService<Notification> {
 
       if (mostRecent.isPresent()) {
         if (mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
-            NotifyAllMedics(patient.getFirstName() + " " + patient.getLastName() + "è da più di 3 giorni" +
-                    "che non scrive una rilevazione glicemica.");
+          NotifyAllMedics(patient.getFirstName() + " " + patient.getLastName() + "è da più di 3 giorni" +
+              "che non scrive una rilevazione glicemica.");
         }
       }
     }
   }
 
-  //@Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 1)
-  // TODO: ONLY USED FOR TESTING SO REMOVE
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1)
+  // @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 1)
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1, initialDelay = 1) // TODO: ONLY USED FOR TESTING SO REMOVE
   public void remindPatients() {
     for (Patient patient : patientRepository.findAll()) {
       notificationRepository.save(new Notification("RICORDATI LA TUA RILEVAZIONE!!!",
-              false, LocalDateTime.now(), patient.getUser()));
+          false, LocalDateTime.now(), patient.getUser()));
     }
   }
 
   public void NotifyAllMedics(String message) {
-    for(Medic medic : medicRepository.findAll()) {
+    for (Medic medic : medicRepository.findAll()) {
       notificationRepository.save(new Notification(message,
-              false, LocalDateTime.now(), medic.getUser()));
+          false, LocalDateTime.now(), medic.getUser()));
     }
   }
 
