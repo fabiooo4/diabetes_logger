@@ -97,7 +97,7 @@ public class NotificationService implements CrudService<Notification> {
   }
 
   // Run this every fixed amount of time
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 30)
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1)
   public void checkMissingReports() {
     List<Report> reports = reportRepository.findAll();
     List<Patient> patients = patientRepository.findAll();

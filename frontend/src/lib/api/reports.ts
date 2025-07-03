@@ -1,5 +1,5 @@
 import { PUBLIC_API_BASE } from '$env/static/public';
-import type { Patient, Report } from '$lib/types';
+import type { Report } from '$lib/types';
 
 export async function getAllUserReports(
   token: string | undefined,

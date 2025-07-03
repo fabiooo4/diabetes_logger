@@ -123,6 +123,7 @@
             <class>com.univr.diabetes_logger.model.Medic</class>
             <class>com.univr.diabetes_logger.model.Therapy</class>
             <class>com.univr.diabetes_logger.model.Report</class>
+            <class>com.univr.diabetes_logger.model.Notification</class>
           </classes>
           <customTypeMappings>
             <mapping>java.time.LocalDateTime:string</mapping>

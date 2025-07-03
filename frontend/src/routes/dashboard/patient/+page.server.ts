@@ -1,5 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { createReport, getAllUserReports } from '$lib/api/reports';
+import { getAllUserNotifications } from '$lib/api/notifications';
 import { fail, type Actions } from '@sveltejs/kit';
 import type { Report } from '$lib/types';
 import { parseDateTime } from '@internationalized/date';
@@ -8,10 +9,12 @@ export const load: PageServerLoad = ({ locals, cookies }) => {
   let token = cookies.get('token');
 
   let reportsList = getAllUserReports(token, locals.user?.id);
+  let notificationsList = getAllUserNotifications(token, locals.user?.id);
 
   return {
     user: locals.user,
-    reportsList: reportsList
+    reportsList: reportsList,
+    notificationsList: notificationsList
   };
 };
 
