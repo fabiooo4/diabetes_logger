@@ -1,13 +1,7 @@
 package com.univr.diabetes_logger.service;
 
-import com.univr.diabetes_logger.model.Notification;
-import com.univr.diabetes_logger.model.Patient;
-import com.univr.diabetes_logger.model.Report;
-import com.univr.diabetes_logger.model.User;
-import com.univr.diabetes_logger.repository.NotificationRepository;
-import com.univr.diabetes_logger.repository.PatientRepository;
-import com.univr.diabetes_logger.repository.ReportRepository;
-import com.univr.diabetes_logger.repository.UserRepository;
+import com.univr.diabetes_logger.model.*;
+import com.univr.diabetes_logger.repository.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +19,15 @@ public class NotificationService implements CrudService<Notification> {
   private final ReportRepository reportRepository;
   private final UserRepository userRepository;
   private final PatientRepository patientRepository;
+  private final MedicRepository medicRepository;
 
   public NotificationService(NotificationRepository notificationRepository, ReportRepository reportRepository,
-      UserRepository userRepository, PatientRepository patientRepository) {
+                             UserRepository userRepository, PatientRepository patientRepository, MedicRepository medicRepository) {
     this.notificationRepository = notificationRepository;
     this.reportRepository = reportRepository;
     this.userRepository = userRepository;
     this.patientRepository = patientRepository;
+      this.medicRepository = medicRepository;
   }
 
   @Override
@@ -117,11 +113,26 @@ public class NotificationService implements CrudService<Notification> {
 
       if (mostRecent.isPresent()) {
         if (mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
-          notificationRepository.save(
-              new Notification("Son passati più di 3 giorni da quando non scrivi una rilevazione.",
-                  false, LocalDateTime.now(), patient.getUser()));
+            NotifyAllMedics();
         }
       }
+    }
+  }
+
+  //@Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 1)
+  // TODO: ONLY USED FOR TESTING SO REMOVE
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1)
+  public void remindPatients() {
+    for (Patient patient : patientRepository.findAll()) {
+      notificationRepository.save(new Notification("RICORDATI LA TUA RILEVAZIONE!!!",
+              false, LocalDateTime.now(), patient.getUser()));
+    }
+  }
+
+  public void NotifyAllMedics() {
+    for(Medic medic : medicRepository.findAll()) {
+      notificationRepository.save(new Notification("Son passati più di 3 giorni da quando non scrivi una rilevazione.",
+              false, LocalDateTime.now(), medic.getUser()));
     }
   }
 
