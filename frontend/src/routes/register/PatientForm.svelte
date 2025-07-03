@@ -2,7 +2,7 @@
 	import { DateField } from 'bits-ui';
 	import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date';
 
-	let date: CalendarDate = $state(today(getLocalTimeZone()));
+	let date: CalendarDate | undefined = $state(undefined);
 </script>
 
 <div class="flex flex-col gap-4">
@@ -11,7 +11,7 @@
 		<input
 			type="text"
 			name="patientFirstName"
-			class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+			class="transition-all h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
 		/>
 	</div>
 
@@ -20,7 +20,7 @@
 		<input
 			type="text"
 			name="patientLastName"
-			class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+			class="transition-all h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
 		/>
 	</div>
 
@@ -38,7 +38,7 @@
 			<div class="flex w-full flex-col gap-1.5">
 				<DateField.Label class="block text-sm font-medium select-none">Birthday</DateField.Label>
 				<DateField.Input
-					class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none "
+					class="transition-all h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none "
 				>
 					{#snippet children({ segments })}
 						{#each segments as { part, value }, i (part + i)}

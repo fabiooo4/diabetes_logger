@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { Button } from 'bits-ui';
 	import { enhance } from '$app/forms';
+	import LockKeyOpen from 'phosphor-svelte/lib/LockKeyOpen';
+	import LockKey from 'phosphor-svelte/lib/LockKey';
 
 	let { form }: { form?: { error: string } } = $props();
+
+	let showPassword = $state(false);
 </script>
 
 <main class="flex items-center justify-center">
@@ -15,9 +19,9 @@
 		>
 			<h1 class="w-full text-center text-2xl font-bold">Login</h1>
 
-      {#if form?.error}
-        <p class="text-red-500 font-bold">{form.error}</p>
-      {/if}
+			{#if form?.error}
+				<p class="font-bold text-red-500">{form.error}</p>
+			{/if}
 
 			<div class="flex w-5/6 flex-col items-center justify-center gap-4">
 				<div class="w-full">
@@ -25,23 +29,30 @@
 					<input
 						type="email"
 						name="email"
-						class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+						class="transition-all h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
 					/>
 				</div>
 
-				<div class="w-full">
+				<div class="relative w-full">
 					<label for="password" class="pb-1 pl-1 text-sm">Password</label>
 					<input
-						type="password"
+						type={showPassword ? 'text' : 'password'}
 						name="password"
-						class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+						class="transition-all h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
 					/>
+					<button type="button" onclick={() => (showPassword = !showPassword)}>
+            {#if showPassword}
+              <LockKeyOpen class="text-dark/30 absolute top-9 right-4 size-6 hover:bg-gray-100 transition rounded active:bg-gray-200 cursor-pointer" />
+            {:else}
+              <LockKey class="text-dark/30 absolute top-9 right-4 size-6 hover:bg-gray-100 transition rounded active:bg-gray-200 cursor-pointer" />
+            {/if}
+					</button>
 				</div>
 			</div>
 
 			<Button.Root
 				type="submit"
-				class="rounded-input bg-dark text-background shadow-mini hover:bg-dark/95 m-3 inline-flex h-12
+				class="transition-all rounded-input bg-dark text-background shadow-mini hover:bg-dark/95 m-3 inline-flex h-12
         items-center justify-center self-end px-[21px] text-[15px]
         font-semibold active:scale-[0.98] active:transition-all"
 			>
