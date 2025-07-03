@@ -1,9 +1,9 @@
 package com.univr.diabetes_logger.controller;
 
 import java.util.Optional;
-import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,8 +42,20 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public Properties login(@RequestBody User user, UriComponentsBuilder uriBuilder) {
-    return userService.verify(user);
+  public ResponseEntity<?> login(@RequestBody User user, UriComponentsBuilder uriBuilder) {
+    if (user.getEmail() == null || user.getEmail().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email field is required");
+    }
+
+    if (user.getPassword() == null || user.getPassword().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Password field is required");
+    }
+
+    try {
+      return ResponseEntity.ok(userService.verify(user));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Incorrect username or password");
+    }
   }
 
   @PostMapping("/register")

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Button } from 'bits-ui';
 	import { enhance } from '$app/forms';
+
+	let { form }: { form?: { error: string } } = $props();
 </script>
 
 <main class="flex items-center justify-center">
@@ -12,6 +14,10 @@
 			class="rounded-card border-muted bg-background-alt shadow-card mt-16 flex w-[390px] flex-col items-center justify-center gap-4 border p-3"
 		>
 			<h1 class="w-full text-center text-2xl font-bold">Login</h1>
+
+      {#if form?.error}
+        <p class="text-red-500 font-bold">{form.error}</p>
+      {/if}
 
 			<div class="flex w-5/6 flex-col items-center justify-center gap-4">
 				<div class="w-full">
@@ -35,7 +41,7 @@
 
 			<Button.Root
 				type="submit"
-				class="m-3 rounded-input bg-dark text-background shadow-mini hover:bg-dark/95 inline-flex h-12
+				class="rounded-input bg-dark text-background shadow-mini hover:bg-dark/95 m-3 inline-flex h-12
         items-center justify-center self-end px-[21px] text-[15px]
         font-semibold active:scale-[0.98] active:transition-all"
 			>

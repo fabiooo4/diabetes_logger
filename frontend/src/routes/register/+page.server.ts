@@ -1,4 +1,3 @@
-// +page.server.ts
 import { redirect, fail, type Actions } from '@sveltejs/kit';
 import { register } from '$lib/api/auth';
 import type { Role, User } from '$lib/types';
