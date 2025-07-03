@@ -44,6 +44,8 @@ public class UserService implements CrudService<User> {
 
   @Override
   public User create(User user) {
+    System.out.println("Creating user: " + user);
+
     // Crypt password before saving
     user.setPassword(encoder.encode(user.getPassword()));
 

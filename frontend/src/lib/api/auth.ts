@@ -12,6 +12,20 @@ export async function login(email: string, password: string): Promise<Response> 
   });
 }
 
+export async function register(
+  user: NestedRequiredBy<User, 'email' | 'password' | 'role'>
+): Promise<Response> {
+  console.log('Registering user:', user);
+
+  return fetch(PUBLIC_API_BASE + '/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  });
+}
+
 export async function authenticateUser(
   event: RequestEvent<Partial<Record<string, string>>, string | null>
 ): Promise<User | null> {
@@ -31,7 +45,7 @@ export async function authenticateUser(
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
+      Authorization: 'Bearer ' + token
     }
   })
     .then((response) => {
