@@ -106,6 +106,11 @@ public class Patient {
     if (riskFactor != null) {
       setRiskFactor(riskFactor);
     }
+
+    String medicNotes = patient.getMedicNotes();
+    if (medicNotes != null) {
+      setMedicNotes(medicNotes);
+    }
   }
 
   public Integer getId() {
@@ -192,5 +197,58 @@ public class Patient {
 
   public void setMedicNotes(String medicNotes) {
       this.medicNotes = medicNotes;
+  }
+
+  public String actionPerformed(Patient patient) {
+    String ret = "( Modified: ";
+    String notModified = ret;
+
+    if(!patient.getFirstName().equals(this.firstName)) {
+      ret += "first name, ";
+    }
+
+    if(!patient.getLastName().equals(this.lastName)) {
+      ret += "last name, ";
+    }
+
+    if(!patient.getBirthDate().equals(this.birthDate)) {
+      ret += "Birthdate, ";
+    }
+
+    if(patient.getReferralMedic() != null) {
+      if(!patient.getReferralMedic().equals(this.getReferralMedic())) {
+        ret += "referral medic, ";
+      }
+    }
+
+    if(patient.getTherapy() != null) {
+      if(!patient.getTherapy().equals(this.therapy)) {
+        ret += "therapy, ";
+      }
+    }
+
+    if(patient.getRiskFactor() != null) {
+      if(!patient.getRiskFactor().equals(this.riskFactor)) {
+        ret += "risk factor, ";
+      }
+    }
+
+    if(patient.getPreviousPatologies() != null) {
+      if(!patient.getPreviousPatologies().equals(this.previousPatologies)) {
+        ret += "previous patologies, ";
+      }
+    }
+
+    if(patient.getMedicNotes() != null) {
+      if(!patient.getMedicNotes().equals(this.medicNotes)) {
+        ret += "medic notes, ";
+      }
+    }
+
+    if(ret.equals(notModified)) {
+      return null;
+    }
+
+    return ret.substring(0, ret.length() - 1) + " )";
   }
 }

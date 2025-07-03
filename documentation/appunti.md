@@ -100,3 +100,11 @@ Autenticazione necessaria per l'utente
 #### PatientsController
 - GET/patients
 - GET+PATCH/patients/{id} può modificare solo le note extra
+
+## Log dei medici
+
+- id del change
+- medic che ha effettuato il change
+- a quale paziente ha effettuato il change
+- cosa ha modificato (Added therapy, Removed therapy, ecc.)
+// come farebbero dei commit su git

@@ -99,7 +99,14 @@ public class SecurityConfiguration {
                   .hasAnyAuthority("MEDIC", "ADMIN")
                   // Reports ---------------------------------------------
                   //
-                  ;
+                  // MedicChangeLog --------------------------------------
+                  .requestMatchers(HttpMethod.GET, "/medicchangelog/{id}", "/medicchangelog/medic/{medicId}",
+                          "/medicchangelog/patient/{patientId}")
+                  .hasAnyAuthority("MEDIC", "ADMIN")
+                  .requestMatchers(HttpMethod.POST, "/medicchangelog")
+                  .hasAnyAuthority("MEDIC", "ADMIN")
+                  // MedicChangeLog --------------------------------------
+              ;
 
               // Admin is allowed to
               request.anyRequest().hasAuthority("ADMIN");
