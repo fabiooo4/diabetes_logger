@@ -8,7 +8,6 @@ export const actions: Actions = {
     const password = form.get('password') as string;
 
     const res = await login(email, password);
-
     if (!res.ok) {
       return fail(res.status, { error: await res.text() });
     }

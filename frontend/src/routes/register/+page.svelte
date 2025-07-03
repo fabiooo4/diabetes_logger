@@ -4,6 +4,8 @@
 	import MedicForm from './MedicForm.svelte';
 	import PatientForm from './PatientForm.svelte';
 
+  let { form }: {form?: {error: string}} = $props();
+
 	let role = $state('PATIENT');
 </script>
 
@@ -16,6 +18,10 @@
 			class="rounded-card border-muted bg-background-alt shadow-card mt-16 flex w-[390px] flex-col items-center justify-center gap-4 border p-3"
 		>
 			<h1 class="w-full text-center text-2xl font-bold">Register</h1>
+
+      {#if form?.error}
+        <p class="text-red-500 font-bold">{form.error}</p>
+      {/if}
 
 			<div class="flex w-5/6 flex-col items-center justify-center gap-4">
 				<div class="w-full">
