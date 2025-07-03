@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-03 23:18:33.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-03 22:09:03.
+
 
 export interface User {
     notifications: Notification[];
@@ -16,7 +17,7 @@ export interface Patient {
     id: number;
     firstName: string;
     lastName: string;
-    birthDate: Date;
+    birthDate: string;
     riskFactor: string;
     previousPatologies: string;
     medicNotes: string;

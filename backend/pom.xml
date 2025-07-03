@@ -127,6 +127,7 @@
           </classes>
           <customTypeMappings>
             <mapping>java.time.LocalDateTime:string</mapping>
+            <mapping>java.time.LocalDate:string</mapping>
           </customTypeMappings>
           <outputFileType>implementationFile</outputFileType>
           <outputFile>../frontend/src/lib/types.ts</outputFile>

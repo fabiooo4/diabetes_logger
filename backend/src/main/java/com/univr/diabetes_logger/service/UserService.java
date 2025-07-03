@@ -1,5 +1,6 @@
 package com.univr.diabetes_logger.service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -44,6 +45,8 @@ public class UserService implements CrudService<User> {
 
   @Override
   public User create(User user) {
+    System.out.println("Creating user: " + user);
+
     // Crypt password before saving
     user.setPassword(encoder.encode(user.getPassword()));
 
@@ -70,7 +73,7 @@ public class UserService implements CrudService<User> {
     return deleted;
   }
 
-  public Properties verify(User user) {
+  public Properties verify(User user) throws NoSuchElementException {
 
     Authentication authentication = authManager
         .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));

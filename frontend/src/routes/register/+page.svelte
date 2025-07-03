@@ -1,11 +1,14 @@
 <script lang="ts">
-	import { Button } from 'bits-ui';
+	import { Button, Separator, Tabs } from 'bits-ui';
 	import { enhance } from '$app/forms';
+	import MedicForm from './MedicForm.svelte';
+	import PatientForm from './PatientForm.svelte';
 	import LockKeyOpen from 'phosphor-svelte/lib/LockKeyOpen';
 	import LockKey from 'phosphor-svelte/lib/LockKey';
 
-	let { form }: { form?: { error: string } } = $props();
+  let { form }: {form?: {error: string}} = $props();
 
+	let role = $state('PATIENT');
 	let showPassword = $state(false);
 </script>
 
@@ -13,15 +16,15 @@
 	<div class="flex flex-col">
 		<form
 			method="POST"
-			action="?/login"
+			action="?/register"
 			use:enhance
 			class="rounded-card border-muted bg-background-alt shadow-card mt-16 flex w-[390px] flex-col items-center justify-center gap-4 border p-3"
 		>
-			<h1 class="w-full text-center text-2xl font-bold">Login</h1>
+			<h1 class="w-full text-center text-2xl font-bold">Register</h1>
 
-			{#if form?.error}
-				<p class="font-bold text-red-500">{form.error}</p>
-			{/if}
+      {#if form?.error}
+        <p class="text-red-500 font-bold">{form.error}</p>
+      {/if}
 
 			<div class="flex w-5/6 flex-col items-center justify-center gap-4">
 				<div class="w-full">
@@ -48,6 +51,36 @@
             {/if}
 					</button>
 				</div>
+
+				<Separator.Root
+					class="bg-border my-4 shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
+				/>
+
+				<div class="w-full">
+					<Tabs.Root bind:value={role} class="transition-all">
+						<input type="hidden" name="role" bind:value={role} />
+						<Tabs.List
+							class="rounded-9px bg-dark-10 shadow-mini-inset dark:bg-background grid w-full grid-cols-2 gap-1 p-1 text-sm leading-[0.01em] font-semibold dark:border dark:border-neutral-600/30"
+						>
+							<Tabs.Trigger
+								value="PATIENT"
+								class="cursor-pointer data-[state=active]:shadow-mini dark:data-[state=active]:bg-muted h-8 rounded-[7px] bg-transparent py-2 data-[state=active]:bg-white"
+								>Patient</Tabs.Trigger
+							>
+							<Tabs.Trigger
+								value="MEDIC"
+								class="cursor-pointer data-[state=active]:shadow-mini dark:data-[state=active]:bg-muted h-8 rounded-[7px] bg-transparent py-2 data-[state=active]:bg-white"
+								>Medic</Tabs.Trigger
+							>
+						</Tabs.List>
+						<Tabs.Content value="PATIENT" class="pt-3 select-none">
+							<PatientForm />
+						</Tabs.Content>
+						<Tabs.Content value="MEDIC" class="pt-3 select-none">
+							<MedicForm />
+						</Tabs.Content>
+					</Tabs.Root>
+				</div>
 			</div>
 
 			<Button.Root
@@ -56,12 +89,12 @@
         items-center justify-center self-end px-[21px] text-[15px]
         font-semibold active:scale-[0.98] active:transition-all"
 			>
-				Login
+				Register
 			</Button.Root>
 		</form>
 		<p class="p-1">
-			Don't have an account?
-			<a href="/register" class="underline">Register</a>
+			Already have an account?
+			<a href="/login" class="underline">Login</a>
 		</p>
 	</div>
 </main>
