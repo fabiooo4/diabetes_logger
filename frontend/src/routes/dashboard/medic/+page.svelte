@@ -5,7 +5,7 @@
 </script>
 
 <main>
-	<h1>Hello {data.user.email}</h1>
+	<h1>{JSON.stringify(data.user)}</h1>
 
 	<div class="mt-8 flex">
 		{#await data.patientsList}

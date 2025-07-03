@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { Button, Separator } from 'bits-ui';
+	import { Button, Separator, Tabs } from 'bits-ui';
 	import { enhance } from '$app/forms';
-	import RoleTabs from './RoleTabs.svelte';
 	import MedicForm from './MedicForm.svelte';
 	import PatientForm from './PatientForm.svelte';
 
@@ -42,7 +41,29 @@
 				/>
 
 				<div class="w-full">
-					<RoleTabs patientForm={PatientForm} medicForm={MedicForm} {role} />
+					<Tabs.Root bind:value={role}>
+						<input type="hidden" name="role" bind:value={role} />
+						<Tabs.List
+							class="rounded-9px bg-dark-10 shadow-mini-inset dark:bg-background grid w-full grid-cols-2 gap-1 p-1 text-sm leading-[0.01em] font-semibold dark:border dark:border-neutral-600/30"
+						>
+							<Tabs.Trigger
+								value="PATIENT"
+								class="data-[state=active]:shadow-mini dark:data-[state=active]:bg-muted h-8 rounded-[7px] bg-transparent py-2 data-[state=active]:bg-white"
+								>Patient</Tabs.Trigger
+							>
+							<Tabs.Trigger
+								value="MEDIC"
+								class="data-[state=active]:shadow-mini dark:data-[state=active]:bg-muted h-8 rounded-[7px] bg-transparent py-2 data-[state=active]:bg-white"
+								>Medic</Tabs.Trigger
+							>
+						</Tabs.List>
+						<Tabs.Content value="PATIENT" class="pt-3 select-none">
+							<PatientForm />
+						</Tabs.Content>
+						<Tabs.Content value="MEDIC" class="pt-3 select-none">
+							<MedicForm />
+						</Tabs.Content>
+					</Tabs.Root>
 				</div>
 			</div>
 
