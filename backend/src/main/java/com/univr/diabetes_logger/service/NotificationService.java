@@ -113,7 +113,8 @@ public class NotificationService implements CrudService<Notification> {
 
       if (mostRecent.isPresent()) {
         if (mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
-            NotifyAllMedics();
+            NotifyAllMedics(patient.getFirstName() + " " + patient.getLastName() + "è da più di 3 giorni" +
+                    "che non scrive una rilevazione glicemica.");
         }
       }
     }
@@ -129,9 +130,9 @@ public class NotificationService implements CrudService<Notification> {
     }
   }
 
-  public void NotifyAllMedics() {
+  public void NotifyAllMedics(String message) {
     for(Medic medic : medicRepository.findAll()) {
-      notificationRepository.save(new Notification("Son passati più di 3 giorni da quando non scrivi una rilevazione.",
+      notificationRepository.save(new Notification(message,
               false, LocalDateTime.now(), medic.getUser()));
     }
   }

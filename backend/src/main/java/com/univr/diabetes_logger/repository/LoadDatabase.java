@@ -32,16 +32,16 @@ public class LoadDatabase {
       reportRepository.deleteAll();
       patientRepository.deleteAll();
       medicRepository.deleteAll();
-      userRepository.deleteAll();
       therapyRepository.deleteAll();
+      userRepository.deleteAll();
 
       // Flush to ensure deletion is complete
       notificationRepository.flush();
       reportRepository.flush();
       patientRepository.flush();
       medicRepository.flush();
-      userRepository.flush();
       therapyRepository.flush();
+      userRepository.flush();
 
       // Preload Users
       User user1 = userService.create(new User("fabio@gmail.com", "fabio", Role.PATIENT));

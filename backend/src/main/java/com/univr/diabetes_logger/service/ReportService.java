@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.Report;
 import com.univr.diabetes_logger.model.User;
+import com.univr.diabetes_logger.repository.NotificationRepository;
 import com.univr.diabetes_logger.repository.ReportRepository;
 import com.univr.diabetes_logger.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +19,58 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ReportService implements CrudService<Report> {
-    private ReportRepository repository;
-    @Autowired
-    private UserRepository userRepository;
+    private final ReportRepository repository;
+    private final UserRepository userRepository;
 
-    public ReportService(ReportRepository repository) {
+    @Autowired
+    private final NotificationService notificationService;
+
+    public ReportService(ReportRepository repository, UserRepository userRepository, NotificationService notificationService) {
         this.repository = repository;
+        this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
+    @Transactional
     @Override
     public Report create(Report report) {
-        // TODO: Check if data are coherent with therapy
-
+        checkLevels(report);
         return repository.save(report);
+    }
+
+    private void checkLevels(Report report) {
+        int glycemia = report.getGlycemiaLevel();
+        String fullName = report.getPatient().getFirstName() + " " + report.getPatient().getLastName();
+        if (report.getBeforeMeal()) {
+            if (glycemia < 80 || glycemia > 130) {
+                if (glycemia < 50 || glycemia > 170) {
+                    notifyCritical(fullName, glycemia);
+                } else {
+                    notifyWarning(fullName, glycemia);
+                }
+            }
+        } else {
+            if (glycemia > 180) {
+                if (glycemia > 210) {
+                    notifyCritical(fullName, glycemia);
+                } else {
+                    notifyWarning(fullName, glycemia);
+                }
+            }
+        }
+    }
+
+    private void notifyCritical(String fullName, int glycemia) {
+        notificationService.NotifyAllMedics(
+                        "ATTENTION, " + fullName +
+                        " has surpassed the glycemia level threshold with a level of " +
+                        glycemia + ", URGENT CHECK");
+    }
+
+    private void notifyWarning(String fullName, int glycemia) {
+        notificationService.NotifyAllMedics(
+                fullName + " has surpassed the glycemia " +
+                "level threshold with a level of " + glycemia);
     }
 
     public Optional<Report> createOnUser(Report report, Integer id) {
@@ -44,6 +85,7 @@ public class ReportService implements CrudService<Report> {
         }
 
         report.setPatient(user.get().getPatient());
+        checkLevels(report);
         return Optional.of(repository.save(report));
     }
 
