@@ -13,7 +13,7 @@
 	} = $props();
 </script>
 
-<main>
+<main class="flex h-full flex-col items-center p-4">
 	<h1>{JSON.stringify(data.user)}</h1>
 
 	<AddReportDialog />

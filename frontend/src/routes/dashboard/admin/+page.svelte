@@ -4,8 +4,8 @@
 	let { data }: { data: { user: User; userList: Promise<User[]> } } = $props();
 </script>
 
-<main>
-	<h1>Hello {data.user.email}</h1>
+<main class="flex h-full flex-col p-4">
+	<h1>{JSON.stringify(data.user)}</h1>
 
 	<div class="mt-8 flex">
 		{#await data.userList}
