@@ -40,7 +40,7 @@
 						name="password"
 						class="transition-all ring-transparent h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
 					/>
-					<button type="button" onclick={() => (showPassword = !showPassword)}>
+					<button tabindex="-1" type="button" onclick={() => (showPassword = !showPassword)}>
             {#if showPassword}
               <LockKeyOpen class="text-dark/30 absolute top-9 right-4 size-6 hover:bg-muted transition rounded cursor-pointer" />
             {:else}
