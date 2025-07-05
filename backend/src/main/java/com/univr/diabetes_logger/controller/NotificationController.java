@@ -52,10 +52,20 @@ public class NotificationController {
   }
 
   @PatchMapping("/user/{userId}/{id}")
-  public Notification createUserNotification(@RequestBody Notification notification,
-      @PathVariable Integer userId, @PathVariable Integer id,
-      UriComponentsBuilder uriBuilder) {
+  public Notification toggleSeenUserNotifications(@PathVariable Integer userId, @PathVariable Integer id) {
     return notificationService.toggleSeen(id);
+  }
+
+  @PatchMapping("/user/{userId}")
+  public Iterable<Notification> toggleSeenAllUserNotifications(@PathVariable Integer userId) {
+
+    List<Notification> notifications = notificationService.getAllByUserId(userId);
+
+    for (Notification notif : notifications) {
+      notificationService.setSeen(notif.getId());
+    }
+
+    return notifications;
   }
 
   @PutMapping("/user/{userId}/{id}")
