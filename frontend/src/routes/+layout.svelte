@@ -7,35 +7,40 @@
 	import UserCircle from 'phosphor-svelte/lib/UserCircle';
 	import SignOut from 'phosphor-svelte/lib/SignOut';
 	import { browser } from '$app/environment';
-	import type { User } from '$lib/types';
+	import type { Notification, User } from '$lib/types';
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import NotificationsButton from './NotificationsButton.svelte';
 
-	let { children, data }: { children: Snippet<[]>; data: { user: User } } = $props();
+	let {
+		children,
+		data
+	}: { children: Snippet<[]>; data: { user: User; notifications: Promise<Notification[]> } } =
+		$props();
 
 	type Theme = 'dark' | 'light';
 
-	const initialTheme: Theme =
-		browser && localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
-
-	let theme = $state<Theme>(initialTheme);
+	const initialTheme: boolean = browser && localStorage.getItem('theme') === 'dark' ? true : false;
+	let isDarkMode = $state(initialTheme);
 
 	$effect(() => {
 		if (browser) {
+			let theme: Theme = isDarkMode ? 'dark' : 'light';
+
 			localStorage.setItem('theme', theme);
-			document.documentElement.classList.toggle('dark', theme === 'dark');
+			document.documentElement.classList.toggle('dark', isDarkMode);
 		}
 	});
 
 	function toggleTheme() {
-		theme = theme === 'dark' ? 'light' : 'dark';
+		isDarkMode = !isDarkMode;
 	}
 </script>
 
 <div class="flex h-screen flex-col">
 	<header
-		class="bg-background-alt shadow-card top-0 flex w-full flex-row items-center border-b px-4 py-2"
+		class="bg-background-alt shadow-card top-0 flex w-full flex-row items-center gap-4 border-b px-4 py-2"
 	>
 		{#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error}
 			<h1 class="text-foreground text-lg font-bold">Diabetes Logger</h1>
@@ -89,6 +94,24 @@
 									</div>
 								</DropdownMenu.Item>
 							{/if}
+							<DropdownMenu.CheckboxItem
+								bind:checked={isDarkMode}
+								class="rounded-button data-highlighted:bg-muted flex h-10 cursor-pointer items-center py-3 pr-1.5 pl-3 text-sm font-medium ring-0! ring-transparent! select-none focus-visible:outline-none"
+							>
+								{#snippet children({ checked, indeterminate })}
+									<div class="flex w-full flex-row items-center justify-between">
+										<div class="flex flex-row items-center">
+											{#if isDarkMode}
+                        <Sun class="text-foreground-alt mr-2 size-5" />
+                        Light Mode
+											{:else}
+                        <Moon class="text-foreground-alt mr-2 size-5" />
+                        Dark Mode
+											{/if}
+										</div>
+									</div>
+								{/snippet}
+							</DropdownMenu.CheckboxItem>
 							<DropdownMenu.Item
 								class="rounded-button data-highlighted:bg-muted flex h-10 cursor-pointer items-center py-3 pr-1.5 pl-3 text-sm font-medium ring-0! ring-transparent! select-none focus-visible:outline-none"
 								onSelect={() => {
@@ -116,17 +139,26 @@
 			</div>
 		{/if}
 
-		<!-- Dark Mode Toggle -->
-		<button
-			onclick={toggleTheme}
-			class="hover:bg-muted focus:bg-muted dark:hover:bg-muted ml-auto rounded-xl p-2 transition-all focus:outline-none"
-		>
-			{#if theme === 'dark'}
-				<Sun class="text-foreground size-9" />
-			{:else}
-				<Moon class="text-foreground size-9" />
+		<!-- Middle content -->
+		<div class="ml-auto flex items-center gap-4">
+			{#if page.url.pathname !== '/login' && page.url.pathname !== '/register' && !page.error && data.user != null && data.user.role != 'ADMIN'}
+				<NotificationsButton notifications={data.notifications} />
 			{/if}
-		</button>
+
+			<!-- Dark Mode Toggle -->
+      {#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error || data.user == null}
+        <button
+          onclick={toggleTheme}
+          class="hover:bg-muted focus:bg-muted dark:hover:bg-muted rounded-xl p-2 transition-all focus:outline-none"
+        >
+          {#if isDarkMode}
+            <Sun class="text-foreground size-9" />
+          {:else}
+            <Moon class="text-foreground size-9" />
+          {/if}
+        </button>
+      {/if}
+		</div>
 	</header>
 
 	{@render children()}
