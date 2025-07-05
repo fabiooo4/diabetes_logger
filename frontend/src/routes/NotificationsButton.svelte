@@ -2,11 +2,43 @@
 	import type { Notification } from '$lib/types';
 	import { Popover, Separator, ScrollArea } from 'bits-ui';
 	import Bell from 'phosphor-svelte/lib/Bell';
+	import X from 'phosphor-svelte/lib/X';
 
-	let { notifications }: { notifications: Promise<Notification[]> } = $props();
+	let { notifications, userId }: { notifications: Promise<Notification[]>; userId: number } =
+		$props();
+	let isOpen = $state(false);
+
+	$effect(() => {
+		if (isOpen) {
+			fetch('/', {
+				method: 'PATCH',
+				body: JSON.stringify({ userId }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		}
+	});
+
+  async function deleteNotification(notificationId: number) {
+    console.log('Delete notification clicked', notificationId);
+
+    if (!notificationId) {
+      console.error('No notification ID found in the event target.');
+      return;
+    };
+
+    await fetch('/', {
+      method: 'DELETE',
+      body: JSON.stringify({ userId, notificationId }),
+    });
+
+    let fulfilled = await notifications;
+    notifications = Promise.resolve(fulfilled.filter(n => n.id !== notificationId));
+  }
 </script>
 
-<Popover.Root>
+<Popover.Root bind:open={isOpen}>
 	<Popover.Trigger
 		class="rounded-input bg-dark
 	text-background shadow-mini hover:bg-dark/95 inline-flex h-10 items-center justify-center p-2 text-[15px] font-medium whitespace-nowrap transition-all select-none hover:cursor-pointer active:scale-[0.98]"
@@ -32,30 +64,62 @@
 						<p>Loading notifications...</p>
 					{:then notifications}
 						{#if notifications === undefined || notifications.length === 0}
-							<p>No notifications found.</p>
+							<p class="py-4">No notifications found.</p>
 						{:else}
 							<div class="flex flex-col gap-y-1 wrap-anywhere">
-								{#each notifications as notification}
+								{#each notifications.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) as notification}
 									{#if notification === notifications[0]}
 										<div class="mt-4">
-											<p class="text-sm font-medium">{notification.message}</p>
-											<p class="text-muted-foreground text-xs">
-												{new Date(notification.createdAt).toLocaleString()}
-											</p>
-											<Separator.Root
-												class="bg-border my-4 shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
-											/>
+											<div class="flex flex-row items-center justify-between gap-x-4">
+												<div>
+													<p class="text-sm font-medium">{notification.message}</p>
+													<p class="text-muted-foreground text-xs">
+														{new Date(notification.createdAt).toLocaleString()}
+														<span class="text-destructive ml-2"
+															>{notification.seen ? '' : 'NEW'}</span
+														>
+													</p>
+												</div>
+												<button
+													onclick={async() => await deleteNotification(notification.id)}
+													class="cursor-pointer"
+												>
+													<X class="text-foreground size-5 min-w-5" />
+												</button>
+											</div>
+											{#if notification === notifications[notifications.length - 1]}
+												<Separator.Root
+													class="mt-4 shrink-0 bg-transparent data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
+												/>
+											{:else}
+												<Separator.Root
+													class="bg-border my-4 shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
+												/>
+											{/if}
 										</div>
 									{:else}
 										<div>
-											<p class="text-sm font-medium">{notification.message}</p>
-											<p class="text-muted-foreground text-xs">
-												{new Date(notification.createdAt).toLocaleString()}
-											</p>
+											<div class="flex flex-row items-center justify-between gap-x-4">
+												<div>
+													<p class="text-sm font-medium">{notification.message}</p>
+													<p class="text-muted-foreground text-xs">
+														{new Date(notification.createdAt).toLocaleString()}
+														<span class="text-destructive ml-2"
+															>{notification.seen ? '' : 'NEW'}</span
+														>
+													</p>
+												</div>
+												<button
+													onclick={async () => await deleteNotification(notification.id)}
+													class="cursor-pointer"
+												>
+													<X class="text-foreground size-5 min-w-5" />
+												</button>
+											</div>
 
 											{#if notification === notifications[notifications.length - 1]}
 												<Separator.Root
-													class="bg-transparent mt-4 shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
+													class="mt-4 shrink-0 bg-transparent data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
 												/>
 											{:else}
 												<Separator.Root

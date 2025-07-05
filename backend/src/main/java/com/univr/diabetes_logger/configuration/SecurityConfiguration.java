@@ -68,7 +68,7 @@ public class SecurityConfiguration {
                   .requestMatchers(HttpMethod.DELETE, "/notifications/user/{userId}/{id}")
                   .access(new WebExpressionAuthorizationManager(
                     "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT', 'MEDIC') and authentication.getDetails().checkId(#userId))"))
-                  .requestMatchers(HttpMethod.PATCH, "/notifications/user/{userId}/{id}")
+                  .requestMatchers(HttpMethod.PATCH, "/notifications/user/{userId}/{id}", "/notifications/user/{userId}")
                   .access(new WebExpressionAuthorizationManager(
                     "hasAuthority('ADMIN') or (hasAnyAuthority('PATIENT', 'MEDIC') and authentication.getDetails().checkId(#userId))"))
                   // Notifications ---------------------------------------

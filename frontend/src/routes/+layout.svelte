@@ -16,7 +16,7 @@
 	let {
 		children,
 		data
-	}: { children: Snippet<[]>; data: { user: User; notifications: Promise<Notification[]> } } =
+	}: { children: Snippet<[]>; data: { user: User; notifications: Promise<Notification[]>, token: string } } =
 		$props();
 
 	type Theme = 'dark' | 'light';
@@ -98,7 +98,7 @@
 								bind:checked={isDarkMode}
 								class="rounded-button data-highlighted:bg-muted flex h-10 cursor-pointer items-center py-3 pr-1.5 pl-3 text-sm font-medium ring-0! ring-transparent! select-none focus-visible:outline-none"
 							>
-								{#snippet children({ checked, indeterminate })}
+								{#snippet children()}
 									<div class="flex w-full flex-row items-center justify-between">
 										<div class="flex flex-row items-center">
 											{#if isDarkMode}
@@ -142,7 +142,7 @@
 		<!-- Middle content -->
 		<div class="ml-auto flex items-center gap-4">
 			{#if page.url.pathname !== '/login' && page.url.pathname !== '/register' && !page.error && data.user != null && data.user.role != 'ADMIN'}
-				<NotificationsButton notifications={data.notifications} />
+				<NotificationsButton notifications={data.notifications} userId={data.user?.id} />
 			{/if}
 
 			<!-- Dark Mode Toggle -->

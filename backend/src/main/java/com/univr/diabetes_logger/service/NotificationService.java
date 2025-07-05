@@ -73,7 +73,14 @@ public class NotificationService implements CrudService<Notification> {
 
   @Override
   public Notification update(Integer id, Notification notification) {
-    return null;
+    Notification existingNotif = this.getById(id).orElseThrow();
+
+    existingNotif.setCreatedAt(notification.getCreatedAt());
+    existingNotif.setMessage(notification.getMessage());
+    existingNotif.setSeen(notification.isSeen());
+    existingNotif.setUser(notification.getUser());
+
+    return notificationRepository.save(existingNotif);
   }
 
   public Notification updateOnUser(Integer id, Notification notification) {
@@ -82,7 +89,7 @@ public class NotificationService implements CrudService<Notification> {
     existingNotif.setCreatedAt(notification.getCreatedAt());
     existingNotif.setMessage(notification.getMessage());
     existingNotif.setUser(notification.getUser());
-    // Cannot change the recipient
+    existingNotif.setSeen(notification.isSeen());
 
     return notificationRepository.save(existingNotif);
   }
@@ -140,6 +147,13 @@ public class NotificationService implements CrudService<Notification> {
   public Notification toggleSeen(Integer id) {
     Notification notif = getById(id).orElseThrow();
     notif.toggleSeen();
+
+    return notificationRepository.save(notif);
+  }
+
+  public Notification setSeen(Integer id) {
+    Notification notif = getById(id).orElseThrow();
+    notif.setSeen(true);
 
     return notificationRepository.save(notif);
   }

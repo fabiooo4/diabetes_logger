@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-05 16:22:20.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-05 18:15:55.
 
 
 export interface User {
