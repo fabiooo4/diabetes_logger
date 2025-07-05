@@ -45,8 +45,6 @@ public class SecurityConfiguration {
                   // Allow access to users/{id} endpoint only for the authenticated id
                   .access(new WebExpressionAuthorizationManager("hasAuthority('ADMIN') or authentication.getDetails().checkId(#id)"));
                   // Users -----------------------------------------------
-
-
               // Patient is allowed to
               request
                   // Reports ---------------------------------------------

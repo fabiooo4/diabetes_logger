@@ -411,6 +411,136 @@ le classi che rappresentano gli attori del sistema e le loro interazioni.
   \caption{Architettura MVC del software} 
   \label{fig:mvc}
 \end{figure}
+\noindent
+Seguono i diagrammi UML delle classi del Model e del Controllore, che rappresentano le entità principali del software e le loro relazioni.
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{umlModel.pdf}
+  \end{center}
+  \caption{Diagramma UML delle classi del Model} 
+\end{figure}
+\noindent
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{controller.pdf}
+  \end{center}
+  \caption{Classi UML dei Controller} 
+\end{figure}
+\noindent
+
+\subsection{Comunicazione MVC e gestione delle richieste}
+
+Per gestire la comunicazione nel modello MVC sono state effettuate le seguenti scelte:
+\begin{itemize}
+  \item Per la comunicazione tra il Model e il Controller, sono stati utilizzati i \textit{Repository} di Spring Boot, 
+  che permettono di interagire con il database in modo semplice e veloce. Dopodiché abbiamo implementato
+  i \textit{Service} (Service Layer Pattern) che contengono la logica di business e le operazioni da effettuare sui dati. Abbiamo creato
+  un interfaccia \textit{CrudService} che contiene i metodi CRUD (Create, Read, Update, Delete) che ogni servizio implementa.
+  \item Per la comunicazione tra il Controller e la View, sono stati utilizzati i \textit{REST Controller} di Spring Boot, 
+  che permettono di gestire le richieste HTTP e di restituire le risposte in formato JSON.
+  \item Per la comunicazione tra il Model e la View in realtà, non c'è una comunicazione diretta, ma il Controller
+  si occupa di prendere i dati dal Model e passarli alla View tramite le richieste HTTP. Questo ci permette 
+  di poter decidere quando vogliamo di cambiare modalità di View senza dover modificare il Model.
+\end{itemize}
+
+\subsection{Implementazione e design dei pattern usati}
+
+\subsubsection{Generalità}
+
+Ora andremo a vedere quali sono i pattern implementati nel software e come sono stati utilizzati.
+
+\begin{itemize}
+  \item I \textbf{pattern iterator} sono stati utilizzati per iterare sulle liste di tutti i nostri modelli, proprietà intrinseca
+  di Java. 
+  \item È stato utilizzato molteplici volte il \textbf{pattern Observer} grazie alle dipendenze fornite da Spring Boot 
+  tramite Bean (In Spring Boot, i Bean sono oggetti gestiti dal container di Spring, questo ci permette
+  di usare \textit{Dependency Injection} per iniettare le dipendenze nei nostri componenti, Gestione
+  del ciclo della vita e una configurazione centralizzata) 
+  chiamati \textit{@ManyToOne} e \textit{@OneToMany}: quindi quando un oggetto viene modificato,
+  tutti gli oggetti che dipendono da esso vengono notificati e aggiornati automaticamente.
+  \item Per gestire l'autenticazione e la sicurezza degli endpoints, è stato utilizzato il \textbf{pattern Security} di Spring Boot,
+  che permette di gestire l'autenticazione e l'autorizzazione degli utenti. Tuttavia, in concomitanza abbiamo dovuto usare 
+  il \textbf{pattern Adapter} per adattare le nostre classi di autenticazione a quelle di Spring Boot e alle nostre esigenze
+  (più approfondimenti sul pattern adapter nella sezione \textit{Autenticazione e autorizzazione}).
+  \item Il \textbf{pattern Factory Method} è stato utilizzato per comporre le classi del Model come le repository
+  e tutto il service layer (che implementano l'interfaccia \textit{CrudService}) e implementano i loro metodi in base 
+  alle esigenze del progetto.
+  \item A sua volta, all'interno della configurazione per la sicurezza, è stato utilizzato il \textbf{Filter Chain Pattern}
+  dove una serie di filtri (autenticazione, autorizzazione, CORS, ecc.) processano la richiesta in sequenza.
+\end{itemize}
+
+\subsubsection{Autenticazione e autorizzazione}
+
+Per gestire l'autenticazione e l'autorizzazione degli utenti, è stato utilizzata la libreria \textit{Spring Security}, che permette di gestire
+l'autenticazione e l'autorizzazione degli utenti. 
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{config.pdf}
+  \end{center}
+  \caption{Classi UML della configurazione della sicurezza} 
+\end{figure}
+\noindent
+Di seguito sono riportate le classi principali che compongono la configurazione della sicurezza:
+\begin{itemize}
+  \item La classe \textbf{WebConfig} si occupa di configurare le impostazioni di sicurezza del web, come i CORS e le risorse statiche.
+  Nel nostro caso ci permette di effettuare richieste dallo stesso IP del server, ma su porte diverse (per esempio, il frontend).
+  \item La classe \textbf{JwtFilter} si occupa di filtrare le richieste HTTP e di verificare se l'utente è autenticato tramite un token JWT.
+  I token JWT (JSON Web Token) sono un modo per rappresentare le informazioni di autenticazione in modo sicuro e compatto.
+  In poche parole estraiamo il token JWT dalla richiesta HTTP e lo verifichiamo per vedere se è valido.
+  \item La classe \textbf{SecurityConfiguration} è stato implementato usando il \textbf{builder Pattern} e si occupa di configurare la sicurezza del progetto,
+  infatti possiamo definire una serie di filtri che processano la richiesta in sequenza.
+  Quindi, nella funzione \textit{securityFilterChain} definiamo i filtri che vogliamo utilizzare, come il filtro di autenticazione e il filtro di autorizzazione.
+  Questo ci permette di definire i permessi di ogni ruolo, quindi per esempio, i pazienti possono accedere solo alle loro informazioni, i medici possono accedere alle informazioni dei pazienti 
+  e l'amministratore può accedere a tutte le informazioni (vedere \ref{fig:usecase}).
+\end{itemize}
+Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli:
+\begin{itemize}
+  \item Admin:
+  \begin{itemize}
+    \item \textbf{GET+POST+PUT+DELETE/**}
+  \end{itemize}
+  \item Pazienti:
+  \begin{itemize}
+    \item UsersController: 
+    \begin{itemize}
+      \item \textbf{GET /users/{loggedId}}
+    \end{itemize}
+    \item ReportsController: \begin{itemize}
+      \item \textbf{GET+POST+PUT+DELETE /reports/{loggedId}}
+    \end{itemize}
+    \item NotificationsController: 
+    \begin{itemize}
+      \item \textbf{GET+DELETE /notifications/{loggedId}}
+    \end{itemize}
+  \end{itemize}
+  \item Medici:
+  \begin{itemize}
+    \item UsersController:
+    \begin{itemize}
+      \item \textbf{GET /users/{loggedId}} 
+    \end{itemize}
+    \item ReportsController:
+    \begin{itemize}
+      \item \textbf{GET /reports/{anyUserId}}
+      \item \textbf{GET /reports/}
+    \end{itemize}
+    \item NotificationsController:
+    \begin{itemize}
+      \item \textbf{GET+DELETE /notifications/{loggedId}}
+    \end{itemize}
+    \item TherapiesController:
+    \begin{itemize}
+      \item \textbf{GET+POST+PUT+DELETE /therapies}
+      \item \textbf{GET /therapies/{userId}}
+    \end{itemize}
+    \item PatientsController:
+    \begin{itemize}
+      \item \textbf{GET /patients}
+      \item \textbf{GET+PATCH /patients/{userId}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
 
 
 
