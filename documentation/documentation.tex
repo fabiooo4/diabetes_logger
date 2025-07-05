@@ -347,4 +347,72 @@ già autenticato e che non ci siano errori di autenticazione.
   \label{fig:adAmministratore}
 \end{figure}
 
+\section{Sviluppo}
+
+\subsection{Processo di sviluppo}
+
+Il processo di sviluppo del software è stato realizzato seguendo il modello \textit{Agile} con metodologia \textit{Scrum}.
+Il team è composto da due sviluppatori, che hanno lavorato in parallelo su diverse funzionalità del software.
+Lo Scrum ci ha permesso di organizzare il lavoro in sprint precisi, durante i quali abbiamo
+sviluppato le funzionalità richieste, testandole e integrandole nel software. 
+Gli sprint venivano pianificati in base alle funzionalità da implementare e alle priorità stabilite all'inizio,
+facendo una scrematura delle funzionalità da implementare in base al tempo a disposizione. 
+Alla fine di ogni sprint, abbiamo effettuato una revisione del lavoro svolto, testando le funzionalità implementate e correggendo eventuali bug.
+\textit{Product Backlog} e \textit{Sprint Backlog} non sono nient'altro che una lista di "to-do" task che bisogna affrontare per la scelta delle funzionalità da implementare
+e su come implementarle rispettivamente. Tuttavia non vi è un \textit{Scrum Master} in quanto il team è composto da due persone e non vi è la necessità di avere una figura che coordini il lavoro.
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{adProcessodiSviluppo.pdf}
+  \end{center}
+  \caption{Diagramma del processo di sviluppo}
+  \label{fig:adProcessodiSviluppo}
+\end{figure}
+\noindent
+Prima di cominciare il ciclo di Scrum però, è stata effettuata una fase di \textit{analisi dei requisiti}, dove tutto il team di Scrum si è unito per 
+analizzare le specifiche del progetto e poi sono stati definiti i casi d'uso (vedi figura \ref{fig:usecase}).
+Man mano che venivano implementate le classi e le funzionalità, venivano costruiti gli UML per rappresentare le classi e le relazioni tra di esse.
+Per la gestione del codice sorgente, è stato utilizzato \textit{Git} come sistema di versionamento, con un repository su \textit{GitHub} per facilitare la collaborazione tra i membri del team.
+Abbiamo utilizzato anche \textit{Github Planner} per tenere traccia delle attività da svolgere e dello stato di avanzamento del progetto.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{githubPlanner.png}
+  \end{center}
+  \caption{Github Planner del progetto} 
+  \label{fig:githubPlanner}
+\end{figure}
+
+\subsection{Progettazione e pattern architetturali usati}
+
+Il software è stato progettato seguendo il pattern architetturale \textit{Model-View-Controller} 
+(MVC), che separa la logica di business, la presentazione e la gestione degli eventi.
+Questo tipo di pattern ci ha permesso di mantenere il codice ben organizzato e facilmente manutenibile.
+Abbiamo scelto questo pattern poiché \textit{Spring Boot} (framework di Java utilizzato per il backend) ha gli strumenti necessari
+per implementare questo pattern in modo semplice e veloce:
+\begin{itemize}
+  \item \textbf{Model}: rappresenta la logica di business e i dati del software. 
+  In questo caso, il model è composto da classi che rappresentano lo user, i pazienti, i medici, 
+  le rilevazioni, le notifiche e il change log. 
+  \item \textbf{View}: rappresenta la parte di presentazione del software. In questo caso, 
+  la view è composta da pagine costruite con SvelteKit, un framework per fare siti web. 
+  \item \textbf{Controller}: rappresenta la parte di gestione degli eventi e della logica di business. 
+  Risponde alle chiamate e alle sollecitazioni della View e gestisce le richieste degli utenti.
+\end{itemize}
+Tramite richieste HTTP, il controllera comunica con il model e la view. 
+Quindi il controller riceve la richiesta dalla view e poi interagisce con il model per 
+ottenere i dati necessari oppure modificarli in base alla richiesta dell'utente.
+Nelle prossime sezioni verrà analizzato in dettaglio il modello Model poiché contiene 
+le classi che rappresentano gli attori del sistema e le loro interazioni.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{MVC.pdf}
+  \end{center}
+  \caption{Architettura MVC del software} 
+  \label{fig:mvc}
+\end{figure}
+
+
+
+
 \end{document}
