@@ -1,17 +1,12 @@
 package com.univr.diabetes_logger.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.univr.diabetes_logger.model.Medic;
@@ -20,8 +15,6 @@ import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.service.MedicService;
 import com.univr.diabetes_logger.service.PatientService;
 import com.univr.diabetes_logger.service.UserService;
-
-import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  * UserController
@@ -49,6 +42,11 @@ public class UserController {
 
     if (user.getPassword() == null || user.getPassword().isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Password field is required");
+    }
+
+    if(!user.isVerified()) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not verified, " +
+              "wait for Admin to accept you");
     }
 
     try {
@@ -105,6 +103,18 @@ public class UserController {
   @GetMapping("/users")
   public Iterable<User> getAllUsers() {
     return userService.getAll();
+  }
+
+  @GetMapping("/users/pending")
+  public Iterable<User> getPendingUsers() {
+    return userService.getPendingUsers();
+  }
+
+  @PatchMapping("/users/pending/{userId}")
+  public User updatePendingUser(@PathVariable Integer userId) {
+    User existing = userService.getById(userId).orElseThrow();
+    existing.setVerified(true);
+    return userService.update(userId, existing);
   }
 
   @GetMapping("/users/{id}")

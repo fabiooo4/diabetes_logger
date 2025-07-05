@@ -3,6 +3,7 @@ package com.univr.diabetes_logger.service;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,6 +44,11 @@ public class UserService implements CrudService<User> {
     return repository.findById(id);
   }
 
+  public Iterable<User> getPendingUsers()
+  {
+    return repository.findAll().stream().filter(user -> !user.isVerified()).collect(Collectors.toList());
+  }
+
   @Override
   public User create(User user) {
     System.out.println("Creating user: " + user);
@@ -60,6 +66,7 @@ public class UserService implements CrudService<User> {
     existingUser.setEmail(user.getEmail());
     existingUser.setPassword(encoder.encode(user.getPassword()));
     existingUser.setRole(user.getRole());
+    existingUser.setVerified(user.isVerified());
 
     return repository.save(existingUser);
   }
