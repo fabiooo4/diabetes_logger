@@ -21,7 +21,15 @@ import jakarta.persistence.Table;
 @Table(name = "users")
 public class User {
 
-  public enum Role {
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public enum Role {
     PATIENT,
     MEDIC,
     ADMIN
@@ -39,6 +47,8 @@ public class User {
   private String password;
   @Column(name = "role")
   private String role;
+  @Column(name = "verified")
+  private boolean verified;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -71,11 +81,12 @@ public class User {
   protected User() {
   }
 
-  public User(String email, String password, Role role) {
+  public User(String email, String password, Role role, boolean verified) {
     this.email = email;
     this.password = password;
+      this.verified = verified;
 
-    if (role == null) {
+      if (role == null) {
       this.role = null;
     } else {
       this.role = role.toString();

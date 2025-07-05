@@ -53,9 +53,9 @@ public class LoadDatabase {
       log.info("Cleared therapies");
 
       // Preload Users
-      User user1 = userService.create(new User("fabio@gmail.com", "fabio", Role.PATIENT));
-      User user2 = userService.create(new User("paolo@gmail.com", "paolo", Role.ADMIN));
-      User medic_user = userService.create(new User("medic@gmail.com", "medic", Role.MEDIC));
+      User user1 = userService.create(new User("fabio@gmail.com", "fabio", Role.PATIENT,true));
+      User user2 = userService.create(new User("paolo@gmail.com", "paolo", Role.ADMIN, true));
+      User medic_user = userService.create(new User("medic@gmail.com", "medic", Role.MEDIC, true));
       log.info("Preloading user " + user1);
       log.info("Preloading user " + user2);
       log.info("Preloading user " + medic_user);
