@@ -2,6 +2,7 @@
 	import type { Notification } from '$lib/types';
 	import { Popover, Separator, ScrollArea } from 'bits-ui';
 	import Bell from 'phosphor-svelte/lib/Bell';
+	import BellRinging from 'phosphor-svelte/lib/BellRinging';
 	import X from 'phosphor-svelte/lib/X';
 
 	let { notifications, userId }: { notifications: Promise<Notification[]>; userId: number } =
@@ -67,7 +68,15 @@
 		class="rounded-input bg-dark
 	text-background shadow-mini hover:bg-dark/95 inline-flex h-10 items-center justify-center p-2 text-[15px] font-medium whitespace-nowrap transition-all select-none hover:cursor-pointer active:scale-[0.98]"
 	>
-		<Bell class="size-6" />
+		{#await notifications}
+			<Bell class="size-6" />
+		{:then notifications}
+			{#if notifications.length > 0 && notifications.some((n) => !n.seen)}
+				<BellRinging class="size-6" />
+			{:else}
+				<Bell class="size-6" />
+			{/if}
+		{/await}
 	</Popover.Trigger>
 	<Popover.Portal>
 		<Popover.Content
