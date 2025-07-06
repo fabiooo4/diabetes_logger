@@ -44,11 +44,6 @@ public class UserController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Password field is required");
     }
 
-    if(!user.isVerified()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not verified, " +
-              "wait for Admin to accept you");
-    }
-
     try {
       return ResponseEntity.ok(userService.verify(user));
     } catch (Exception e) {
@@ -131,6 +126,11 @@ public class UserController {
   @PutMapping("/users/{id}")
   public User updateUser(@PathVariable Integer id, @RequestBody User user) {
     return userService.update(id, user);
+  }
+
+  @PatchMapping("/users/{id}")
+  public User patchUser(@PathVariable Integer id, @RequestBody User user) {
+    return userService.patch(id, user);
   }
 
   @DeleteMapping("/users/{id}")

@@ -23,7 +23,7 @@
 			<h1 class="w-full text-center text-2xl font-bold">Register</h1>
 
 			{#if form?.error}
-				<p class="font-bold text-red-500">{form.error}</p>
+				<p class="font-bold text-destructive">{form.error}</p>
 			{/if}
 
 			<div class="flex w-5/6 flex-col items-center justify-center gap-4">
@@ -36,7 +36,7 @@
 					/>
 				</div>
 
-				<div class="flex flex-col relative w-full">
+				<div class="relative flex w-full flex-col">
 					<label for="password" class="pb-1 pl-1 text-sm">Password</label>
 					<input
 						type={showPassword ? 'text' : 'password'}

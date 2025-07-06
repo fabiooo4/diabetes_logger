@@ -7,15 +7,15 @@ export const load: PageServerLoad = ({ locals }) => {
 	let user: User | null = locals.user;
 
 	if (user == null) {
-    console.error('User is not authenticated');
+		console.error('User is not authenticated');
 		throw redirect(302, '/login');
 	}
 
 	switch (user.role) {
-    case 'PATIENT':
-      throw redirect(302, '/dashboard/patient');
-    case 'MEDIC':
-      throw redirect(302, '/dashboard/medic');
+		case 'PATIENT':
+			throw redirect(302, '/dashboard/patient');
+		case 'MEDIC':
+			throw redirect(302, '/dashboard/medic');
 		case 'ADMIN':
 			throw redirect(302, '/dashboard/admin');
 		default:

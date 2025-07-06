@@ -7,9 +7,35 @@
 	let { notifications, userId }: { notifications: Promise<Notification[]>; userId: number } =
 		$props();
 	let isOpen = $state(false);
+	let alreadyOpened = $state(false);
 
 	$effect(() => {
 		if (isOpen) {
+			if (alreadyOpened == false) alreadyOpened = true;
+
+			fetch('/', {
+				method: 'POST',
+				body: JSON.stringify({ userId }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((response) => {
+					if (!response.ok) {
+						console.error('Failed to fetch notifications' + response.statusText);
+						return;
+					}
+					return response.json();
+				})
+				.then((data) => {
+					notifications = Promise.resolve(data);
+				})
+				.catch((error) => {
+					console.error('Error fetching notifications:', error);
+				});
+		} else {
+			if (!alreadyOpened) return;
+
 			fetch('/', {
 				method: 'PATCH',
 				body: JSON.stringify({ userId }),
@@ -20,22 +46,20 @@
 		}
 	});
 
-  async function deleteNotification(notificationId: number) {
-    console.log('Delete notification clicked', notificationId);
+	async function deleteNotification(notificationId: number) {
+		if (!notificationId) {
+			console.error('No notification ID found in the event target.');
+			return;
+		}
 
-    if (!notificationId) {
-      console.error('No notification ID found in the event target.');
-      return;
-    };
+		await fetch('/', {
+			method: 'DELETE',
+			body: JSON.stringify({ userId, notificationId })
+		});
 
-    await fetch('/', {
-      method: 'DELETE',
-      body: JSON.stringify({ userId, notificationId }),
-    });
-
-    let fulfilled = await notifications;
-    notifications = Promise.resolve(fulfilled.filter(n => n.id !== notificationId));
-  }
+		let fulfilled = await notifications;
+		notifications = Promise.resolve(fulfilled.filter((n) => n.id !== notificationId));
+	}
 </script>
 
 <Popover.Root bind:open={isOpen}>
@@ -81,7 +105,7 @@
 													</p>
 												</div>
 												<button
-													onclick={async() => await deleteNotification(notification.id)}
+													onclick={async () => await deleteNotification(notification.id)}
 													class="cursor-pointer"
 												>
 													<X class="text-foreground size-5 min-w-5" />

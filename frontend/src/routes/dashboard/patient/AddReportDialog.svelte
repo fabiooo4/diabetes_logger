@@ -56,7 +56,7 @@
 								>
 								<input type="hidden" name="date" value={date.toString()} />
 								<DatePicker.Input
-									class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover flex w-full max-w-[232px] items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+									class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover flex w-full max-w-[232px] items-center border px-2 py-3 text-sm tracking-[0.01em] transition-all select-none"
 								>
 									{#snippet children({ segments })}
 										{#each segments as { part, value }, i (part + i)}
@@ -152,7 +152,7 @@
 								>
 								<TimeField.Input
 									name="time"
-									class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none "
+									class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] transition-all select-none "
 								>
 									{#snippet children({ segments })}
 										{#each segments as { part, value }, i (part + i)}
@@ -188,14 +188,14 @@
 								class="bg-background data-[state=unchecked]:shadow-mini dark:border-background/30 dark:bg-foreground dark:shadow-popover pointer-events-none block size-[30px] shrink-0 rounded-full transition-transform data-[state=checked]:translate-x-6 data-[state=unchecked]:translate-x-0 dark:border dark:data-[state=unchecked]:border"
 							/>
 						</Switch.Root>
-						<Label.Root for="beforeMeal" class="text-sm font-medium">Before meal</Label.Root>
+						<Label.Root class="text-sm font-medium">Before meal</Label.Root>
 					</div>
 
-					<Label.Root for="glycemiaLevel" class="text-sm font-medium">Glycemia level</Label.Root>
+					<Label.Root class="text-sm font-medium">Glycemia level</Label.Root>
 					<div class="relative w-full">
 						<input
 							id="glycemiaLevel"
-							class="h-input rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex w-full items-center border px-4 text-base ring-transparent focus:outline-hidden sm:text-sm"
+							class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
 							type="number"
 							placeholder="Enter glycemia level"
 							name="glycemiaLevel"
@@ -204,31 +204,31 @@
 						<!-- <LockKeyOpen class="text-dark/30 absolute top-[14px] right-4 size-[22px]" /> -->
 					</div>
 
-					<Label.Root for="symptoms" class="text-sm font-medium">Symptoms</Label.Root>
+					<Label.Root class="text-sm font-medium">Symptoms</Label.Root>
 					<div class="relative w-full">
 						<textarea
 							id="symptoms"
-							class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-4 py-4 text-base ring-transparent focus:outline-hidden sm:text-sm"
+							class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
 							placeholder="Describe your symptoms"
 							name="symptoms"
 						></textarea>
 					</div>
 
-					<Label.Root for="notes" class="text-sm font-medium">Extra notes</Label.Root>
+					<Label.Root class="text-sm font-medium">Extra notes</Label.Root>
 					<div class="relative w-full">
 						<textarea
 							id="notes"
-							class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-4 py-4 text-base ring-transparent focus:outline-hidden sm:text-sm"
+							class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
 							placeholder="Add any extra notes, like other therapies you are taking or pathologies you currently have"
 							name="notes"
 						></textarea>
 					</div>
 
-					<Label.Root for="medicine" class="text-sm font-medium">Medicine</Label.Root>
+					<Label.Root class="text-sm font-medium">Medicine</Label.Root>
 					<div class="relative w-full">
 						<input
 							id="medicine"
-							class="h-input rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex w-full items-center border px-4 text-base ring-transparent focus:outline-hidden sm:text-sm"
+							class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
 							placeholder="Insert the medicine you report taking"
 							name="medicine"
 						/>
@@ -238,7 +238,7 @@
 					<div class="relative w-full">
 						<input
 							id="amount"
-							class="h-input rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex w-full items-center border px-4 text-base ring-transparent focus:outline-hidden sm:text-sm"
+							class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
 							type="number"
 							placeholder="Insert the amount of medicine you report taking"
 							name="amount"

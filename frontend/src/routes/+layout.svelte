@@ -16,8 +16,10 @@
 	let {
 		children,
 		data
-	}: { children: Snippet<[]>; data: { user: User; notifications: Promise<Notification[]>, token: string } } =
-		$props();
+	}: {
+		children: Snippet<[]>;
+		data: { user: User; notifications: Promise<Notification[]>; token: string };
+	} = $props();
 
 	type Theme = 'dark' | 'light';
 
@@ -42,7 +44,7 @@
 	<header
 		class="bg-background-alt shadow-card top-0 flex w-full flex-row items-center gap-4 border-b px-4 py-2"
 	>
-		{#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error}
+		{#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error || page.url.pathname === '/dashboard/profile/changedProfile'}
 			<h1 class="text-foreground text-lg font-bold">Diabetes Logger</h1>
 		{:else}
 			<!-- Profile -->
@@ -102,11 +104,11 @@
 									<div class="flex w-full flex-row items-center justify-between">
 										<div class="flex flex-row items-center">
 											{#if isDarkMode}
-                        <Sun class="text-foreground-alt mr-2 size-5" />
-                        Light Mode
+												<Sun class="text-foreground-alt mr-2 size-5" />
+												Light Mode
 											{:else}
-                        <Moon class="text-foreground-alt mr-2 size-5" />
-                        Dark Mode
+												<Moon class="text-foreground-alt mr-2 size-5" />
+												Dark Mode
 											{/if}
 										</div>
 									</div>
@@ -118,8 +120,8 @@
 									goto('/logout');
 								}}
 							>
-								<div class="flex items-center">
-									<SignOut class="text-foreground-alt mr-2 size-5" />
+								<div class="flex items-center text-destructive">
+									<SignOut class="text-destructive mr-2 size-5" />
 									Logout
 								</div>
 							</DropdownMenu.Item>
@@ -146,18 +148,18 @@
 			{/if}
 
 			<!-- Dark Mode Toggle -->
-      {#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error || data.user == null}
-        <button
-          onclick={toggleTheme}
-          class="hover:bg-muted focus:bg-muted dark:hover:bg-muted rounded-xl p-2 transition-all focus:outline-none"
-        >
-          {#if isDarkMode}
-            <Sun class="text-foreground size-9" />
-          {:else}
-            <Moon class="text-foreground size-9" />
-          {/if}
-        </button>
-      {/if}
+			{#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error || data.user == null}
+				<button
+					onclick={toggleTheme}
+					class="hover:bg-muted focus:bg-muted dark:hover:bg-muted rounded-xl p-2 transition-all focus:outline-none"
+				>
+					{#if isDarkMode}
+						<Sun class="text-foreground size-9" />
+					{:else}
+						<Moon class="text-foreground size-9" />
+					{/if}
+				</button>
+			{/if}
 		</div>
 	</header>
 
