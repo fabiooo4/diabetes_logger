@@ -425,6 +425,7 @@ Seguono i diagrammi UML delle classi del Model e del Controllore, che rappresent
     \includegraphics[width=1\textwidth]{controller.pdf}
   \end{center}
   \caption{Classi UML dei Controller} 
+  \label{fig:controller}
 \end{figure}
 \noindent
 
@@ -542,7 +543,35 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
   \end{itemize}
 \end{itemize}
 
+\subsubsection{Model: repository e service layer}
 
+Il nostro Model è composto da diverse classi che rappresentano gli attori del sistema e le loro interazioni.
+Esso ricopre un ruolo essenziale perché è il modello che definisce e manipola i dati del software. 
+Ovviamente ognuno di questi sottomodelli sono contenute dentro \textbf{package} per garantire una buona organizzazione del codice e una facile navigazione, insieme
+ad un controllo degli errori più semplice.
+Nella nostra codebase, il Model è composto dalle seguenti classi:
+\begin{itemize}
+  \item \textbf{Model}: è il package principale che contiene tutte le classi del Model. Quest'ultima contiene
+  tutte le definizioni delle entità del sistema, come \textit{User}, \textit{Patient}, \textit{Medic}, \textit{MedicChangeLog}, \textit{Report}, \textit{Notification} e \textit{Therapy}.
+  \item \textbf{Repository}: è il package che contiene le interfacce dei repository, che sono utilizzate per interagire con il database. 
+  Abbiamo utilizzato JPA (Jakarta Persistance API) Repository di Spring Boot, che ci ha permesso di immagazinare e ottenere i dati da un 
+  database relazionale. 
+  Le interfacce dei repository estendono \textit{JpaRepository} e forniscono i metodi per effettuare le operazioni CRUD sui dati.
+  \item \textbf{Service}: è il package che contiene le classi dei servizi, che sono utilizzate per gestire la logica di business del software. 
+  Infatti, le classi dei servizi implementano l'interfaccia \textit{CrudService} che contiene i metodi CRUD che ogni servizio deve implementare.
+  I servizi sono utilizzati dai controller per gestire le richieste degli utenti e interagire con i repository.
+\end{itemize}
+Il controller (vedi figura \ref{fig:controller}) come già stato detto, utilizza il Model per 
+gestire le richieste degli utenti e interagire con i dati e
+passa i dati alla View tramite le richieste HTTP grazie all'architettura REST.
+Seguono sequence diagram di alcune interazioni e dinamiche importanti del software:
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{sdReportCreate.pdf}
+  \end{center}
+  \caption{Sequence Diagram della creazione di un report} 
+\end{figure}
+\noindent
 
 
 \end{document}
