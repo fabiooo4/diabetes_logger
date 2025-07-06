@@ -2,6 +2,7 @@
 	import { TimeField, DatePicker, Switch, Dialog, Label, Separator } from 'bits-ui';
 	import CalendarBlank from 'phosphor-svelte/lib/CalendarBlank';
 	import CaretLeft from 'phosphor-svelte/lib/CaretLeft';
+	import Plus from 'phosphor-svelte/lib/Plus';
 	import CaretRight from 'phosphor-svelte/lib/CaretRight';
 	import {
 		CalendarDate,
@@ -21,9 +22,9 @@
 	<Dialog.Trigger
 		class="rounded-input bg-dark text-background
 	  shadow-mini hover:bg-dark/95 focus-visible:ring-foreground focus-visible:ring-offset-background inline-flex
-	  h-12 items-center justify-center px-[21px] text-[15px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
+	  h-12 items-center justify-center px-[11px] text-[15px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
 	>
-		Add report
+		<Plus class="size-6" />
 	</Dialog.Trigger>
 	<Dialog.Portal>
 		<Dialog.Overlay

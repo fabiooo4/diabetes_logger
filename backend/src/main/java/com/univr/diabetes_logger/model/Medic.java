@@ -35,6 +35,9 @@ public class Medic {
   @Column(name = "lastName")
   private String lastName;
 
+  // Expose email to user endpoint for patient access
+  private String email;
+
   @OneToMany(mappedBy = "referralMedic")
   private Set<Patient> patients = new LinkedHashSet<Patient>();
 
@@ -65,6 +68,10 @@ public class Medic {
       setLastName(lastName);
     }
 
+  }
+
+  public String getEmail() {
+    return this.getUser().getEmail();
   }
 
   public Integer getId() {
