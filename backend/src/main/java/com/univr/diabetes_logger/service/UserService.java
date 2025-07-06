@@ -127,7 +127,7 @@ public class UserService implements CrudService<User> {
       existingUser.updatePatient(patient);
     } else if (medic != null && existingUser.getMedic() != null && patient == null) {
       existingUser.updateMedic(medic);
-    } else {
+    } else if (patient != null && medic != null && existingUser.getRole() != Role.ADMIN) {
       throw new IllegalArgumentException("Only one of patient or medic can be updated");
     }
 
