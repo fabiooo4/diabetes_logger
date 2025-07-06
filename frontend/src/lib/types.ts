@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-06 14:22:46.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-06 21:18:11.
 
 export interface User {
     notifications: Notification[];
@@ -29,6 +29,7 @@ export interface Medic {
     id: number;
     firstName: string;
     lastName: string;
+    email: string;
 }
 
 export interface Therapy {

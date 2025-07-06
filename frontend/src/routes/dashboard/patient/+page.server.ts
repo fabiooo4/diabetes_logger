@@ -8,13 +8,13 @@ import { parseDateTime } from '@internationalized/date';
 export const load: PageServerLoad = ({ locals, cookies }) => {
 	let token = cookies.get('token');
 
-	let reportsList = getAllUserReports(token, locals.user?.id);
-	let notificationsList = getAllUserNotifications(token, locals.user?.id);
+	let reports = getAllUserReports(token, locals.user?.id);
+	let notifications = getAllUserNotifications(token, locals.user?.id);
 
 	return {
 		user: locals.user,
-		reportsList: reportsList,
-		notificationsList: notificationsList
+		reports: reports,
+		notifications: notifications
 	};
 };
 
