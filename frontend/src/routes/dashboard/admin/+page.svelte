@@ -16,7 +16,7 @@
 			<ul class="flex flex-col gap-y-4">
 				{#each users as user}
 					<li>
-						{user.id} - {user.email} - {user.role}<br>
+						{user.id} - {user.email} - {user.role}<br />
 						{#if user.role === 'PATIENT'}
 							{JSON.stringify(user.patient)}
 						{:else if user.role === 'MEDIC'}

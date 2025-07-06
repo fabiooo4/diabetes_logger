@@ -20,22 +20,22 @@
 		}
 	});
 
-  async function deleteNotification(notificationId: number) {
-    console.log('Delete notification clicked', notificationId);
+	async function deleteNotification(notificationId: number) {
+		console.log('Delete notification clicked', notificationId);
 
-    if (!notificationId) {
-      console.error('No notification ID found in the event target.');
-      return;
-    };
+		if (!notificationId) {
+			console.error('No notification ID found in the event target.');
+			return;
+		}
 
-    await fetch('/', {
-      method: 'DELETE',
-      body: JSON.stringify({ userId, notificationId }),
-    });
+		await fetch('/', {
+			method: 'DELETE',
+			body: JSON.stringify({ userId, notificationId })
+		});
 
-    let fulfilled = await notifications;
-    notifications = Promise.resolve(fulfilled.filter(n => n.id !== notificationId));
-  }
+		let fulfilled = await notifications;
+		notifications = Promise.resolve(fulfilled.filter((n) => n.id !== notificationId));
+	}
 </script>
 
 <Popover.Root bind:open={isOpen}>
@@ -81,7 +81,7 @@
 													</p>
 												</div>
 												<button
-													onclick={async() => await deleteNotification(notification.id)}
+													onclick={async () => await deleteNotification(notification.id)}
 													class="cursor-pointer"
 												>
 													<X class="text-foreground size-5 min-w-5" />

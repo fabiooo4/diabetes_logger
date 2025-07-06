@@ -11,7 +11,7 @@
 		<input
 			type="text"
 			name="patientFirstName"
-			class="transition-all ring-transparent h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+			class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
 		/>
 	</div>
 
@@ -20,25 +20,17 @@
 		<input
 			type="text"
 			name="patientLastName"
-			class="transition-all ring-transparent h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none"
+			class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
 		/>
 	</div>
 
 	<div>
-		<DateField.Root
-			locale="en-GB"
-			bind:value={date}
-			maxValue={today(getLocalTimeZone())}
-		>
-			<input
-				type="hidden"
-				name="birthDate"
-				value={date ? date.toString() : undefined}
-			/>
+		<DateField.Root locale="en-GB" bind:value={date} maxValue={today(getLocalTimeZone())}>
+			<input type="hidden" name="birthDate" value={date ? date.toString() : undefined} />
 			<div class="flex w-full flex-col gap-1.5">
 				<DateField.Label class="block text-sm font-medium select-none">Birthday</DateField.Label>
 				<DateField.Input
-					class="transition-all ring-transparent h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] select-none "
+					class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none "
 				>
 					{#snippet children({ segments })}
 						{#each segments as { part, value }, i (part + i)}

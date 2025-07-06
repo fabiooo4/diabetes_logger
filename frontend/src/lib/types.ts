@@ -1,13 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-05 18:15:55.
-
+// Generated using typescript-generator version 3.2.1263 on 2025-07-06 13:06:54.
 
 export interface User {
     notifications: Notification[];
     id: number;
     email: string;
     role: Role;
+    verified: boolean;
     patient: Patient;
     medic: Medic;
     password: string;

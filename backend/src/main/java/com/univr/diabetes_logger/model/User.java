@@ -1,5 +1,6 @@
 package com.univr.diabetes_logger.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,16 +21,7 @@ import jakarta.persistence.Table;
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "users")
 public class User {
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public enum Role {
+  public enum Role {
     PATIENT,
     MEDIC,
     ADMIN
@@ -70,6 +62,27 @@ public class User {
     this.patient = patient;
   }
 
+  public void updatePatient(Patient patient) {
+    if (this.patient == null && this.medic == null) {
+      this.patient = patient;
+    } else {
+      String firstName = patient.getFirstName();
+      if (firstName != null && !firstName.isEmpty() && !firstName.equals(this.patient.getFirstName())) {
+        this.patient.setFirstName(firstName);
+      }
+
+      String lastName = patient.getLastName();
+      if (lastName != null && !lastName.isEmpty() && !lastName.equals(this.patient.getLastName())) {
+        this.patient.setLastName(lastName);
+      }
+
+      LocalDate birthDate = patient.getBirthDate();
+      if (birthDate != null && !birthDate.equals(this.patient.getBirthDate())) {
+        this.patient.setBirthDate(birthDate);
+      }
+    }
+  }
+
   public Medic getMedic() {
     return medic;
   }
@@ -78,15 +91,31 @@ public class User {
     this.medic = medic;
   }
 
+  public void updateMedic(Medic medic) {
+    if (this.medic == null && this.patient == null) {
+      this.medic = medic;
+    } else {
+      String firstName = medic.getFirstName();
+      if (firstName != null && !firstName.isEmpty() && !firstName.equals(this.medic.getFirstName())) {
+        this.medic.setFirstName(firstName);
+      }
+
+      String lastName = medic.getLastName();
+      if (lastName != null && !lastName.isEmpty() && !lastName.equals(this.medic.getLastName())) {
+        this.medic.setLastName(lastName);
+      }
+    }
+  }
+
   protected User() {
   }
 
   public User(String email, String password, Role role, boolean verified) {
     this.email = email;
     this.password = password;
-      this.verified = verified;
+    this.verified = verified;
 
-      if (role == null) {
+    if (role == null) {
       this.role = null;
     } else {
       this.role = role.toString();
@@ -123,9 +152,18 @@ public class User {
     }
   }
 
+  public boolean isVerified() {
+    return verified;
+  }
+
+  public void setVerified(boolean verified) {
+    this.verified = verified;
+  }
+
   @Override
   public String toString() {
-    return "User [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + "]";
+    return "User [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + ", verified="
+        + verified + "]";
   }
 
   public Integer getId() {

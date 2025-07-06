@@ -43,6 +43,9 @@ public class SecurityConfiguration {
                   // Users -----------------------------------------------
                   .requestMatchers(HttpMethod.GET, "/users/{id}")
                   // Allow access to users/{id} endpoint only for the authenticated id
+                  .access(new WebExpressionAuthorizationManager("hasAuthority('ADMIN') or authentication.getDetails().checkId(#id)"))
+                  .requestMatchers(HttpMethod.PATCH, "/users/{id}")
+                  // Allow access to users/{id} endpoint only for the authenticated id
                   .access(new WebExpressionAuthorizationManager("hasAuthority('ADMIN') or authentication.getDetails().checkId(#id)"));
                   // Users -----------------------------------------------
               // Patient is allowed to
