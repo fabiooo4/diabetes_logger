@@ -1,5 +1,6 @@
 package com.univr.diabetes_logger.model;
 
+import com.univr.diabetes_logger.service.TherapyService;
 import jakarta.persistence.*;
 
 /**
@@ -32,7 +33,6 @@ public class Therapy {
   }
 
   public void updateTherapy(Therapy therapy) {
-
     String medicine = therapy.getMedicine();
     if(medicine != null) {
       this.medicine = medicine;

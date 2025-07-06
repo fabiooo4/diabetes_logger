@@ -49,7 +49,7 @@ public class PatientService implements CrudService<Patient> {
       medicChangeLogRepository.save(new MedicChangeLog(existingPatient.getReferralMedic(),
               existingPatient, actions, LocalDateTime.now()));
     }
-
+    
     return repository.save(existingPatient);
   }
 

@@ -93,8 +93,9 @@ public class Patient {
     }
 
     Therapy therapy = patient.getTherapy();
+
     if (therapy != null) {
-      this.therapy.updateTherapy(therapy);
+        setTherapy(therapy);
     }
 
     String previousPatologies = patient.getPreviousPatologies();

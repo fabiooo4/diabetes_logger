@@ -42,6 +42,7 @@ public class TherapyService implements CrudService<Therapy> {
     return therapyRepository.save(existingTherapy);
   }
 
+
   @Override
   public Therapy delete(Integer id) {
     Therapy deletedTherapy = this.getById(id).orElseThrow();
