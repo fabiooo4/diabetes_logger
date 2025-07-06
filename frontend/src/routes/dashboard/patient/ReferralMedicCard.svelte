@@ -32,6 +32,6 @@
 			</div>
 		</div>
 	{:else}
-		<h1 class="text-foreground-alt text-lg">No referral medic found</h1>
+		<h1 class="text-muted-foreground text-lg">No referral medic found</h1>
 	{/if}
 </div>

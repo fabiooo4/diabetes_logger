@@ -21,9 +21,13 @@
 				<p>Loading reports...</p>
 			{:then reports}
         <div class="flex flex-col gap-y-2">
-          {#each reports.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()) as report}
-            <ReportEntry {report} />
-          {/each}
+          {#if reports.length === 0}
+            <p class="text-muted-foreground">No reports available.</p>
+          {:else}
+            {#each reports.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()) as report}
+              <ReportEntry {report} />
+            {/each}
+          {/if}
         </div>
 			{/await}
 		</ScrollArea.Viewport>
