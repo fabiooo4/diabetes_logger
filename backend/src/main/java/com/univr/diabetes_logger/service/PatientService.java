@@ -11,7 +11,7 @@ import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.repository.PatientRepository;
 
 /**
- * PatientServiceImpl
+ * PatientService
  */
 @Service
 public class PatientService implements CrudService<Patient> {
@@ -21,7 +21,7 @@ public class PatientService implements CrudService<Patient> {
 
   public PatientService(PatientRepository repository, MedicChangeLogRepository medicChangeLogRepository) {
     this.repository = repository;
-      this.medicChangeLogRepository = medicChangeLogRepository;
+    this.medicChangeLogRepository = medicChangeLogRepository;
   }
 
   @Override
@@ -45,11 +45,11 @@ public class PatientService implements CrudService<Patient> {
     String actions = existingPatient.actionPerformed(patient);
     existingPatient.updatePatient(patient);
 
-    if(actions != null) {
+    if (actions != null) {
       medicChangeLogRepository.save(new MedicChangeLog(existingPatient.getReferralMedic(),
-              existingPatient, actions, LocalDateTime.now()));
+          existingPatient, actions, LocalDateTime.now()));
     }
-    
+
     return repository.save(existingPatient);
   }
 

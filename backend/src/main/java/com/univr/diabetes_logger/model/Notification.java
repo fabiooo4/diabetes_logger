@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Notification
+ */
 @Entity
 @Table(name = "notifications")
 public class Notification {

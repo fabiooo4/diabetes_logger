@@ -82,12 +82,12 @@ export async function editReport(
   userId: number | undefined
 ): Promise<Report | null> {
   if (!token) {
-    console.error('No token provided for creating report');
+    console.error('No token provided for editing report');
     return null;
   }
 
   if (userId == undefined) {
-    console.error('No userId provided for creating report');
+    console.error('No userId provided for editing report');
     return null;
   }
 
@@ -120,12 +120,12 @@ export async function deleteReport(
   userId: number | undefined
 ): Promise<Report | null> {
   if (!token) {
-    console.error('No token provided for creating report');
+    console.error('No token provided for deleting report');
     return null;
   }
 
   if (userId == undefined) {
-    console.error('No userId provided for creating report');
+    console.error('No userId provided for deleting report');
     return null;
   }
 

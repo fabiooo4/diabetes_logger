@@ -1,10 +1,14 @@
 package com.univr.diabetes_logger.model;
 
-import com.univr.diabetes_logger.service.TherapyService;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
- * Terapia
+ * Therapy
  */
 @Entity
 @Table(name = "therapies")
@@ -23,7 +27,8 @@ public class Therapy {
   @Column(name = "directions")
   private String directions;
 
-  protected Therapy() {}
+  protected Therapy() {
+  }
 
   public Therapy(String medicine, Integer dailyIntake, Double amount, String directions) {
     this.medicine = medicine;
@@ -34,36 +39,36 @@ public class Therapy {
 
   public void updateTherapy(Therapy therapy) {
     String medicine = therapy.getMedicine();
-    if(medicine != null) {
+    if (medicine != null) {
       this.medicine = medicine;
     }
 
     Double amount = therapy.getAmount();
-    if(amount != null) {
+    if (amount != null) {
       this.amount = amount;
     }
 
     String directions = therapy.getDirections();
-    if(directions != null) {
+    if (directions != null) {
       this.directions = directions;
     }
 
     Integer dailyIntake = therapy.getDailyIntake();
-    if(dailyIntake != null) {
+    if (dailyIntake != null) {
       this.dailyIntake = dailyIntake;
     }
   }
 
   public Integer getId() {
-      return id;
+    return id;
   }
 
   public String getMedicine() {
-      return medicine;
+    return medicine;
   }
 
   public Integer getDailyIntake() {
-      return dailyIntake;
+    return dailyIntake;
   }
 
   public Double getAmount() {
@@ -96,6 +101,6 @@ public class Therapy {
 
   public String toString() {
     return "Therapy: [id=" + id + ", medicine=" + medicine + ", dailyIntake=" +
-            dailyIntake + ", amount=" + amount + ", directions=" + directions + "]";
+        dailyIntake + ", amount=" + amount + ", directions=" + directions + "]";
   }
 }

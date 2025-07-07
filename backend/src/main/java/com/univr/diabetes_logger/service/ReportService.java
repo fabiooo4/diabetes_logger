@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.Report;
 import com.univr.diabetes_logger.model.User;
-import com.univr.diabetes_logger.repository.NotificationRepository;
 import com.univr.diabetes_logger.repository.ReportRepository;
 import com.univr.diabetes_logger.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -16,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * MedicServiceImpl
+ * ReportService
  */
 @Service
 public class ReportService implements CrudService<Report> {

@@ -8,7 +8,7 @@ import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.repository.MedicRepository;
 
 /**
- * MedicServiceImpl
+ * MedicService
  */
 @Service
 public class MedicService implements CrudService<Medic> {

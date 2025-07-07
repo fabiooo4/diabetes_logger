@@ -19,7 +19,7 @@ import com.univr.diabetes_logger.model.User.Role;
 import com.univr.diabetes_logger.repository.UserRepository;
 
 /**
- * UserServiceImpl
+ * UserService
  */
 @Service
 public class UserService implements CrudService<User> {

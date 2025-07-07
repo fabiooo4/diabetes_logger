@@ -9,11 +9,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 
+/**
+ * TherapyController
+ */
 @RestController
 @RequestMapping(path = "/therapies")
 public class TherapyController {
 
-  @Autowired // get the bean therapyService
+  @Autowired
   private TherapyService therapyService;
 
   public TherapyController(TherapyService therapyService) {

@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDateTime;
 
 /**
- * Rilevazione
+ * Report
  */
 @Entity
 @Table(name = "reports")

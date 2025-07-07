@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * TherapyService
+ */
 @Service
 public class TherapyService implements CrudService<Therapy> {
 
@@ -41,7 +44,6 @@ public class TherapyService implements CrudService<Therapy> {
 
     return therapyRepository.save(existingTherapy);
   }
-
 
   @Override
   public Therapy delete(Integer id) {

@@ -12,6 +12,9 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * NotificationService
+ */
 @Service
 public class NotificationService implements CrudService<Notification> {
 

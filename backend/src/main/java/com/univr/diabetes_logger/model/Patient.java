@@ -35,11 +35,12 @@ public class Patient {
   private String lastName;
   @Column(name = "birthDate")
   private LocalDate birthDate;
-  @Column(name = "riskFactor")
+
+  @Column(name = "riskFactor", nullable = true)
   private String riskFactor;
-  @Column(name = "previousPatologies")
+  @Column(name = "previousPatologies", nullable = true)
   private String previousPatologies;
-  @Column(name = "medicNotes")
+  @Column(name = "medicNotes", nullable = true)
   private String medicNotes;
 
   @ManyToOne
@@ -62,7 +63,7 @@ public class Patient {
   }
 
   public Patient(User user, String firstName, String lastName,
-                 LocalDate birthDate, Medic referralMedic) {
+      LocalDate birthDate, Medic referralMedic) {
     this.user = user;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -92,26 +93,11 @@ public class Patient {
       this.referralMedic.updateMedic(referralMedic);
     }
 
-    Therapy therapy = patient.getTherapy();
-
-    if (therapy != null) {
-        setTherapy(therapy);
-    }
-
-    String previousPatologies = patient.getPreviousPatologies();
-    if (previousPatologies != null) {
-      setPreviousPatologies(previousPatologies);
-    }
-
-    String riskFactor = patient.getRiskFactor();
-    if (riskFactor != null) {
-      setRiskFactor(riskFactor);
-    }
-
-    String medicNotes = patient.getMedicNotes();
-    if (medicNotes != null) {
-      setMedicNotes(medicNotes);
-    }
+    // The following are nullable
+    setTherapy(patient.getTherapy());
+    setPreviousPatologies(patient.getPreviousPatologies());
+    setRiskFactor(patient.getRiskFactor());
+    setMedicNotes(patient.getMedicNotes());
   }
 
   public Integer getId() {
@@ -177,79 +163,70 @@ public class Patient {
   }
 
   public String getRiskFactor() {
-      return riskFactor;
+    return riskFactor;
   }
 
   public void setRiskFactor(String riskFactor) {
-      this.riskFactor = riskFactor;
+    this.riskFactor = riskFactor;
   }
 
   public String getPreviousPatologies() {
-      return previousPatologies;
+    return previousPatologies;
   }
 
   public void setPreviousPatologies(String previousPatologies) {
-      this.previousPatologies = previousPatologies;
+    this.previousPatologies = previousPatologies;
   }
 
   public String getMedicNotes() {
-      return medicNotes;
+    return medicNotes;
   }
 
   public void setMedicNotes(String medicNotes) {
-      this.medicNotes = medicNotes;
+    this.medicNotes = medicNotes;
   }
 
   public String actionPerformed(Patient patient) {
-    String ret = "( Modified: ";
+    String ret = "Modified: ";
     String notModified = ret;
 
-    if(!patient.getFirstName().equals(this.firstName)) {
+    if (patient.getFirstName() != null && !patient.getFirstName().equals(this.firstName)) {
       ret += "first name, ";
     }
 
-    if(!patient.getLastName().equals(this.lastName)) {
+    if (patient.getLastName() != null && !patient.getLastName().equals(this.lastName)) {
       ret += "last name, ";
     }
 
-    if(!patient.getBirthDate().equals(this.birthDate)) {
+    if (patient.getBirthDate() != null && !patient.getBirthDate().equals(this.birthDate)) {
       ret += "Birthdate, ";
     }
 
-    if(patient.getReferralMedic() != null) {
-      if(!patient.getReferralMedic().equals(this.getReferralMedic())) {
-        ret += "referral medic, ";
-      }
+    // The following are nullable
+    if (patient.getReferralMedic() == null || !patient.getReferralMedic().equals(this.getReferralMedic())) {
+      ret += "referral medic, ";
     }
 
-    if(patient.getTherapy() != null) {
-      if(!patient.getTherapy().equals(this.therapy)) {
-        ret += "therapy, ";
-      }
+    if (patient.getTherapy() == null || !patient.getTherapy().equals(this.therapy)) {
+      ret += "therapy, ";
     }
 
-    if(patient.getRiskFactor() != null) {
-      if(!patient.getRiskFactor().equals(this.riskFactor)) {
-        ret += "risk factor, ";
-      }
+    if (patient.getRiskFactor() == null || !patient.getRiskFactor().equals(this.riskFactor)) {
+      ret += "risk factor, ";
     }
 
-    if(patient.getPreviousPatologies() != null) {
-      if(!patient.getPreviousPatologies().equals(this.previousPatologies)) {
-        ret += "previous patologies, ";
-      }
+    if (patient.getPreviousPatologies() == null || !patient.getPreviousPatologies().equals(this.previousPatologies)) {
+      ret += "previous patologies, ";
     }
 
-    if(patient.getMedicNotes() != null) {
-      if(!patient.getMedicNotes().equals(this.medicNotes)) {
-        ret += "medic notes, ";
-      }
+    if (patient.getMedicNotes() == null || !patient.getMedicNotes().equals(this.medicNotes)) {
+      ret += "medic notes, ";
     }
 
-    if(ret.equals(notModified)) {
+    if (ret.equals(notModified)) {
       return null;
     }
 
-    return ret.substring(0, ret.length() - 1) + " )";
+    return ret.substring(0, ret.length() - 2);
   }
 }

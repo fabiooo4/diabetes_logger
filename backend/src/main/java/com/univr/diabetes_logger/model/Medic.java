@@ -20,7 +20,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 /**
- * Medico
+ * Medic
  */
 @Entity
 @Table(name = "medics")
@@ -36,6 +36,7 @@ public class Medic {
   private String lastName;
 
   // Expose email to user endpoint for patient access
+  @SuppressWarnings("unused")
   private String email;
 
   @OneToMany(mappedBy = "referralMedic")

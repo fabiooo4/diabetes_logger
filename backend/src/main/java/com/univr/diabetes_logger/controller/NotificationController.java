@@ -9,6 +9,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * NotificationController
+ */
 @RestController
 @RequestMapping(path = "/notifications")
 public class NotificationController {
