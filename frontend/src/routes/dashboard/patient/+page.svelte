@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Notification, Report, User } from '$lib/types';
-	import AddReportDialog from './AddReportDialog.svelte';
+	import PatientReports from './PatientReports.svelte';
 	import ReferralMedicCard from './ReferralMedicCard.svelte';
-	import ReportsCard from './ReportsCard.svelte';
 	import TherapyCard from './TherapyCard.svelte';
 
 	let {
@@ -31,7 +30,7 @@
 		<div
 			class="bg-background-alt shadow-card border-muted w-full gap-8 rounded-xl border p-8"
 		>
-      <ReportsCard reports={data.reports} />
+      <PatientReports reports={data.reports} />
 		</div>
 	</div>
 

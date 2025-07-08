@@ -53,6 +53,18 @@ public class ReportController {
     return reportService.getAllByUserId(userId);
   }
 
+  @GetMapping("patient/{patientId}/{id}")
+  public Optional<Report> getPatientReportById(@PathVariable Integer patientId, @PathVariable Integer id) {
+    List<Report> listOfReports = reportService.getAllByPatientId(patientId);
+
+    return listOfReports.stream().filter(report -> id.equals(report.getId())).findFirst();
+  }
+
+  @GetMapping("patient/{patientId}")
+  public Iterable<Report> getReportsByPatientId(@PathVariable Integer patientId) {
+    return reportService.getAllByPatientId(patientId);
+  }
+
   @PostMapping("user/{userId}")
   public ResponseEntity<Report> createUserReport(@RequestBody Report report, @PathVariable Integer userId,
       UriComponentsBuilder uriBuilder) {

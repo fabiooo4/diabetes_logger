@@ -32,7 +32,7 @@ export const actions: Actions = {
       id: parseInt(form.get('patientId') as string),
       riskFactor: form.get('riskFactor') as string,
       previousPatologies: form.get('previousPatologies') as string,
-      medicNotes: form.get('medicNotes') as string,
+      medicNotes: form.get('medicNotes') as string
     };
 
     const res = await editPatient(token, patient);

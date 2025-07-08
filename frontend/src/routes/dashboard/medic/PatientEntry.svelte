@@ -1,26 +1,45 @@
 <script lang="ts">
-	import type { Patient } from '$lib/types';
+	import type { Patient, Report } from '$lib/types';
 	import CaretDown from 'phosphor-svelte/lib/CaretDown';
 	import { Accordion, Dialog, Label, Separator } from 'bits-ui';
 	import PencilSimple from 'phosphor-svelte/lib/PencilSimple';
 	import X from 'phosphor-svelte/lib/X';
+	import ReportsCard from '../patient/ReportsCard.svelte';
 
 	let { patient }: { patient: Patient } = $props();
 
-	let disabled = $state(
-		patient.medicNotes == null &&
-			patient.therapy == null &&
-			patient.riskFactor == null &&
-			patient.previousPatologies == null
-	);
+	let reports: Promise<Report[]> = $state(Promise.resolve([]));
+
+	async function getReports() {
+		fetch('/dashboard/medic', {
+			method: 'POST',
+			body: JSON.stringify({ patientId: patient.id }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then((response) => {
+				if (!response.ok) {
+					console.error('Failed to fetch patient reports' + response.statusText);
+					return;
+				}
+				return response.json();
+			})
+			.then((data) => {
+				reports = Promise.resolve(data);
+			})
+			.catch((error) => {
+				console.error('Error fetching patient reports:', error);
+			});
+	}
 </script>
 
 <div
 	class="bg-background-alt shadow-card border-muted flex w-full flex-row items-center gap-8 rounded-xl border p-4"
 >
-	<Accordion.Root class="w-full" type="multiple" {disabled}>
+	<Accordion.Root class="w-full" type="multiple">
 		<Accordion.Item value="1" class="border-dark-10 group px-1.5">
-			<Accordion.Header class="relative">
+			<Accordion.Header class="relative" onclick={getReports}>
 				<div class="absolute top-0 right-12 cursor-default">
 					<Dialog.Root>
 						<Dialog.Trigger
@@ -137,19 +156,11 @@
 						{/if}
 					</div>
 
-					{#if !disabled}
-						<span
-							class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
-						>
-							<CaretDown class="size-[18px] transition-transform duration-200" />
-						</span>
-					{:else}
-						<span
-							class="transparent size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
-						>
-							<CaretDown class="size-[18px] text-transparent transition-transform duration-200" />
-						</span>
-					{/if}
+					<span
+						class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
+					>
+						<CaretDown class="size-[18px] transition-transform duration-200" />
+					</span>
 				</Accordion.Trigger>
 			</Accordion.Header>
 			<Accordion.Content
@@ -164,17 +175,26 @@
 							</p>
 						</div>
 					{/if}
-					<div>
-						<h1 class="text-foreground-alt">Previous patologies:</h1>
-						<p>
-							{patient.previousPatologies}
-						</p>
-					</div>
-					<div>
-						<h1 class="text-foreground-alt">Medic notes:</h1>
-						<p>
-							{patient.medicNotes}
-						</p>
+					{#if patient.previousPatologies}
+						<div>
+							<h1 class="text-foreground-alt">Previous patologies:</h1>
+							<p>
+								{patient.previousPatologies}
+							</p>
+						</div>
+					{/if}
+					{#if patient.medicNotes}
+						<div>
+							<h1 class="text-foreground-alt">Medic notes:</h1>
+							<p>
+								{patient.medicNotes}
+							</p>
+						</div>
+					{/if}
+
+					<div class="flex w-full flex-col gap-y-4">
+						<h1 class="text-2xl font-bold">Reports</h1>
+						<ReportsCard {reports} role="MEDIC" />
 					</div>
 				</div>
 			</Accordion.Content>

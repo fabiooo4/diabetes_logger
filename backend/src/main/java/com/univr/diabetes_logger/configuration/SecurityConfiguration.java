@@ -96,7 +96,7 @@ public class SecurityConfiguration {
                   // Therapies -------------------------------------------
                   //
                   // Reports ---------------------------------------------
-                  .requestMatchers(HttpMethod.GET, "/reports", "/reports/{id}")
+                  .requestMatchers(HttpMethod.GET, "/reports", "/reports/{id}", "/reports/patient/{patientId}")
                   .hasAnyAuthority("MEDIC", "ADMIN")
                   // Reports ---------------------------------------------
                   //
