@@ -55,7 +55,7 @@ public class NotificationController {
   }
 
   @PatchMapping("/user/{userId}/{id}")
-  public Notification toggleSeenUserNotifications(@PathVariable Integer userId, @PathVariable Integer id) {
+  public Notification toggleSeenUserNotifications(@PathVariable Integer id) {
     return notificationService.toggleSeen(id);
   }
 

@@ -1,6 +1,5 @@
 package com.univr.diabetes_logger.service;
 
-import com.univr.diabetes_logger.model.Therapy;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 
 /**
  * PatientServiceTest
-
+*/
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PatientServiceTest {
@@ -35,9 +34,10 @@ public class PatientServiceTest {
 
   @BeforeEach
   public void setup() {
-    patient = new Patient(new User("testmail", "testpass", Role.PATIENT), "test", "test", LocalDate.of(2000, 1, 1),
-        new Medic(new User("medicmail", "medicpass", Role.MEDIC), "testMedic", "lastname"),
-    new Therapy("Caccolina", 100, 420.69, "aiutatemi"));
+    patient = new Patient(new User("testmail", "testpass", Role.PATIENT, true), "test", "test",
+            LocalDate.of(2000, 1, 1),
+        new Medic(new User("medicmail", "medicpass", Role.MEDIC, true),
+                "testMedic", "lastname"));
   }
 
   @Test
@@ -114,4 +114,3 @@ public class PatientServiceTest {
     assertThat(deletedPatient).isEqualTo(patient);
   }
 }
-*/

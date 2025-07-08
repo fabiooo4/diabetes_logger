@@ -63,8 +63,7 @@ public class ReportController {
   }
 
   @PostMapping
-  public ResponseEntity<Report> createReport(@RequestBody Report report, @PathVariable Integer userId,
-      UriComponentsBuilder uriBuilder) {
+  public ResponseEntity<Report> createReport(@RequestBody Report report, UriComponentsBuilder uriBuilder) {
     Report created = reportService.create(report);
 
     var uri = uriBuilder.path("/reports/{id}").buildAndExpand(created.getId()).toUri();
@@ -82,7 +81,7 @@ public class ReportController {
   }
 
   @DeleteMapping("user/{userId}/{id}")
-  public Report deleteUserReportById(@PathVariable Integer userId,@PathVariable Integer id) {
+  public Report deleteUserReportById(@PathVariable Integer id) {
     return reportService.delete(id);
   }
 

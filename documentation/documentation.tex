@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{braket}
 \usepackage{listings}
+\usepackage{minted}
 \usepackage{mdframed}
 \usepackage{tikz}
 \usepackage{enumitem}
@@ -588,6 +589,342 @@ Seguono sequence diagram di alcune interazioni e dinamiche importanti del softwa
   \caption{Sequence Diagram del controllo delle rilevazioni mancanti}  
 \end{figure}
 \noindent
+
+\pagebreak
+
+\section{Test e validazione}
+
+Per testare il software sono stati utilizzati diversi tipi di test, tra cui:
+\begin{itemize}
+  \item Revisione del codice: il codice è stato revisionato da entrambi i membri del team per garantire che fosse scritto 
+  in modo che rispettasse le specifiche del progetto e che fosse facilmente comprensibile.
+  \item Verifica della consistenza: sono stati effettuati test per verificare che il software fosse coerente con le specifiche del progetto e che
+  funzionasse come previsto, tramite i Bean @WebMvcTest di Spring Boot che permettono di testare i controller e le loro interazioni con il Model.
+  Questo tipo di test è automatizzato grazie all'API di JUnit. 
+  \item È stato usato @DataJpaTest per testare le interazioni con il database e verificare che le operazioni CRUD funzionassero correttamente.
+  \item È stato fatto gran uso di Postman per testare le API REST del software, verificando che le richieste HTTP restituissero i risultati attesi.
+  \item Il software è stato testato dagli sviluppatori
+  \item Il software è stato testato da un utente generico
+\end{itemize}
+
+\subsection{Revisione del codice}
+
+La fase di revisione del codice è stata effettuata da entrambi i membri del team, che hanno esaminato il codice 
+per garantire che fosse scritto in modo chiaro e comprensibile e che soprattutto rispettasse le specifiche 
+del progetto. Si è più volte controllato che gli use case, activity diagram, design pattern e sequence diagram 
+fossero rispettati e che il codice fosse ben strutturato e organizzato. È stato rivisto il codice anche per 
+cercare di trovare eventuali bug o errori di logica, in modo da correggerli prima di procedere con i test veri e propri.
+Abbiamo dato più attenzione specialmente agli use case del paziente e del medico (insieme a quello che
+può fare solo l'amministratore), in quanto sono le funzionalità principali del software.
+
+\subsection{Test con @WebMvcTest e @DataJpaTest}
+
+Per testare il software sono stati utilizzati i Bean di Spring Boot @WebMvcTest e @DataJpaTest, che permettono di testare i controller 
+e le interazioni con il database. Quello che segue 
+è un esempio di test per il repository del paziente, che verifica le operazioni CRUD (Create, Read, Update, Delete).
+Le funzioni con il tag @Test sono i test veri e propri e ad ogni test è stato assegnato un ordine tramite l'annotazione @Order.
+Effettuiamo l'azione e verifichiamo che il risultato sia quello atteso, utilizzando le asserzioni di JUnit.
+
+\begin{minted}{java}  
+@DataJpaTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class PatientRepositoryTest {
+  @Autowired
+  private PatientRepository patientRepository;
+
+  @Test
+  @Order(1)
+  @Rollback(value = false)
+  public void createPatientTest() {
+
+    // Action
+    Patient patient = new Patient(new User("testmail", "pass", Role.PATIENT,true),
+            "TestFirstName", "TestLastName",
+        LocalDate.of(2000, 1, 1), new Medic(new User("medicmail",
+            "pass", Role.MEDIC, true), "TestMedic", "lastname"));
+    patientRepository.save(patient);
+
+    // Verify
+    System.out.println(patient);
+    assertThat(patient.getId()).isGreaterThan(0);
+  }
+
+  @Test
+  @Order(2)
+  public void getPatientByIdTest() {
+    // Action
+    Patient found = patientRepository.findById(1).get();
+
+    // Verify
+    System.out.println(found);
+    assertThat(found.getId()).isEqualTo(1);
+  }
+
+  @Test
+  @Order(3)
+  public void getAllPatientsTest() {
+    // Action
+    List<Patient> patients = patientRepository.findAll();
+
+    // Verify
+    System.out.println(patients);
+    assertThat(patients.size()).isGreaterThan(0);
+  }
+
+  @Test
+  @Order(4)
+  @Rollback(value = false)
+  public void updatePatientTest() {
+    // Action
+    Patient patient = patientRepository.findById(1).get();
+    patient.setFirstName("UpdatedFirstName");
+    patient.setLastName("UpdatedLastName");
+    Patient updated = patientRepository.save(patient);
+
+    // Verify
+    System.out.println(updated);
+    assertThat(updated.getFirstName()).isEqualTo("UpdatedFirstName");
+    assertThat(updated.getLastName()).isEqualTo("UpdatedLastName");
+  }
+
+  @Test
+  @Order(5)
+  @Rollback(value = false)
+  public void deletePatientTest() {
+    // Action
+    Patient patient = patientRepository.findById(1).get();
+    patientRepository.delete(patient);
+
+    // Verify
+    Patient deleted = patientRepository.findById(1).orElse(null);
+    assertThat(deleted).isNull();
+  }
+}
+\end{minted}
+\noindent
+Il prossimo codice invece è preso dal test di un controller, più precisamente il controller dei pazienti.
+\begin{minted}{java}
+@WebMvcTest(PatientController.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class PatientControllerTest {
+
+  @Autowired
+  private MockMvc mockMvc;
+
+  @MockitoBean
+  private PatientService patientService;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  private Patient patient;
+
+  @BeforeEach
+  public void setup() {
+    patient = new Patient(new User("usermail", "pass1", Role.PATIENT,true),
+            "Nome", "Cognome", LocalDate.of(2000, 1, 1),
+        new Medic(new User("medicmail", "medicpass", Role.MEDIC, true),
+                "FirstName", "LastName"));
+    patient.setId(1); // Set a mock ID for testing
+  }
+
+  // Post Controller
+  @Test
+  @Order(1)
+  public void createPatientTest() throws Exception {
+    // precondition
+    given(patientService.create(any(Patient.class))).willReturn(patient);
+
+    // action
+    ResultActions response = mockMvc.perform(post("/patients")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(patient)));
+
+    // verify
+    response.andDo(print()).andExpect(status().isCreated())
+        .andExpect(jsonPath("$.firstName",
+            is(patient.getFirstName())))
+        .andExpect(jsonPath("$.lastName",
+            is(patient.getLastName())))
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", 
+        is(patient.getReferralMedic().getId())));
+  }
+
+  // Get Controller
+  @Test
+  @Order(2)
+  public void getAllPatientsTest() throws Exception {
+    // precondition
+    List<Patient> patientsList = new ArrayList<>();
+    patientsList.add(patient);
+    patientsList
+        .add(
+                new Patient(new User("testmail", "testpass", 
+                        Role.PATIENT,true), "test",
+                        "test", LocalDate.of(2000, 1, 1),
+                new Medic(new User("testmedicmail", "testpass", Role.MEDIC, true),
+                        "testMedic", "lastname")));
+    given(patientService.getAll()).willReturn(patientsList);
+
+    // action
+    ResultActions response = mockMvc.perform(get("/patients"));
+
+    // verify
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.size()",
+            is(patientsList.size())));
+  }
+
+  @Test
+  @Order(3)
+  public void getPatientByIdTest() throws Exception {
+    // precondition
+    given(patientService.getById(patient.getId())).willReturn(Optional.of(patient));
+
+    // action
+    ResultActions response = mockMvc.perform(get("/patients/{id}", patient.getId()));
+
+    // verify
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.firstName",
+            is(patient.getFirstName())))
+        .andExpect(jsonPath("$.lastName",
+            is(patient.getLastName())))
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", 
+        is(patient.getReferralMedic().getId())));
+  }
+
+  // Put Controller
+  @Test
+  @Order(4)
+  public void updatePatientTest() throws Exception {
+    // precondition
+    patient.setFirstName("UpdatedFirst");
+    patient.setLastName("UpdatedLast");
+    given(patientService.update(any(Integer.class), 
+    any(Patient.class))).willReturn(patient);
+
+    // action
+    ResultActions response = mockMvc.perform(put("/patients/{id}", patient.getId())
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(patient)));
+
+    // verify
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.firstName",
+            is(patient.getFirstName())))
+        .andExpect(jsonPath("$.lastName",
+            is(patient.getLastName())))
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", 
+        is(patient.getReferralMedic().getId())));
+  }
+
+  // Delete Controller
+  @Test
+  @Order(5)
+  public void deletePatientTest() throws Exception {
+    // precondition
+    given(patientService.delete(patient.getId())).willReturn(patient);
+
+    // action
+    ResultActions response = mockMvc.perform(delete("/patients/{id}", patient.getId()));
+
+    // verify
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.firstName",
+            is(patient.getFirstName())))
+        .andExpect(jsonPath("$.lastName",
+            is(patient.getLastName())))
+        .andExpect(jsonPath("$.birthDate",
+            is(patient.getBirthDate())))
+        .andExpect(jsonPath("$.referralMedic.id", 
+        is(patient.getReferralMedic().getId())));
+  }
+
+}
+\end{minted}
+
+\subsection{Postman}
+
+Per \textbf{testare le API REST} del software, è stato utilizzato \textit{Postman}, un tool che permette di inviare richieste HTTP 
+e di visualizzare le risposte. Ne è stato fatto un uso intensivo per testare le API del software,
+poiché per testare le API REST è necessario inviare richieste HTTP e verificare le risposte.
+Il nostro environment di Postman permetteva di simulare l'autenticazione degli utenti e di verificarne 
+le funzionalità. Quando un utente si autenticava, veniva restituito un token JWT che veniva utilizzato per
+autenticare le richieste successive. Il token veniva inserito nella cartella principale
+dell'environment di Postman e veniva utilizzato per autenticare le richieste da parte di tutti i controller.
+
+
+\vspace{1em}
+\noindent
+Ovviamente per testare la correttezza generale del software in maniera veloce seguento come sempre
+uno stile \textit{Agile}, abbiamo creato un file java (\textit{LoadDatabase.java}) che caricava in automatico i dati di test nel database,
+in modo da poter testare le funzionalità del software senza dover inserire manualmente i dati.
+Per ogni controller, sono stati creati dei test che verificano le funzionalità principali di essi, come 
+la creazione, la lettura, l'aggiornamento e la cancellazione dei dati.
+Postman ha aiutato incredibilmente anche a \textbf{testare che gli endpoints fossero protetti} correttamente e 
+che le autorizzazioni funzionassero come previsto.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=1\textwidth]{postman.png}
+  \end{center}
+  \caption{Postman environment del progetto} 
+  \label{fig:postman}
+\end{figure}
+\noindent
+
+
+\subsection{Test manuali degli sviluppatori}
+
+In questa fase ci siamo preoccupati di testare il software manualmente,
+verificando che tutte le funzionalità implementate funzionassero come previsto e che non ci fossero bug o errori di logica.
+Alcuni dei test effettuati sono stati:
+\begin{itemize}
+  \item Verifica che il login funzionasse correttamente per tutti gli utenti;
+  \item Verifica che la registrazione funzionasse correttamente per tutti gli utenti;
+  \item Verifica che l'utente potesse modificare i propri dati;
+  \item I campi obbligatori devono essere riempiti correttamente
+  altrimenti la View avvisa di riempirli;
+  \item Alcuni campi non possono essere modificati da un certo tipo di utente 
+  questo tipo di sicurezza è stata implementata tramite il pattern Security di Spring Boot
+  e quindi è stato semplice accertarsi che funzionasse;
+  \item Inserimento di un report con dati validi e verifica che venisse creato correttamente;
+  \item Verifica che le notifiche venissero create correttamente quando un report 
+  "preoccupante" veniva inserito;
+  \item Verifica che le notifiche venissero cancellate 
+  correttamente quando un utente le cancellava;
+  \item Verificato il sistema di avvisi tramite notifiche;
+  \item Verifica dei vari inserimenti con input errati oppure vuoti;
+  \item Verifica di un assegnazione di una terapia ad un paziente;
+  \item Inserimento di terapie, pazienti o medici duplicati
+  \item Verifica che l'amministratore potesse gestire gli utenti e le richieste di registrazione;
+  \item Verifica che l'amministratore potesse visualizzare la traccia dei medici e i medici l'ultima 
+  operazione effettuata su un paziente;
+  \item Verificato che il paziente possa vedere solo i suoi report ma non quelli degli altri pazienti;
+\end{itemize}
+
+\subsection{Test utente generico}
+
+Per testare il software da un utente generico, abbiamo chiesto ad un individuo esterno di provare 
+il software e di darci un feedback sulle funzionalità implementate.
+Sono state fornite all'utente solo alcune linee guida di come utilizzare il software, senza spiegare nel dettaglio.
+L'utente ha registrato un nuovo account e ha provato a utilizzare il software come un paziente,
+provando ad inserire report e visualizzare le notifiche.
+Lo scopo di questo test era quello di verificare che il software fosse facile da usare e che 
+le funzionalità implementate fossero intuitive.
+Il feedback ricevuto è stato positivo e allo stesso tempo ci ha dato spunti
+per migliorare ulteriormente l'usabilità del software.
 
 
 \end{document}

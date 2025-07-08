@@ -47,7 +47,8 @@ public class MedicChangeLogController {
     }
 
     @PostMapping
-    public ResponseEntity<MedicChangeLog> createMedicChangeLog(@RequestBody MedicChangeLog medicChangeLog, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<MedicChangeLog> createMedicChangeLog(@RequestBody MedicChangeLog medicChangeLog,
+               UriComponentsBuilder uriBuilder) {
         MedicChangeLog created = medicChangeLogService.create(medicChangeLog);
 
         var uri = uriBuilder.path("/{id}").buildAndExpand(created.getId()).toUri();

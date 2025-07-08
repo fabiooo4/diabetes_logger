@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-07 22:55:22.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-08 11:27:02.
 
 export interface User {
     notifications: Notification[];

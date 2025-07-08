@@ -32,7 +32,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody User user, UriComponentsBuilder uriBuilder) {
+  public ResponseEntity<?> login(@RequestBody User user) {
     if (user.getEmail() == null || user.getEmail().isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email field is required");
     }

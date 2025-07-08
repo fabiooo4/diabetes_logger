@@ -1,0 +1,150 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nd}{@WebMvcTest}\PYG{p}{(}\PYG{n}{PatientController}\PYG{p}{.}\PYG{n+na}{class}\PYG{p}{)}
+\PYG{n+nd}{@TestMethodOrder}\PYG{p}{(}\PYG{n}{MethodOrderer}\PYG{p}{.}\PYG{n+na}{OrderAnnotation}\PYG{p}{.}\PYG{n+na}{class}\PYG{p}{)}
+\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{PatientControllerTest}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+
+\PYG{+w}{  }\PYG{n+nd}{@Autowired}
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{MockMvc}\PYG{+w}{ }\PYG{n}{mockMvc}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nd}{@MockitoBean}
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{PatientService}\PYG{+w}{ }\PYG{n}{patientService}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nd}{@Autowired}
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{ObjectMapper}\PYG{+w}{ }\PYG{n}{objectMapper}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{patient}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nd}{@BeforeEach}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{setup}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{patient}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Patient}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}usermail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}pass1\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{PATIENT}\PYG{p}{,}\PYG{k+kc}{true}\PYG{p}{),}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}Nome\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Cognome\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{LocalDate}\PYG{p}{.}\PYG{n+na}{of}\PYG{p}{(}\PYG{l+m+mi}{2000}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{),}
+\PYG{+w}{        }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Medic}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}medicmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}medicpass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{MEDIC}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{),}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}FirstName\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}LastName\PYGZdq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{setId}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{// Set a mock ID for testing}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Post Controller}
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{createPatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{k+kd}{throws}\PYG{+w}{ }\PYG{n}{Exception}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// precondition}
+\PYG{+w}{    }\PYG{n}{given}\PYG{p}{(}\PYG{n}{patientService}\PYG{p}{.}\PYG{n+na}{create}\PYG{p}{(}\PYG{n}{any}\PYG{p}{(}\PYG{n}{Patient}\PYG{p}{.}\PYG{n+na}{class}\PYG{p}{))).}\PYG{n+na}{willReturn}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// action}
+\PYG{+w}{    }\PYG{n}{ResultActions}\PYG{+w}{ }\PYG{n}{response}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mockMvc}\PYG{p}{.}\PYG{n+na}{perform}\PYG{p}{(}\PYG{n}{post}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}/patients\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{contentType}\PYG{p}{(}\PYG{n}{MediaType}\PYG{p}{.}\PYG{n+na}{APPLICATION\PYGZus{}JSON}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{content}\PYG{p}{(}\PYG{n}{objectMapper}\PYG{p}{.}\PYG{n+na}{writeValueAsString}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{)));}
+
+\PYG{+w}{    }\PYG{c+c1}{// verify}
+\PYG{+w}{    }\PYG{n}{response}\PYG{p}{.}\PYG{n+na}{andDo}\PYG{p}{(}\PYG{n}{print}\PYG{p}{()).}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{status}\PYG{p}{().}\PYG{n+na}{isCreated}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.firstName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getFirstName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.lastName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getLastName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.birthDate\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getBirthDate}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.referralMedic.id\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getReferralMedic}\PYG{p}{().}\PYG{n+na}{getId}\PYG{p}{())));}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Get Controller}
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{getAllPatientsTest}\PYG{p}{()}\PYG{+w}{ }\PYG{k+kd}{throws}\PYG{+w}{ }\PYG{n}{Exception}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// precondition}
+\PYG{+w}{    }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Patient}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{patientsList}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{ArrayList}\PYG{o}{\PYGZlt{}\PYGZgt{}}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{patientsList}\PYG{p}{.}\PYG{n+na}{add}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{patientsList}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{add}\PYG{p}{(}
+\PYG{+w}{                }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Patient}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}testmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}testpass\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{                        }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{PATIENT}\PYG{p}{,}\PYG{k+kc}{true}\PYG{p}{),}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}test\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{                        }\PYG{l+s}{\PYGZdq{}test\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{LocalDate}\PYG{p}{.}\PYG{n+na}{of}\PYG{p}{(}\PYG{l+m+mi}{2000}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{),}
+\PYG{+w}{                }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Medic}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}testmedicmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}testpass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{MEDIC}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{),}
+\PYG{+w}{                        }\PYG{l+s}{\PYGZdq{}testMedic\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lastname\PYGZdq{}}\PYG{p}{)));}
+\PYG{+w}{    }\PYG{n}{given}\PYG{p}{(}\PYG{n}{patientService}\PYG{p}{.}\PYG{n+na}{getAll}\PYG{p}{()).}\PYG{n+na}{willReturn}\PYG{p}{(}\PYG{n}{patientsList}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// action}
+\PYG{+w}{    }\PYG{n}{ResultActions}\PYG{+w}{ }\PYG{n}{response}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mockMvc}\PYG{p}{.}\PYG{n+na}{perform}\PYG{p}{(}\PYG{n}{get}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}/patients\PYGZdq{}}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{c+c1}{// verify}
+\PYG{+w}{    }\PYG{n}{response}\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{status}\PYG{p}{().}\PYG{n+na}{isOk}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andDo}\PYG{p}{(}\PYG{n}{print}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.size()\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patientsList}\PYG{p}{.}\PYG{n+na}{size}\PYG{p}{())));}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{getPatientByIdTest}\PYG{p}{()}\PYG{+w}{ }\PYG{k+kd}{throws}\PYG{+w}{ }\PYG{n}{Exception}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// precondition}
+\PYG{+w}{    }\PYG{n}{given}\PYG{p}{(}\PYG{n}{patientService}\PYG{p}{.}\PYG{n+na}{getById}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{())).}\PYG{n+na}{willReturn}\PYG{p}{(}\PYG{n}{Optional}\PYG{p}{.}\PYG{n+na}{of}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{c+c1}{// action}
+\PYG{+w}{    }\PYG{n}{ResultActions}\PYG{+w}{ }\PYG{n}{response}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mockMvc}\PYG{p}{.}\PYG{n+na}{perform}\PYG{p}{(}\PYG{n}{get}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}/patients/\PYGZob{}id\PYGZcb{}\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{()));}
+
+\PYG{+w}{    }\PYG{c+c1}{// verify}
+\PYG{+w}{    }\PYG{n}{response}\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{status}\PYG{p}{().}\PYG{n+na}{isOk}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andDo}\PYG{p}{(}\PYG{n}{print}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.firstName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getFirstName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.lastName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getLastName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.birthDate\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getBirthDate}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.referralMedic.id\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getReferralMedic}\PYG{p}{().}\PYG{n+na}{getId}\PYG{p}{())));}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Put Controller}
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{updatePatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{k+kd}{throws}\PYG{+w}{ }\PYG{n}{Exception}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// precondition}
+\PYG{+w}{    }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{setFirstName}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UpdatedFirst\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{setLastName}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UpdatedLast\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{given}\PYG{p}{(}\PYG{n}{patientService}\PYG{p}{.}\PYG{n+na}{update}\PYG{p}{(}\PYG{n}{any}\PYG{p}{(}\PYG{n}{Integer}\PYG{p}{.}\PYG{n+na}{class}\PYG{p}{),}
+\PYG{+w}{    }\PYG{n}{any}\PYG{p}{(}\PYG{n}{Patient}\PYG{p}{.}\PYG{n+na}{class}\PYG{p}{))).}\PYG{n+na}{willReturn}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// action}
+\PYG{+w}{    }\PYG{n}{ResultActions}\PYG{+w}{ }\PYG{n}{response}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mockMvc}\PYG{p}{.}\PYG{n+na}{perform}\PYG{p}{(}\PYG{n}{put}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}/patients/\PYGZob{}id\PYGZcb{}\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{contentType}\PYG{p}{(}\PYG{n}{MediaType}\PYG{p}{.}\PYG{n+na}{APPLICATION\PYGZus{}JSON}\PYG{p}{)}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{content}\PYG{p}{(}\PYG{n}{objectMapper}\PYG{p}{.}\PYG{n+na}{writeValueAsString}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{)));}
+
+\PYG{+w}{    }\PYG{c+c1}{// verify}
+\PYG{+w}{    }\PYG{n}{response}\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{status}\PYG{p}{().}\PYG{n+na}{isOk}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andDo}\PYG{p}{(}\PYG{n}{print}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.firstName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getFirstName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.lastName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getLastName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.birthDate\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getBirthDate}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.referralMedic.id\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getReferralMedic}\PYG{p}{().}\PYG{n+na}{getId}\PYG{p}{())));}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{c+c1}{// Delete Controller}
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{deletePatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{k+kd}{throws}\PYG{+w}{ }\PYG{n}{Exception}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// precondition}
+\PYG{+w}{    }\PYG{n}{given}\PYG{p}{(}\PYG{n}{patientService}\PYG{p}{.}\PYG{n+na}{delete}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{())).}\PYG{n+na}{willReturn}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// action}
+\PYG{+w}{    }\PYG{n}{ResultActions}\PYG{+w}{ }\PYG{n}{response}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{mockMvc}\PYG{p}{.}\PYG{n+na}{perform}\PYG{p}{(}\PYG{n}{delete}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}/patients/\PYGZob{}id\PYGZcb{}\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{()));}
+
+\PYG{+w}{    }\PYG{c+c1}{// verify}
+\PYG{+w}{    }\PYG{n}{response}\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{status}\PYG{p}{().}\PYG{n+na}{isOk}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andDo}\PYG{p}{(}\PYG{n}{print}\PYG{p}{())}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.firstName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getFirstName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.lastName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getLastName}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.birthDate\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getBirthDate}\PYG{p}{())))}
+\PYG{+w}{        }\PYG{p}{.}\PYG{n+na}{andExpect}\PYG{p}{(}\PYG{n}{jsonPath}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}\PYGZdl{}.referralMedic.id\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{is}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getReferralMedic}\PYG{p}{().}\PYG{n+na}{getId}\PYG{p}{())));}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

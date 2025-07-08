@@ -1,0 +1,76 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nd}{@DataJpaTest}
+\PYG{n+nd}{@TestMethodOrder}\PYG{p}{(}\PYG{n}{MethodOrderer}\PYG{p}{.}\PYG{n+na}{OrderAnnotation}\PYG{p}{.}\PYG{n+na}{class}\PYG{p}{)}
+\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kd}{class} \PYG{n+nc}{PatientRepositoryTest}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n+nd}{@Autowired}
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{PatientRepository}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nd}{@Rollback}\PYG{p}{(}\PYG{n}{value}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{false}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{createPatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+
+\PYG{+w}{    }\PYG{c+c1}{// Action}
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{patient}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Patient}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}testmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}pass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{PATIENT}\PYG{p}{,}\PYG{k+kc}{true}\PYG{p}{),}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}TestFirstName\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}TestLastName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{        }\PYG{n}{LocalDate}\PYG{p}{.}\PYG{n+na}{of}\PYG{p}{(}\PYG{l+m+mi}{2000}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Medic}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}medicmail\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}pass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{MEDIC}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{),}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}TestMedic\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lastname\PYGZdq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{save}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// Verify}
+\PYG{+w}{    }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assertThat}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{()).}\PYG{n+na}{isGreaterThan}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{getPatientByIdTest}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Action}
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{found}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{findById}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{).}\PYG{n+na}{get}\PYG{p}{();}
+
+\PYG{+w}{    }\PYG{c+c1}{// Verify}
+\PYG{+w}{    }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{n}{found}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assertThat}\PYG{p}{(}\PYG{n}{found}\PYG{p}{.}\PYG{n+na}{getId}\PYG{p}{()).}\PYG{n+na}{isEqualTo}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{getAllPatientsTest}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Action}
+\PYG{+w}{    }\PYG{n}{List}\PYG{o}{\PYGZlt{}}\PYG{n}{Patient}\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{n}{patients}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{findAll}\PYG{p}{();}
+
+\PYG{+w}{    }\PYG{c+c1}{// Verify}
+\PYG{+w}{    }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{n}{patients}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assertThat}\PYG{p}{(}\PYG{n}{patients}\PYG{p}{.}\PYG{n+na}{size}\PYG{p}{()).}\PYG{n+na}{isGreaterThan}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nd}{@Rollback}\PYG{p}{(}\PYG{n}{value}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{false}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{updatePatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Action}
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{patient}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{findById}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{).}\PYG{n+na}{get}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{setFirstName}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UpdatedFirstName\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{patient}\PYG{p}{.}\PYG{n+na}{setLastName}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UpdatedLastName\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{updated}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{save}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// Verify}
+\PYG{+w}{    }\PYG{n}{System}\PYG{p}{.}\PYG{n+na}{out}\PYG{p}{.}\PYG{n+na}{println}\PYG{p}{(}\PYG{n}{updated}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assertThat}\PYG{p}{(}\PYG{n}{updated}\PYG{p}{.}\PYG{n+na}{getFirstName}\PYG{p}{()).}\PYG{n+na}{isEqualTo}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UpdatedFirstName\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assertThat}\PYG{p}{(}\PYG{n}{updated}\PYG{p}{.}\PYG{n+na}{getLastName}\PYG{p}{()).}\PYG{n+na}{isEqualTo}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}UpdatedLastName\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+
+\PYG{+w}{  }\PYG{n+nd}{@Test}
+\PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nd}{@Rollback}\PYG{p}{(}\PYG{n}{value}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{false}\PYG{p}{)}
+\PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{deletePatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// Action}
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{patient}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{findById}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{).}\PYG{n+na}{get}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{delete}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{c+c1}{// Verify}
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{deleted}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{findById}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{).}\PYG{n+na}{orElse}\PYG{p}{(}\PYG{k+kc}{null}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{assertThat}\PYG{p}{(}\PYG{n}{deleted}\PYG{p}{).}\PYG{n+na}{isNull}\PYG{p}{();}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}
