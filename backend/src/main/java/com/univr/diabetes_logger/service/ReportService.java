@@ -122,6 +122,23 @@ public class ReportService implements CrudService<Report> {
     ).collect(Collectors.toList());
   }
 
+  public List<Report> getAllByPatientId(Integer patientId) {
+
+    List<Report> listOfReports = repository.findAll();
+
+    return listOfReports.stream().filter(report -> {
+
+      Patient patient = report.getPatient();
+      if (patient == null) {
+        return false;
+      }
+
+      return patient.getId().equals(patientId);
+    }
+
+    ).collect(Collectors.toList());
+  }
+
   @Override
   public Report update(Integer id, Report report) {
     Report existingReport = this.getById(id).orElseThrow();
