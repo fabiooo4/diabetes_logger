@@ -16,6 +16,8 @@
   colorlinks=false,
 }
 
+\newcommand{\mycomment}[1]{}
+
 % Code blocks
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -385,7 +387,7 @@ Abbiamo utilizzato anche \textit{Github Planner} per tenere traccia delle attivi
 
 \subsection{Progettazione e pattern architetturali usati}
 
-Il software è stato progettato seguendo il pattern architetturale \textit{Model-View-Controller} 
+\mycomment{ Il software è stato progettato seguendo il pattern architetturale \textit{Model-View-Controller} 
 (MVC), che separa la logica di business, la presentazione e la gestione degli eventi.
 Questo tipo di pattern ci ha permesso di mantenere il codice ben organizzato e facilmente manutenibile.
 Abbiamo scelto questo pattern poiché \textit{Spring Boot} (framework di Java utilizzato per il backend) ha gli strumenti necessari
@@ -404,12 +406,40 @@ Quindi il controller riceve la richiesta dalla view e poi interagisce con il mod
 ottenere i dati necessari oppure modificarli in base alla richiesta dell'utente.
 Nelle prossime sezioni verrà analizzato in dettaglio il modello Model poiché contiene 
 le classi che rappresentano gli attori del sistema e le loro interazioni.
+}
+
+Il software è stato progettato seguendo un’architettura di tipo \textit{Client-Server}, 
+ispirata al pattern \textit{Model-View-Controller (MVC)}, 
+seppur con alcune differenze rispetto alla sua implementazione classica.
+ In particolare, il sistema è suddiviso in due componenti principali:
+
+\begin{itemize}
+  \item \textbf{Client (View)}: responsabile dell’interfaccia utente e dell’interazione con 
+  l’utente finale. È implementato tramite \textit{SvelteKit}, un framework moderno per applicazioni web. 
+  Il client si occupa esclusivamente della presentazione e invia richieste HTTP al server per ottenere 
+  o modificare i dati.
+  \item \textbf{Server (Model + Controller)}: realizzato con \textit{Spring Boot}, gestisce sia 
+  la logica di business (Model) che il controllo delle richieste (Controller). Il server espone delle 
+  API REST che il client può invocare.
+  \begin{itemize}
+    \item \textbf{Model}: rappresenta le entità principali del sistema, come utenti, pazienti, medici, 
+    rilevazioni, notifiche e il change log.
+    \item \textbf{Controller}: gestisce le richieste provenienti dal client, delega 
+    le operazioni al Model e restituisce le risposte appropriate.
+  \end{itemize}
+\end{itemize}
+\noindent
+Questa separazione ha garantito una buona modularità del sistema, migliorando la manutenibilità e 
+facilitando l’evoluzione indipendente del frontend e del backend.
+Nel prosieguo della documentazione verrà analizzato in dettaglio il \textbf{Model}, 
+in quanto contiene le classi che rappresentano gli attori del sistema e le loro interazioni.
+
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=0.9\textwidth]{MVC.pdf}
+    \includegraphics[width=0.9\textwidth]{ClientServerMVC.pdf}
   \end{center}
-  \caption{Architettura MVC del software} 
+  \caption{Architettura Client-Server ispirata al pattern MVC} 
   \label{fig:mvc}
 \end{figure}
 \noindent

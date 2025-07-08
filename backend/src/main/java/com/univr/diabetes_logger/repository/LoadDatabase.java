@@ -61,19 +61,20 @@ public class LoadDatabase {
       log.info("Preloading user " + medic_user);
 
       // Preload Medics
-      Medic medic = medicService.create(new Medic(medic_user, "sushila", "cacata"));
+      Medic medic = medicService.create(new Medic(medic_user, "Nome", "Cognome"));
       log.info("Preloading medic " + medic);
 
       // Preload Therapies
-      Therapy therapy1 = therapyService.create(new Therapy("Metformina", 2, 30.0, "Prendere durante i pasti"));
+      Therapy therapy1 = therapyService.create(new Therapy("Metformine", 2, 30.0,
+              "Take it only in the evening"));
       log.info("Preloading therapy " + therapy1 + " for user " + user1);
 
       // Preload Patients
-      Patient patient1 = patientService.create(new Patient(user1, "fabio", "fabibo", LocalDate.of(2001, 1, 1), medic));
+      Patient patient1 = patientService.create(new Patient(user1, "fabio", "irimie", LocalDate.of(2001, 1, 1), medic));
       log.info("Preloading patient " + patient1);
 
       Report report = reportService.create(new Report(120, false,
-          "cacca", "aiuto", LocalDateTime.of(LocalDate.of(2000, 1, 1),
+          "Stomachache", "None", LocalDateTime.of(LocalDate.of(2000, 1, 1),
               LocalTime.of(1, 1, 1)),
           "Insuline", 100, patient1));
       log.info("Preloading report " + report);
@@ -82,7 +83,6 @@ public class LoadDatabase {
           21, 20, 13), medic_user));
 
       log.info("Preloading notifications " + notif);
-
     };
   }
 }
