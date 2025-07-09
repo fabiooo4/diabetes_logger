@@ -373,7 +373,7 @@ e su come implementarle rispettivamente. Tuttavia non vi è un \textit{Scrum Mas
 \noindent
 Prima di cominciare il ciclo di Scrum però, è stata effettuata una fase di \textit{analisi dei requisiti}, dove tutto il team di Scrum si è unito per 
 analizzare le specifiche del progetto e poi sono stati definiti i casi d'uso (vedi figura \ref{fig:usecase}).
-Man mano che venivano implementate le classi e le funzionalità, venivano costruiti gli UML per rappresentare le classi e le relazioni tra di esse.
+Man mano che venivano implementate le classi e le funzionalità, veniva aggiornata la documentazione per assicurarci che sia tutto coerente e che non ci fossero errori.
 Per la gestione del codice sorgente, è stato utilizzato \textit{Git} come sistema di versionamento, con un repository su \textit{GitHub} per facilitare la collaborazione tra i membri del team.
 Abbiamo utilizzato anche \textit{Github Planner} per tenere traccia delle attività da svolgere e dello stato di avanzamento del progetto.
 
@@ -387,27 +387,6 @@ Abbiamo utilizzato anche \textit{Github Planner} per tenere traccia delle attivi
 
 \subsection{Progettazione e pattern architetturali usati}
 
-\mycomment{ Il software è stato progettato seguendo il pattern architetturale \textit{Model-View-Controller} 
-(MVC), che separa la logica di business, la presentazione e la gestione degli eventi.
-Questo tipo di pattern ci ha permesso di mantenere il codice ben organizzato e facilmente manutenibile.
-Abbiamo scelto questo pattern poiché \textit{Spring Boot} (framework di Java utilizzato per il backend) ha gli strumenti necessari
-per implementare questo pattern in modo semplice e veloce:
-\begin{itemize}
-  \item \textbf{Model}: rappresenta la logica di business e i dati del software. 
-  In questo caso, il model è composto da classi che rappresentano lo user, i pazienti, i medici, 
-  le rilevazioni, le notifiche e il change log. 
-  \item \textbf{View}: rappresenta la parte di presentazione del software. In questo caso, 
-  la view è composta da pagine costruite con SvelteKit, un framework per fare siti web. 
-  \item \textbf{Controller}: rappresenta la parte di gestione degli eventi e della logica di business. 
-  Risponde alle chiamate e alle sollecitazioni della View e gestisce le richieste degli utenti.
-\end{itemize}
-Tramite richieste HTTP, il controllera comunica con il model e la view. 
-Quindi il controller riceve la richiesta dalla view e poi interagisce con il model per 
-ottenere i dati necessari oppure modificarli in base alla richiesta dell'utente.
-Nelle prossime sezioni verrà analizzato in dettaglio il modello Model poiché contiene 
-le classi che rappresentano gli attori del sistema e le loro interazioni.
-}
-
 Il software è stato progettato seguendo un’architettura di tipo \textit{Client-Server}, 
 ispirata al pattern \textit{Model-View-Controller (MVC)}, 
 seppur con alcune differenze rispetto alla sua implementazione classica.
@@ -420,7 +399,7 @@ seppur con alcune differenze rispetto alla sua implementazione classica.
   o modificare i dati.
   \item \textbf{Server (Model + Controller)}: realizzato con \textit{Spring Boot}, gestisce sia 
   la logica di business (Model) che il controllo delle richieste (Controller). Il server espone delle 
-  API REST che il client può invocare.
+  Web API che il client può invocare.
   \begin{itemize}
     \item \textbf{Model}: rappresenta le entità principali del sistema, come utenti, pazienti, medici, 
     rilevazioni, notifiche e il change log.
@@ -460,13 +439,13 @@ Seguono i diagrammi UML delle classi del Model e del Controllore, che rappresent
 \end{figure}
 \noindent
 
-\subsection{Comunicazione MVC e gestione delle richieste}
+\subsection{Comunicazione e gestione delle richieste}
 
-Per gestire la comunicazione nel modello MVC sono state effettuate le seguenti scelte:
+Per gestire la comunicazione tra le componenti del software sono state effettuate le seguenti scelte:
 \begin{itemize}
   \item Per la comunicazione tra il Model e il Controller, sono stati utilizzati i \textit{Repository} di Spring Boot, 
   che permettono di interagire con il database in modo semplice e veloce. Dopodiché abbiamo implementato
-  i \textit{Service} (Service Layer Pattern) che contengono la logica di business e le operazioni da effettuare sui dati. Abbiamo creato
+  i \textit{Service} che contengono la logica di business e le operazioni da effettuare sui dati. Abbiamo creato
   un interfaccia \textit{CrudService} che contiene i metodi CRUD (Create, Read, Update, Delete) che ogni servizio implementa.
   \item Per la comunicazione tra il Controller e la View, sono stati utilizzati i \textit{REST Controller} di Spring Boot, 
   che permettono di gestire le richieste HTTP e di restituire le risposte in formato JSON.
@@ -485,10 +464,7 @@ Ora andremo a vedere quali sono i pattern implementati nel software e come sono 
   \item I \textbf{pattern iterator} sono stati utilizzati per iterare sulle liste di tutti i nostri modelli, proprietà intrinseca
   di Java. 
   \item È stato utilizzato molteplici volte il \textbf{pattern Observer} grazie alle dipendenze fornite da Spring Boot 
-  tramite Bean (In Spring Boot, i Bean sono oggetti gestiti dal container di Spring, questo ci permette
-  di usare \textit{Dependency Injection} per iniettare le dipendenze nei nostri componenti, Gestione
-  del ciclo della vita e una configurazione centralizzata) 
-  chiamati \textit{@ManyToOne} e \textit{@OneToMany}: quindi quando un oggetto viene modificato,
+  tramite annotazioni come \textit{@ManyToOne} e \textit{@OneToMany}: quindi quando un oggetto viene modificato,
   tutti gli oggetti che dipendono da esso vengono notificati e aggiornati automaticamente.
   \item Per gestire l'autenticazione e la sicurezza degli endpoints, è stato utilizzato il \textbf{pattern Security} di Spring Boot,
   che permette di gestire l'autenticazione e l'autorizzazione degli utenti. Tuttavia, in concomitanza abbiamo dovuto usare 
@@ -497,8 +473,8 @@ Ora andremo a vedere quali sono i pattern implementati nel software e come sono 
   \item Il \textbf{pattern Factory Method} è stato utilizzato per comporre le classi del Model come le repository
   e tutto il service layer (che implementano l'interfaccia \textit{CrudService}) e implementano i loro metodi in base 
   alle esigenze del progetto.
-  \item A sua volta, all'interno della configurazione per la sicurezza, è stato utilizzato il \textbf{Filter Chain Pattern}
-  dove una serie di filtri (autenticazione, autorizzazione, CORS, ecc.) processano la richiesta in sequenza.
+  \item A sua volta, all'interno della configurazione per la sicurezza, è stato utilizzato il \textbf{Filter Pattern}
+  dove una serie di filtri (autenticazione, autorizzazione, ecc.) processano la richiesta in sequenza.
 \end{itemize}
 
 \subsubsection{Autenticazione e autorizzazione}
@@ -520,7 +496,7 @@ Di seguito sono riportate le classi principali che compongono la configurazione 
   \item La classe \textbf{JwtFilter} si occupa di filtrare le richieste HTTP e di verificare se l'utente è autenticato tramite un token JWT.
   I token JWT (JSON Web Token) sono un modo per rappresentare le informazioni di autenticazione in modo sicuro e compatto.
   In poche parole estraiamo il token JWT dalla richiesta HTTP e lo verifichiamo per vedere se è valido.
-  \item La classe \textbf{SecurityConfiguration} è stato implementato usando il \textbf{builder Pattern} e si occupa di configurare la sicurezza del progetto,
+  \item La classe \textbf{SecurityConfiguration} è stata implementata usando il \textbf{builder Pattern} e si occupa di configurare la sicurezza del progetto,
   infatti possiamo definire una serie di filtri che processano la richiesta in sequenza.
   Quindi, nella funzione \textit{securityFilterChain} definiamo i filtri che vogliamo utilizzare, come il filtro di autenticazione e il filtro di autorizzazione.
   Questo ci permette di definire i permessi di ogni ruolo, quindi per esempio, i pazienti possono accedere solo alle loro informazioni, i medici possono accedere alle informazioni dei pazienti 
@@ -536,66 +512,76 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
   \begin{itemize}
     \item UsersController: 
     \begin{itemize}
-      \item \textbf{GET+PATCH /users/{loggedId}}
+      \item \textbf{GET+PATCH /users/\{loggedId\}}
     \end{itemize}
     \item ReportsController: \begin{itemize}
-      \item \textbf{GET+POST+PUT+DELETE /reports/{loggedId}}
+      \item \textbf{GET+POST+PUT+DELETE /reports/\{loggedId\}}
     \end{itemize}
     \item NotificationsController: 
     \begin{itemize}
-      \item \textbf{GET+DELETE /notifications/{loggedId}}
+      \item \textbf{GET+DELETE /notifications/\{loggedId\}}
     \end{itemize}
   \end{itemize}
   \item Medici:
   \begin{itemize}
     \item UsersController:
     \begin{itemize}
-      \item \textbf{GET+PATCH /users/{loggedId}} 
+      \item \textbf{GET+PATCH /users/\{loggedId\}} 
     \end{itemize}
     \item ReportsController:
     \begin{itemize}
-      \item \textbf{GET /reports/{anyUserId}}
-      \item \textbf{GET /reports/{anyPatientId}}
+      \item \textbf{GET /reports/\{anyUserId\}}
+      \item \textbf{GET /reports/\{anyPatientId\}}
       \item \textbf{GET /reports/}
     \end{itemize}
     \item NotificationsController:
     \begin{itemize}
-      \item \textbf{GET+DELETE /notifications/{loggedId}}
+      \item \textbf{GET+DELETE /notifications/\{loggedId\}}
     \end{itemize}
     \item TherapiesController:
     \begin{itemize}
       \item \textbf{GET+POST+PUT+DELETE /therapies}
-      \item \textbf{GET /therapies/{userId}}
+      \item \textbf{GET /therapies/\{userId\}}
     \end{itemize}
     \item PatientsController:
     \begin{itemize}
       \item \textbf{GET /patients}
-      \item \textbf{GET+PATCH /patients/{userId}}
+      \item \textbf{GET+PATCH /patients/\{userId\}}
     \end{itemize}
   \end{itemize}
+\end{itemize}
+\noindent
+I seguenti termini fanno riferimento a identificatori variabili all'interno degli endpoints
+e sono defiiniti nel modo seguente:
+\begin{itemize}
+  \item \textbf{loggedId}: è l'id dell'utente che è autenticato
+  con un JWT token valido.
+  \item \textbf{anyUserId}: è l'id di un qualsiasi utente
+  \item \textbf{anyPatientId}: è l'id di un qualsiasi paziente, quindi può 
+  essere un paziente che non è l'utente autenticato
+  \item \textbf{userId}: è l'id di un utente qualsiasi, può essere anche un utente non autenticato
 \end{itemize}
 
 \subsubsection{Model: repository e service layer}
 
 Il nostro Model è composto da diverse classi che rappresentano gli attori del sistema e le loro interazioni.
-Esso ricopre un ruolo essenziale perché è il modello che definisce e manipola i dati del software. 
-Ovviamente ognuno di questi sottomodelli sono contenute dentro \textbf{package} per garantire una buona organizzazione del codice e una facile navigazione, insieme
+La nostra logica di business è separata in \textit{layer}  contenuti dentro \textbf{package} 
+per garantire una buona organizzazione del codice e una facile navigazione, insieme
 ad un controllo degli errori più semplice.
-Nella nostra codebase, il Model è composto dalle seguenti classi:
+Questi layer sono:
 \begin{itemize}
-  \item \textbf{Model}: è il package principale che contiene tutte le classi del Model. Quest'ultima contiene
-  tutte le definizioni delle entità del sistema, come \textit{User}, \textit{Patient}, \textit{Medic}, \textit{MedicChangeLog}, \textit{Report}, \textit{Notification} e \textit{Therapy}.
+  \item \textbf{Model}: è il package principale perché contiene tutte le definizioni delle entità del sistema, come \textit{User}, \textit{Patient}, \textit{Medic}, \textit{MedicChangeLog}, \textit{Report}, \textit{Notification} e \textit{Therapy}.
   \item \textbf{Repository}: è il package che contiene le interfacce dei repository, che sono utilizzate per interagire con il database. 
   Abbiamo utilizzato JPA (Jakarta Persistance API) Repository di Spring Boot, che ci ha permesso di immagazinare e ottenere i dati da un 
   database relazionale. 
   Le interfacce dei repository estendono \textit{JpaRepository} e forniscono i metodi per effettuare le operazioni CRUD sui dati.
   \item \textbf{Service}: è il package che contiene le classi dei servizi, che sono utilizzate per gestire la logica di business del software. 
   Infatti, le classi dei servizi implementano l'interfaccia \textit{CrudService} che contiene i metodi CRUD che ogni servizio deve implementare.
+  I servizi astraggono e ampliano le funzionalità della repository.
   I servizi sono utilizzati dai controller per gestire le richieste degli utenti e interagire con i repository.
 \end{itemize}
 Il controller (vedi figura \ref{fig:controller}) come già stato detto, utilizza il Model per 
-gestire le richieste degli utenti e interagire con i dati e
-passa i dati alla View tramite le richieste HTTP grazie all'architettura REST.
+gestire le richieste degli utenti e interagire con i dati. 
 Seguono sequence diagram di alcune interazioni e dinamiche importanti del software:
 \begin{figure}[H]
   \begin{center}
@@ -651,7 +637,7 @@ può fare solo l'amministratore), in quanto sono le funzionalità principali del
 \subsection{Test con @WebMvcTest e @DataJpaTest}
 
 Per testare il software sono stati utilizzati i Bean di Spring Boot @WebMvcTest e @DataJpaTest, che permettono di testare i controller 
-e le interazioni con il database. Quello che segue 
+e le interazioni con un database di test salvato in memoria. Quello che segue 
 è un esempio di test per il repository del paziente, che verifica le operazioni CRUD (Create, Read, Update, Delete).
 Le funzioni con il tag @Test sono i test veri e propri e ad ogni test è stato assegnato un ordine tramite l'annotazione @Order.
 Effettuiamo l'azione e verifichiamo che il risultato sia quello atteso, utilizzando le asserzioni di JUnit.
@@ -890,17 +876,20 @@ public class PatientControllerTest {
 Per \textbf{testare le API REST} del software, è stato utilizzato \textit{Postman}, un tool che permette di inviare richieste HTTP 
 e di visualizzare le risposte. Ne è stato fatto un uso intensivo per testare le API del software,
 poiché per testare le API REST è necessario inviare richieste HTTP e verificare le risposte.
-Il nostro environment di Postman permetteva di simulare l'autenticazione degli utenti e di verificarne 
-le funzionalità. Quando un utente si autenticava, veniva restituito un token JWT che veniva utilizzato per
-autenticare le richieste successive. Il token veniva inserito nella cartella principale
-dell'environment di Postman e veniva utilizzato per autenticare le richieste da parte di tutti i controller.
+Il nostro environment di Postman permette di simulare l'autenticazione degli utenti e di verificarne 
+le funzionalità. Quando un utente si autentica, viene restituito un token JWT che viene utilizzato per
+autenticare le richieste successive. Il token viene inserito nella cartella principale
+dell'environment di Postman e viene utilizzato per autenticare le richieste da parte di tutti i controller.
 
 
 \vspace{1em}
 \noindent
-Ovviamente per testare la correttezza generale del software in maniera veloce seguento come sempre
-uno stile \textit{Agile}, abbiamo creato un file java (\textit{LoadDatabase.java}) che caricava in automatico i dati di test nel database,
+Ovviamente per testare la correttezza generale del software in maniera veloce seguendo come sempre
+uno stile \textit{Agile}, abbiamo creato un file java (\textit{LoadDatabase.java}) che carica in automatico i dati 
+di test nel database,
 in modo da poter testare le funzionalità del software senza dover inserire manualmente i dati.
+Questa funzione di inizializzazione è stata rimossa quando il processo di sviluppo è stato ultimato per non
+eliminare i dati dal database ogni volta che viene avviato il software.
 Per ogni controller, sono stati creati dei test che verificano le funzionalità principali di essi, come 
 la creazione, la lettura, l'aggiornamento e la cancellazione dei dati.
 Postman ha aiutato incredibilmente anche a \textbf{testare che gli endpoints fossero protetti} correttamente e 
@@ -923,19 +912,19 @@ verificando che tutte le funzionalità implementate funzionassero come previsto 
 Alcuni dei test effettuati sono stati:
 \begin{itemize}
   \item Verifica che il login funzionasse correttamente per tutti gli utenti;
-  \item Verifica che la registrazione funzionasse correttamente per tutti gli utenti;
+  \item Verifica che la registrazione funzionasse correttamente per tutti i ruoli;
   \item Verifica che l'utente potesse modificare i propri dati;
   \item I campi obbligatori devono essere riempiti correttamente
-  altrimenti la View avvisa di riempirli;
+  altrimenti il Controller avvisa di riempirli;
   \item Alcuni campi non possono essere modificati da un certo tipo di utente 
   questo tipo di sicurezza è stata implementata tramite il pattern Security di Spring Boot
   e quindi è stato semplice accertarsi che funzionasse;
   \item Inserimento di un report con dati validi e verifica che venisse creato correttamente;
-  \item Verifica che le notifiche venissero create correttamente quando un report 
-  "preoccupante" veniva inserito;
-  \item Verifica che le notifiche venissero cancellate 
-  correttamente quando un utente le cancellava;
-  \item Verificato il sistema di avvisi tramite notifiche;
+  \item Verifica che le notifiche vengano create correttamente quando un report 
+  "preoccupante" viene inserito;
+  \item Verifica che le notifiche vengano cancellate 
+  correttamente quando un utente le cancella;
+  \item Verificato che il sistema di avvisi tramite notifiche;
   \item Verifica dei vari inserimenti con input errati oppure vuoti;
   \item Verifica di un assegnazione di una terapia ad un paziente;
   \item Inserimento di terapie, pazienti o medici duplicati
@@ -949,13 +938,12 @@ Alcuni dei test effettuati sono stati:
 
 Per testare il software da un utente generico, abbiamo chiesto ad un individuo esterno di provare 
 il software e di darci un feedback sulle funzionalità implementate.
-Sono state fornite all'utente solo alcune linee guida di come utilizzare il software, senza spiegare nel dettaglio.
-L'utente ha registrato un nuovo account e ha provato a utilizzare il software come un paziente,
+L'utente ha richiesto la registrazione di un nuovo account e ha provato a utilizzare il software come un paziente,
 provando ad inserire report e visualizzare le notifiche.
 Lo scopo di questo test era quello di verificare che il software fosse facile da usare e che 
 le funzionalità implementate fossero intuitive.
 Il feedback ricevuto è stato positivo e allo stesso tempo ci ha dato spunti
-per migliorare ulteriormente l'usabilità del software.
+per migliorare ulteriormente l'usabilità del software. 
 
 
 \end{document}

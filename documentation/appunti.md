@@ -108,3 +108,6 @@ Autenticazione necessaria per l'utente
 - a quale paziente ha effettuato il change
 - cosa ha modificato (Added therapy, Removed therapy, ecc.)
 // come farebbero dei commit su git
+
+## Figure 13: Modificare e aggiungere gli endpoints alle funzioni
+## Figure 15: Modificare sequence diagram da Model -> Controller
