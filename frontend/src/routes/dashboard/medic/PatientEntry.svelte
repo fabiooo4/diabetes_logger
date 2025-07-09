@@ -3,14 +3,14 @@
 	import CaretDown from 'phosphor-svelte/lib/CaretDown';
 	import { Accordion, Checkbox, Dialog, Label, Separator } from 'bits-ui';
 	import PencilSimple from 'phosphor-svelte/lib/PencilSimple';
-  import Check from "phosphor-svelte/lib/Check";
-  import Minus from "phosphor-svelte/lib/Minus";
+	import Check from 'phosphor-svelte/lib/Check';
+	import Minus from 'phosphor-svelte/lib/Minus';
 	import X from 'phosphor-svelte/lib/X';
 	import ReportsCard from '../patient/ReportsCard.svelte';
 
 	let { patient }: { patient: Patient } = $props();
 
-  let hasTherapy = $state(patient.therapy !== null)
+	let hasTherapy = $state(patient.therapy !== null);
 
 	let reports: Promise<Report[]> = $state(Promise.resolve([]));
 
@@ -103,13 +103,13 @@
 											></textarea>
 										</div>
 
-										<div class="flex items-center space-x-3 my-3">
+										<div class="my-3 flex items-center space-x-3">
 											<Checkbox.Root
 												id="therapy"
 												aria-labelledby="therapy-label"
 												class="border-muted bg-foreground data-[state=unchecked]:border-border-input data-[state=unchecked]:bg-background data-[state=unchecked]:hover:border-dark-40 peer inline-flex size-[25px] items-center justify-center rounded-md border transition-all duration-150 ease-in-out active:scale-[0.98]"
 												name="therapy"
-                        bind:checked={hasTherapy}
+												bind:checked={hasTherapy}
 											>
 												{#snippet children({ checked, indeterminate })}
 													<div class="text-background inline-flex items-center justify-center">
@@ -126,65 +126,65 @@
 												for="therapy"
 												class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 											>
-                        Assign therapy
+												Assign therapy
 											</Label.Root>
 										</div>
-                    {#if hasTherapy}
-                      <Label.Root class="text-sm font-medium">Medicine</Label.Root>
-                      <div class="relative w-full">
-                        <input
-                          id="medicine"
-                          class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
-                          type="text"
-                          placeholder="Enter the medicine name"
-                          value={patient.therapy && patient.therapy.medicine
-                            ? patient.therapy.medicine
-                            : ''}
-                          name="medicine"
-                        />
-                      </div>
+										{#if hasTherapy}
+											<Label.Root class="text-sm font-medium">Medicine</Label.Root>
+											<div class="relative w-full">
+												<input
+													id="medicine"
+													class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+													type="text"
+													placeholder="Enter the medicine name"
+													value={patient.therapy && patient.therapy.medicine
+														? patient.therapy.medicine
+														: ''}
+													name="medicine"
+												/>
+											</div>
 
-                      <Label.Root class="text-sm font-medium">Amount</Label.Root>
-                      <div class="relative w-full">
-                        <input
-                          id="amount"
-                          class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
-                          type="number"
-                          placeholder="Enter the amount of medicine to take"
-                          value={patient.therapy && patient.therapy.amount
-                            ? patient.therapy.amount
-                            : ''}
-                          name="amount"
-                        />
-                      </div>
+											<Label.Root class="text-sm font-medium">Amount</Label.Root>
+											<div class="relative w-full">
+												<input
+													id="amount"
+													class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+													type="number"
+													placeholder="Enter the amount of medicine to take"
+													value={patient.therapy && patient.therapy.amount
+														? patient.therapy.amount
+														: ''}
+													name="amount"
+												/>
+											</div>
 
-                      <Label.Root class="text-sm font-medium">Daily intake</Label.Root>
-                      <div class="relative w-full">
-                        <input
-                          id="dailyIntake"
-                          class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
-                          type="number"
-                          placeholder="Enter the daily intake of medicine"
-                          value={patient.therapy && patient.therapy.dailyIntake
-                            ? patient.therapy.dailyIntake
-                            : ''}
-                          name="dailyIntake"
-                        />
-                      </div>
+											<Label.Root class="text-sm font-medium">Daily intake</Label.Root>
+											<div class="relative w-full">
+												<input
+													id="dailyIntake"
+													class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+													type="number"
+													placeholder="Enter the daily intake of medicine"
+													value={patient.therapy && patient.therapy.dailyIntake
+														? patient.therapy.dailyIntake
+														: ''}
+													name="dailyIntake"
+												/>
+											</div>
 
-                      <Label.Root class="text-sm font-medium">Directions</Label.Root>
-                      <div class="relative w-full">
-                        <textarea
-                          id="directions"
-                          class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
-                          placeholder="Add any notes you want to leave for the patient"
-                          value={patient.therapy && patient.therapy.directions
-                            ? patient.therapy.directions
-                            : ''}
-                          name="directions"
-                        ></textarea>
-                      </div>
-                    {/if}
+											<Label.Root class="text-sm font-medium">Directions</Label.Root>
+											<div class="relative w-full">
+												<textarea
+													id="directions"
+													class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
+													placeholder="Add any notes you want to leave for the patient"
+													value={patient.therapy && patient.therapy.directions
+														? patient.therapy.directions
+														: ''}
+													name="directions"
+												></textarea>
+											</div>
+										{/if}
 									</div>
 									<div class="flex w-full justify-end">
 										<button
@@ -251,14 +251,6 @@
 				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down mt-4 overflow-hidden tracking-[-0.01em]"
 			>
 				<div class="flex flex-col gap-y-4">
-					{#if patient.therapy}
-						<div>
-							<h1 class="text-foreground-alt">Notes:</h1>
-							<p>
-								{JSON.stringify(patient.therapy)}
-							</p>
-						</div>
-					{/if}
 					{#if patient.previousPatologies}
 						<div>
 							<h1 class="text-foreground-alt">Previous patologies:</h1>
@@ -273,6 +265,43 @@
 							<p>
 								{patient.medicNotes}
 							</p>
+						</div>
+					{/if}
+					{#if patient.therapy}
+            <h1 class="font-bold text-lg mt-2">Therapy</h1>
+            <div class="flex flex-row flex-wrap items-center gap-x-8">
+              <div>
+                <div>
+                  <h1 class="text-foreground-alt">Medicine:</h1>
+                  <p>
+                    {patient.therapy.medicine}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <h1 class="text-foreground-alt">Amount:</h1>
+                  <p>
+                    {patient.therapy.amount}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <h1 class="text-foreground-alt">Daily intake:</h1>
+                  <p>
+                    {patient.therapy.dailyIntake}
+                  </p>
+                </div>
+              </div>
+            </div>
+						<div>
+							<div>
+								<h1 class="text-foreground-alt">Directions:</h1>
+								<p>
+									{patient.therapy.directions}
+								</p>
+							</div>
 						</div>
 					{/if}
 

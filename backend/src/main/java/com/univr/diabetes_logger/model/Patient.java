@@ -54,7 +54,7 @@ public class Patient {
   @JsonIgnore
   private User user;
 
-  @ManyToOne(cascade = CascadeType.REMOVE)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "therapy_id", referencedColumnName = "id", nullable = true)
   @OnDelete(action = OnDeleteAction.SET_NULL)
   private Therapy therapy;
@@ -71,8 +71,7 @@ public class Patient {
     this.referralMedic = referralMedic;
   }
 
-  public void updatePatient(Patient patient) {
-
+  public void updatePatient(Patient patient) throws IllegalArgumentException {
     String firstName = patient.getFirstName();
     if (firstName != null) {
       setFirstName(firstName);
@@ -94,7 +93,19 @@ public class Patient {
     }
 
     // The following are nullable
-    setTherapy(patient.getTherapy());
+    Therapy therapy = patient.getTherapy();
+    if (therapy != null) {
+      if (therapy.getAmount() != null || therapy.getMedicine() != null
+          || therapy.getDailyIntake() != null || therapy.getDirections() != null) {
+        throw new IllegalArgumentException("Therapy fields cannot be null");
+      }
+
+      patient.getTherapy().setId(null);
+      setTherapy(patient.getTherapy());
+    } else {
+      setTherapy(null);
+    }
+
     setPreviousPatologies(patient.getPreviousPatologies());
     setRiskFactor(patient.getRiskFactor());
     setMedicNotes(patient.getMedicNotes());
