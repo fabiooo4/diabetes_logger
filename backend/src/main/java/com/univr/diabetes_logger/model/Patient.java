@@ -95,8 +95,8 @@ public class Patient {
     // The following are nullable
     Therapy therapy = patient.getTherapy();
     if (therapy != null) {
-      if (therapy.getAmount() != null || therapy.getMedicine() != null
-          || therapy.getDailyIntake() != null || therapy.getDirections() != null) {
+      if (therapy.getAmount() == null || therapy.getMedicine() == null
+          || therapy.getDailyIntake() == null || therapy.getDirections() == null) {
         throw new IllegalArgumentException("Therapy fields cannot be null");
       }
 
