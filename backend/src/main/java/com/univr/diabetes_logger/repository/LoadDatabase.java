@@ -22,12 +22,17 @@ public class LoadDatabase {
   @Bean
   CommandLineRunner initDatabase(UserRepository userRepository, PatientRepository patientRepository,
       MedicRepository medicRepository, TherapyRepository therapyRepository,
-      ReportRepository reportRepository, UserService userService, PatientService patientService,
+      ReportRepository reportRepository, MedicChangeLogRepository medicChangeLogRepository, UserService userService, PatientService patientService,
       MedicService medicService, TherapyService therapyService, NotificationRepository notificationRepository,
-      NotificationService notificationService, ReportService reportService) {
+      NotificationService notificationService, ReportService reportService, MedicChangeLogService medicChangeLogService) {
     return args -> {
       // TODO: Remove in production
       log.info("Clearing database");
+
+      medicChangeLogRepository.deleteAll();
+      medicChangeLogRepository.flush();
+      log.info("Cleared medic change logs");
+
       notificationRepository.deleteAll();
       notificationRepository.flush();
       log.info("Cleared notifications");
