@@ -382,18 +382,22 @@ Are you sure you want to delete this report? This action cannot be undone.
 				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down mt-4 overflow-hidden tracking-[-0.01em]"
 			>
 				<div class="flex flex-col gap-y-4">
-					<div>
-						<h1 class="text-foreground-alt">Symptoms:</h1>
-						<p>
-							{report.symptoms}
-						</p>
-					</div>
-					<div>
-						<h1 class="text-foreground-alt">Notes:</h1>
-						<p>
-							{report.notes}
-						</p>
-					</div>
+					{#if report.symptoms}
+						<div>
+							<h1 class="text-foreground-alt">Symptoms:</h1>
+							<p>
+								{report.symptoms}
+							</p>
+						</div>
+					{/if}
+					{#if report.notes}
+						<div>
+							<h1 class="text-foreground-alt">Notes:</h1>
+							<p>
+								{report.notes}
+							</p>
+						</div>
+					{/if}
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>

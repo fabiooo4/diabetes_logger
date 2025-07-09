@@ -124,6 +124,7 @@
             <class>com.univr.diabetes_logger.model.Therapy</class>
             <class>com.univr.diabetes_logger.model.Report</class>
             <class>com.univr.diabetes_logger.model.Notification</class>
+            <class>com.univr.diabetes_logger.model.MedicChangeLog</class>
           </classes>
           <customTypeMappings>
             <mapping>java.time.LocalDateTime:string</mapping>

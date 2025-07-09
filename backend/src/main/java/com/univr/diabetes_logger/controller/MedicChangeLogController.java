@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * MedicChangeLogController
  */
 @RestController
-@RequestMapping(path = "/medicChangelog")
+@RequestMapping(path = "/medicChangeLog")
 public class MedicChangeLogController {
     private MedicChangeLogService medicChangeLogService;
 

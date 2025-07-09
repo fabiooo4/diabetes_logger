@@ -154,7 +154,8 @@ public class Patient {
   @Override
   public String toString() {
     return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate
-        + ", referralMedic=" + referralMedic + ", therapy=" + therapy + ", user=" + user + "]";
+        + ", riskFactor=" + riskFactor + ", previousPatologies=" + previousPatologies + ", medicNotes=" + medicNotes
+        + ", referralMedic=" + referralMedic + ", user=" + user + ", therapy=" + therapy + "]";
   }
 
   public User getUser() {
@@ -213,24 +214,26 @@ public class Patient {
       ret += "Birthdate, ";
     }
 
-    // The following are nullable
-    if (patient.getReferralMedic() == null || !patient.getReferralMedic().equals(this.getReferralMedic())) {
+    if (patient.getReferralMedic() != null && !patient.getReferralMedic().equals(this.getReferralMedic())) {
       ret += "referral medic, ";
     }
 
-    if (patient.getTherapy() == null || !patient.getTherapy().equals(this.therapy)) {
+    if (patient.getTherapy() != null && !patient.getTherapy().equals(this.therapy)) {
       ret += "therapy, ";
     }
 
-    if (patient.getRiskFactor() == null || !patient.getRiskFactor().equals(this.riskFactor)) {
+    if (patient.getRiskFactor() != null && !patient.getRiskFactor().equals(this.riskFactor)) {
       ret += "risk factor, ";
     }
+    System.out.println(patient);
 
-    if (patient.getPreviousPatologies() == null || !patient.getPreviousPatologies().equals(this.previousPatologies)) {
+    if (patient.getPreviousPatologies() != null && !patient.getPreviousPatologies().isEmpty()
+        && !patient.getPreviousPatologies().equals(this.previousPatologies)) {
       ret += "previous patologies, ";
     }
 
-    if (patient.getMedicNotes() == null || !patient.getMedicNotes().equals(this.medicNotes)) {
+    if (patient.getMedicNotes() != null && !patient.getMedicNotes().isEmpty()
+        && !patient.getMedicNotes().equals(this.medicNotes)) {
       ret += "medic notes, ";
     }
 

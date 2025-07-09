@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2025-07-10 01:39:22.
+// Generated using typescript-generator version 3.2.1263 on 2025-07-10 01:32:53.
 
 export interface User {
     notifications: Notification[];
@@ -58,6 +58,14 @@ export interface Notification {
     seen: boolean;
     createdAt: string;
     user: User;
+}
+
+export interface MedicChangeLog {
+    id: number;
+    medic: Medic;
+    patient: Patient;
+    action: string;
+    timestamp: string;
 }
 
 export type Role = "PATIENT" | "MEDIC" | "ADMIN";
