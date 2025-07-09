@@ -56,7 +56,7 @@ public class MedicChangeLogController {
     }
 
     @PutMapping("/{id}")
-    public MedicChangeLog updatePatient(@PathVariable Integer id, @RequestBody MedicChangeLog medicChangeLog) {
+    public MedicChangeLog updateChangeLog(@PathVariable Integer id, @RequestBody MedicChangeLog medicChangeLog) {
         return medicChangeLogService.update(id, medicChangeLog);
     }
 

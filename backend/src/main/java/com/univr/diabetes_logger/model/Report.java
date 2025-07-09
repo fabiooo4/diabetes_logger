@@ -20,13 +20,13 @@ public class Report {
     private Integer id;
 
     @Column(name = "glycemiaLevel")
-    private int glycemiaLevel;
+    private Integer glycemiaLevel;
     @Column(name = "dateTime")
     private LocalDateTime dateTime;
     @Column(name = "isBeforeMeal")
-    private boolean beforeMeal;
+    private Boolean beforeMeal;
     @Column(name = "symptoms")
-    private String symptoms;
+    private String symptoms; // Extra
     @Column(name = "notes")
     private String notes; // Extra
 
@@ -34,7 +34,7 @@ public class Report {
     @Column(name = "medicine")
     private String medicine;
     @Column(name = "amount")
-    private int amount; // mg/dL
+    private Integer amount; // mg/dL
 
     // I pazienti possiedono la terapia, basta fetcharla con l'ID tramite l'id dell' utente
     @ManyToOne
@@ -47,8 +47,8 @@ public class Report {
 
     }
 
-    public Report(int glycemiaLevel, boolean beforeMeal, String symptoms, String notes,
-                  LocalDateTime dateTime, String medicine, int amount, Patient patient) {
+    public Report(Integer glycemiaLevel, boolean beforeMeal, String symptoms, String notes,
+                  LocalDateTime dateTime, String medicine, Integer amount, Patient patient) {
         this.glycemiaLevel = glycemiaLevel;
         this.beforeMeal = beforeMeal;
         this.patient = patient;
@@ -61,7 +61,7 @@ public class Report {
 
     }
 
-    public int getGlycemiaLevel() {
+    public Integer getGlycemiaLevel() {
         return glycemiaLevel;
     }
 
@@ -77,7 +77,7 @@ public class Report {
         this.beforeMeal = beforeMeal;
     }
 
-    public boolean getBeforeMeal() {
+    public Boolean getBeforeMeal() {
         return beforeMeal;
     }
 
@@ -113,7 +113,7 @@ public class Report {
         this.medicine = medicine;
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 

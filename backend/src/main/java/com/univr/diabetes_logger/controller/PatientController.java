@@ -3,6 +3,7 @@ package com.univr.diabetes_logger.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,16 +41,54 @@ public class PatientController {
   }
 
   @PostMapping
-  public ResponseEntity<Patient> createPatient(@RequestBody Patient patient, UriComponentsBuilder uriBuilder) {
+  public ResponseEntity<?> createPatient(@RequestBody Patient patient, UriComponentsBuilder uriBuilder) {
     Patient created = patientService.create(patient);
 
+    if(patient.getTherapy() != null) {
+
+      if(patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+      }
+
+      if(patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
+      }
+
+      if(patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
+      }
+
+      if(patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
+      }
+    }
     var uri = uriBuilder.path("/patients/{id}").buildAndExpand(created.getId()).toUri();
     return ResponseEntity.created(uri).body(created);
   }
 
   @PutMapping("/{id}")
-  public Patient updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
-    return patientService.update(id, patient);
+  public ResponseEntity<?> updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
+
+    if(patient.getTherapy() != null) {
+
+      if(patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+      }
+
+      if(patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
+      }
+
+      if(patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
+      }
+
+      if(patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
+      }
+    }
+
+    return ResponseEntity.ok(patientService.update(id, patient));
   }
 
   @DeleteMapping("/{id}")

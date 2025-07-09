@@ -5,10 +5,13 @@ import java.util.Optional;
 
 import com.univr.diabetes_logger.model.MedicChangeLog;
 import com.univr.diabetes_logger.repository.MedicChangeLogRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.repository.PatientRepository;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * PatientService
@@ -61,4 +64,31 @@ public class PatientService implements CrudService<Patient> {
 
     return deleted;
   }
+
+  public ResponseEntity<?> checkPatient(Patient patient, UriComponentsBuilder uriBuilder) {
+
+    if(patient.getTherapy() != null) {
+
+      if(patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+      }
+
+      if(patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
+      }
+
+      if(patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
+      }
+
+      if(patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
+      }
+    }
+
+    var uri = uriBuilder.path("/patients/{id}").buildAndExpand(patient.getId()).toUri();
+    return ResponseEntity.created(uri).body(patient);
+  }
+
 }
+

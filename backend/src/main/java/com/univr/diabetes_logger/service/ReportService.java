@@ -12,6 +12,8 @@ import com.univr.diabetes_logger.repository.ReportRepository;
 import com.univr.diabetes_logger.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -186,10 +188,10 @@ public class ReportService implements CrudService<Report> {
     return repository.save(existingReport);
   }
 
+
   public Report updateOnUser(Integer id, Report report) {
     Report existingReport = this.getById(id).orElseThrow();
 
-    // TODO: Modify the update
     existingReport.setGlycemiaLevel(report.getGlycemiaLevel());
     existingReport.setBeforeMeal(report.getBeforeMeal());
     existingReport.setSymptoms(report.getSymptoms());
