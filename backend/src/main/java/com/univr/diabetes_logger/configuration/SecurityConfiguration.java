@@ -101,8 +101,8 @@ public class SecurityConfiguration {
                   // Reports ---------------------------------------------
                   //
                   // MedicChangeLog --------------------------------------
-                  .requestMatchers(HttpMethod.GET, "/medicchangelog/{id}", "/medicchangelog/medic/{medicId}",
-                          "/medicchangelog/patient/{patientId}")
+                  .requestMatchers(HttpMethod.GET, "/medicChangeLog/{id}", "/medicChangeLog/medic/{medicId}",
+                          "/medicChangeLog/patient/{patientId}")
                   .hasAnyAuthority("MEDIC", "ADMIN")
                   .requestMatchers(HttpMethod.POST, "/medicchangelog")
                   .hasAnyAuthority("MEDIC", "ADMIN")

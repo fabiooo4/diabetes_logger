@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Patient, Report } from '$lib/types';
+	import type { Patient, Report, MedicChangeLog } from '$lib/types';
 	import CaretDown from 'phosphor-svelte/lib/CaretDown';
 	import { Accordion, Checkbox, Dialog, Label, Separator } from 'bits-ui';
 	import PencilSimple from 'phosphor-svelte/lib/PencilSimple';
@@ -13,6 +13,7 @@
 	let hasTherapy = $state(patient.therapy !== null);
 
 	let reports: Promise<Report[]> = $state(Promise.resolve([]));
+	let lastModified: MedicChangeLog | null = $state(null);
 
 	async function getReports() {
 		fetch('/dashboard/medic', {
@@ -36,6 +37,29 @@
 				console.error('Error fetching patient reports:', error);
 			});
 	}
+
+	async function getLastModified() {
+		fetch('/dashboard/medic', {
+			method: 'PATCH',
+			body: JSON.stringify({ patientId: patient.id }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then((response) => {
+				if (!response.ok) {
+					console.error('Failed to fetch last patient modification' + response.statusText);
+					return;
+				}
+				return response.json();
+			})
+			.then((data: { lastModified: MedicChangeLog | null }) => {
+				lastModified = data.lastModified;
+			})
+			.catch((error) => {
+				console.error('Error fetching last patient modification:', error);
+			});
+	}
 </script>
 
 <div
@@ -43,7 +67,13 @@
 >
 	<Accordion.Root class="w-full" type="multiple">
 		<Accordion.Item value="1" class="border-dark-10 group px-1.5">
-			<Accordion.Header class="relative" onclick={getReports}>
+			<Accordion.Header
+				class="relative"
+				onclick={() => {
+					getReports();
+					getLastModified();
+				}}
+			>
 				<div class="absolute top-0 right-12 cursor-default">
 					<Dialog.Root>
 						<Dialog.Trigger
@@ -268,33 +298,33 @@
 						</div>
 					{/if}
 					{#if patient.therapy}
-            <h1 class="font-bold text-lg mt-2">Therapy</h1>
-            <div class="flex flex-row flex-wrap items-center gap-x-8">
-              <div>
-                <div>
-                  <h1 class="text-foreground-alt">Medicine:</h1>
-                  <p>
-                    {patient.therapy.medicine}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <h1 class="text-foreground-alt">Amount:</h1>
-                  <p>
-                    {patient.therapy.amount}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <h1 class="text-foreground-alt">Daily intake:</h1>
-                  <p>
-                    {patient.therapy.dailyIntake}
-                  </p>
-                </div>
-              </div>
-            </div>
+						<h1 class="mt-2 text-lg font-bold">Therapy</h1>
+						<div class="flex flex-row flex-wrap items-center gap-x-8">
+							<div>
+								<div>
+									<h1 class="text-foreground-alt">Medicine:</h1>
+									<p>
+										{patient.therapy.medicine}
+									</p>
+								</div>
+							</div>
+							<div>
+								<div>
+									<h1 class="text-foreground-alt">Amount:</h1>
+									<p>
+										{patient.therapy.amount}
+									</p>
+								</div>
+							</div>
+							<div>
+								<div>
+									<h1 class="text-foreground-alt">Daily intake:</h1>
+									<p>
+										{patient.therapy.dailyIntake}
+									</p>
+								</div>
+							</div>
+						</div>
 						<div>
 							<div>
 								<h1 class="text-foreground-alt">Directions:</h1>
@@ -309,6 +339,13 @@
 						<h1 class="text-2xl font-bold">Reports</h1>
 						<ReportsCard {reports} role="MEDIC" />
 					</div>
+
+					{#if lastModified != null}
+						<p class="text-foreground-alt text-xs">
+							Last modified by: {lastModified.medic.firstName} {lastModified.medic.lastName}, at {new Date(lastModified.timestamp).toLocaleString()}
+              {lastModified.action}
+						</p>
+					{/if}
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>
