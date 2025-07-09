@@ -1,12 +1,16 @@
 <script lang="ts">
 	import type { Patient, Report } from '$lib/types';
 	import CaretDown from 'phosphor-svelte/lib/CaretDown';
-	import { Accordion, Dialog, Label, Separator } from 'bits-ui';
+	import { Accordion, Checkbox, Dialog, Label, Separator } from 'bits-ui';
 	import PencilSimple from 'phosphor-svelte/lib/PencilSimple';
+  import Check from "phosphor-svelte/lib/Check";
+  import Minus from "phosphor-svelte/lib/Minus";
 	import X from 'phosphor-svelte/lib/X';
 	import ReportsCard from '../patient/ReportsCard.svelte';
 
 	let { patient }: { patient: Patient } = $props();
+
+  let hasTherapy = $state(patient.therapy !== null)
 
 	let reports: Promise<Report[]> = $state(Promise.resolve([]));
 
@@ -59,13 +63,10 @@
 								>
 									Edit patient
 								</Dialog.Title>
-								<Separator.Root class="bg-muted -mx-5 mt-5 mb-6 block h-px" />
-								<!-- <Dialog.Description class="text-foreground-alt mb-6 text-sm">
-									Are you sure you want to delete this report? This action cannot be undone.
-								</Dialog.Description> -->
+								<Separator.Root class="bg-muted -mx-5 mt-5 block h-px" />
 								<form action="?/editPatient" method="POST">
 									<input type="hidden" name="patientId" value={patient.id} />
-									<div class="flex flex-col items-start gap-1 pt-7 pb-11">
+									<div class="flex flex-col items-start gap-1 pt-7 pb-7">
 										<Label.Root class="text-sm font-medium">Risk factor</Label.Root>
 										<div class="relative w-full">
 											<input
@@ -101,6 +102,89 @@
 												name="medicNotes"
 											></textarea>
 										</div>
+
+										<div class="flex items-center space-x-3 my-3">
+											<Checkbox.Root
+												id="therapy"
+												aria-labelledby="therapy-label"
+												class="border-muted bg-foreground data-[state=unchecked]:border-border-input data-[state=unchecked]:bg-background data-[state=unchecked]:hover:border-dark-40 peer inline-flex size-[25px] items-center justify-center rounded-md border transition-all duration-150 ease-in-out active:scale-[0.98]"
+												name="therapy"
+                        bind:checked={hasTherapy}
+											>
+												{#snippet children({ checked, indeterminate })}
+													<div class="text-background inline-flex items-center justify-center">
+														{#if indeterminate}
+															<Minus class="size-[15px]" weight="bold" />
+														{:else if checked}
+															<Check class="size-[15px]" weight="bold" />
+														{/if}
+													</div>
+												{/snippet}
+											</Checkbox.Root>
+											<Label.Root
+												id="therapy-label"
+												for="therapy"
+												class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+											>
+                        Assign therapy
+											</Label.Root>
+										</div>
+                    {#if hasTherapy}
+                      <Label.Root class="text-sm font-medium">Medicine</Label.Root>
+                      <div class="relative w-full">
+                        <input
+                          id="medicine"
+                          class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+                          type="text"
+                          placeholder="Enter the medicine name"
+                          value={patient.therapy && patient.therapy.medicine
+                            ? patient.therapy.medicine
+                            : ''}
+                          name="medicine"
+                        />
+                      </div>
+
+                      <Label.Root class="text-sm font-medium">Amount</Label.Root>
+                      <div class="relative w-full">
+                        <input
+                          id="amount"
+                          class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+                          type="number"
+                          placeholder="Enter the amount of medicine to take"
+                          value={patient.therapy && patient.therapy.amount
+                            ? patient.therapy.amount
+                            : ''}
+                          name="amount"
+                        />
+                      </div>
+
+                      <Label.Root class="text-sm font-medium">Daily intake</Label.Root>
+                      <div class="relative w-full">
+                        <input
+                          id="dailyIntake"
+                          class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+                          type="number"
+                          placeholder="Enter the daily intake of medicine"
+                          value={patient.therapy && patient.therapy.dailyIntake
+                            ? patient.therapy.dailyIntake
+                            : ''}
+                          name="dailyIntake"
+                        />
+                      </div>
+
+                      <Label.Root class="text-sm font-medium">Directions</Label.Root>
+                      <div class="relative w-full">
+                        <textarea
+                          id="directions"
+                          class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
+                          placeholder="Add any notes you want to leave for the patient"
+                          value={patient.therapy && patient.therapy.directions
+                            ? patient.therapy.directions
+                            : ''}
+                          name="directions"
+                        ></textarea>
+                      </div>
+                    {/if}
 									</div>
 									<div class="flex w-full justify-end">
 										<button
