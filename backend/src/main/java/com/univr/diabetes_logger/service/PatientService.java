@@ -43,7 +43,7 @@ public class PatientService implements CrudService<Patient> {
   }
 
   @Override
-  public Patient update(Integer id, Patient patient) {
+  public Patient update(Integer id, Patient patient) throws IllegalArgumentException {
     Patient existingPatient = this.getById(id).orElseThrow();
     String actions = existingPatient.actionPerformed(patient);
     existingPatient.updatePatient(patient);
