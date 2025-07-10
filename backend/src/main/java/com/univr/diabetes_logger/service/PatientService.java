@@ -95,7 +95,7 @@ public class PatientService implements CrudService<Patient> {
       }
 
       if (patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Daily intake is required or is negative");
       }
 
       if (patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {

@@ -53,10 +53,8 @@ export const actions: Actions = {
     };
 
     const res = await editPatient(token, locals.user?.medic.id, patient);
-
-    if (res == null) {
-      console.error('Failed to edit patient');
-      return fail(500, { error: 'Failed to edit patient' });
+    if (!res.ok) {
+      return fail(res.status, { error: await res.text() });
     }
   }
 };

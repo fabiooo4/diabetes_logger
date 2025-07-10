@@ -3,13 +3,16 @@
 	import CaretDown from 'phosphor-svelte/lib/CaretDown';
 	import { Accordion, Button, Checkbox, Dialog, Label, Separator } from 'bits-ui';
 	import PencilSimple from 'phosphor-svelte/lib/PencilSimple';
+	import Asterisk from 'phosphor-svelte/lib/Asterisk';
 	import Check from 'phosphor-svelte/lib/Check';
 	import Minus from 'phosphor-svelte/lib/Minus';
 	import X from 'phosphor-svelte/lib/X';
 	import ReportsCard from '../patient/ReportsCard.svelte';
 	import Trash from 'phosphor-svelte/lib/Trash';
+	import { enhance } from '$app/forms';
 
-	let { patient, user }: { patient: Patient; user: User } = $props();
+	let { patient, user, form }: { patient: Patient; user: User; form?: { error: string } } =
+		$props();
 
 	let hasTherapy = $state(patient.therapy !== null);
 
@@ -80,6 +83,11 @@
 				<div class="absolute top-0 right-12 cursor-default">
 					<Dialog.Root>
 						<Dialog.Trigger
+							onclick={() => {
+								if (form) {
+									form.error = '';
+								}
+							}}
 							class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
 						>
 							<PencilSimple class="text-foreground size-[18px]" />
@@ -96,10 +104,13 @@
 								>
 									Edit patient
 								</Dialog.Title>
-								<Separator.Root class="bg-muted -mx-5 mt-5 block h-px" />
-								<form action="?/editPatient" method="POST">
+								<Separator.Root class="bg-muted -mx-5 mt-5 mb-5 block h-px" />
+								<Dialog.Description class="text-destructive font-bold">
+									{form?.error}
+								</Dialog.Description>
+								<form action="?/editPatient" method="POST" use:enhance>
 									<input type="hidden" name="patientId" value={patient.id} />
-									<div class="flex flex-col items-start gap-1 pt-7 pb-7">
+									<div class="flex flex-col items-start gap-1 pt-4 pb-4">
 										<Label.Root class="text-sm font-medium">Risk factor</Label.Root>
 										<div class="relative w-full">
 											<input
@@ -117,8 +128,8 @@
 										<Label.Root class="text-sm font-medium">Previous patologies</Label.Root>
 										<div class="relative w-full">
 											<textarea
-												id="preciousPatologies"
-												class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
+												id="previousPatologies"
+												class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[4.5rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
 												placeholder="Add any previous patologies the patient had"
 												value={patient.previousPatologies}
 												name="previousPatologies"
@@ -129,7 +140,7 @@
 										<div class="relative w-full">
 											<textarea
 												id="medicNotes"
-												class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
+												class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[4.5rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
 												placeholder="Add any notes you want to leave for the patient"
 												value={patient.medicNotes}
 												name="medicNotes"
@@ -199,7 +210,10 @@
 											</Label.Root>
 										</div>
 										{#if hasTherapy}
-											<Label.Root class="text-sm font-medium">Medicine</Label.Root>
+											<Label.Root class="relative text-sm font-medium"
+												>Medicine
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<input
 													id="medicine"
@@ -213,7 +227,10 @@
 												/>
 											</div>
 
-											<Label.Root class="text-sm font-medium">Amount</Label.Root>
+											<Label.Root class="relative text-sm font-medium"
+												>Amount
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<input
 													id="amount"
@@ -227,7 +244,10 @@
 												/>
 											</div>
 
-											<Label.Root class="text-sm font-medium">Daily intake</Label.Root>
+											<Label.Root class="relative text-sm font-medium"
+												>Daily intake
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<input
 													id="dailyIntake"
@@ -241,11 +261,14 @@
 												/>
 											</div>
 
-											<Label.Root class="text-sm font-medium">Directions</Label.Root>
+											<Label.Root class="relative text-sm font-medium"
+												>Directions
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<textarea
 													id="directions"
-													class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[6rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
+													class="rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex h-[4.5rem] w-full resize-none items-center border px-2 py-3 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
 													placeholder="Add any notes you want to leave for the patient"
 													value={patient.therapy && patient.therapy.directions
 														? patient.therapy.directions

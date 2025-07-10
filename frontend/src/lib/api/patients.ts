@@ -1,5 +1,6 @@
 import { PUBLIC_API_BASE } from '$env/static/public';
 import type { Patient } from '$lib/types';
+import { fail } from '@sveltejs/kit';
 
 export async function getAllPatients(token: string | undefined): Promise<Patient[]> {
   return fetch(PUBLIC_API_BASE + '/patients', {
@@ -32,17 +33,7 @@ export async function editPatient(
     NestedPartial<Patient>,
     'id' | 'riskFactor' | 'previousPatologies' | 'medicNotes' | 'therapy' | 'referralMedic'
   >,
-): Promise<Report | null> {
-  if (!token) {
-    console.error('No token provided for editing patient');
-    return null;
-  }
-
-  if (!medicId) {
-    console.error('No medic ID provided for editing patient');
-    return null;
-  }
-
+): Promise<Response> {
   return fetch(PUBLIC_API_BASE + '/patients/medic/' + medicId + '/' + patient.id, {
     method: 'PUT',
     headers: {
@@ -51,17 +42,4 @@ export async function editPatient(
     },
     body: JSON.stringify(patient)
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to edit patient: ' + response.status);
-      }
-      return response.json();
-    })
-    .then((data: Report) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error('Error editing patient:', error);
-      return null;
-    });
 }

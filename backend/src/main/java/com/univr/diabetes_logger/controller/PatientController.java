@@ -98,19 +98,19 @@ public class PatientController {
     if (patient.getTherapy() != null) {
 
       if (patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine is required");
       }
 
       if (patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Amount is required or amount is negative");
       }
 
       if (patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("dailyIntake is required or is negative");
       }
 
       if (patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Directions is required");
       }
     }
 

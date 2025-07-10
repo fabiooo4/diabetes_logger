@@ -3,7 +3,7 @@
 	import { ScrollArea } from 'bits-ui';
 	import PatientEntry from './PatientEntry.svelte';
 
-	let { patients, user }: { patients: Promise<Patient[]>, user: User } = $props();
+	let { patients, user, form }: { patients: Promise<Patient[]>, user: User, form?: {error: string} } = $props();
 </script>
 
 <div class="flex flex-col gap-y-8">
@@ -23,7 +23,7 @@
             <p class="text-muted-foreground">No reports available.</p>
           {:else}
             {#each patients as patient}
-              <PatientEntry {patient} {user} />
+              <PatientEntry {patient} {user} {form} />
             {/each}
           {/if}
         </div>
