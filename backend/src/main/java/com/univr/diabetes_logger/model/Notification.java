@@ -91,4 +91,11 @@ public class Notification {
   public void toggleSeen() {
     this.setSeen(!this.isSeen());
   }
+
+  @Override
+  public String toString() {
+    return "Notification [id=" + id + ", message=" + message + ", seen=" + seen + ", createdAt=" + createdAt + ", user="
+        + user + ", getId()=" + getId() + "]";
+  }
+
 }

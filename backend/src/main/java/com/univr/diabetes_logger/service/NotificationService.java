@@ -107,8 +107,7 @@ public class NotificationService implements CrudService<Notification> {
   }
 
   // Run this every fixed amount of time
-  // @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 30)
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1, initialDelay = 1) // TODO: ONLY USED FOR TESTING SO REMOVE
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 30)
   public void checkMissingReports() {
     List<Report> reports = reportRepository.findAll();
     List<Patient> patients = patientRepository.findAll();
@@ -119,23 +118,21 @@ public class NotificationService implements CrudService<Notification> {
           .filter(report -> patient.getId().equals(report.getPatient().getId()))
           .toList();
 
-      // Find the most recent report by date
       Optional<Report> mostRecent = reportPerPatient.stream().max(Comparator.comparing(Report::getDateTime));
 
       if (mostRecent.isPresent()) {
         if (mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
-          NotifyAllMedics(patient.getFirstName() + " " + patient.getLastName() + "è da più di 3 giorni" +
-              "che non scrive una rilevazione glicemica.");
+          NotifyAllMedics(
+              patient.getFirstName() + " " + patient.getLastName() + " has not submitted a report in the last 3 days!");
         }
       }
     }
   }
 
-  // @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 1)
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1, initialDelay = 1) // TODO: ONLY USED FOR TESTING SO REMOVE
+  @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 8)
   public void remindPatients() {
     for (Patient patient : patientRepository.findAll()) {
-      notificationRepository.save(new Notification("RICORDATI LA TUA RILEVAZIONE!!!",
+      notificationRepository.save(new Notification("Remember to write your daily report!",
           false, LocalDateTime.now(), patient.getUser()));
     }
   }

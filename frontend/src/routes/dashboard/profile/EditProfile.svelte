@@ -9,18 +9,27 @@
 	import type { User } from '$lib/types';
 	import LockKeyOpen from 'phosphor-svelte/lib/LockKeyOpen';
 	import LockKey from 'phosphor-svelte/lib/LockKey';
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 
-	let { user }: { user: User } = $props();
+	let { user, form }: { user: User; form?: { error: string } } = $props();
 
 	let date: CalendarDate = $state(
 		user?.patient?.birthDate ? parseDate(user.patient.birthDate) : today(getLocalTimeZone())
 	);
 	let showPassword = $state(false);
+
+	let formOpened = $state(false);
 </script>
 
 <div class="flex w-full">
-	<Dialog.Root>
+	<Dialog.Root bind:open={formOpened}>
 		<Dialog.Trigger
+      onclick={() => {
+        if (form) {
+          form = undefined;
+        }
+      }}
 			class="rounded-input bg-dark text-background
       shadow-mini hover:bg-dark/95 focus-visible:ring-foreground focus-visible:ring-offset-background inline-flex
       h-10 w-full items-center justify-center text-[15px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
@@ -40,8 +49,24 @@
 					Edit profile
 				</Dialog.Title>
 				<Separator.Root class="bg-muted -mx-5 mt-5 mb-6 block h-px" />
-				<form action="?/editProfile" method="POST">
-          <input type="hidden" name="role" value={user?.role || ''} />
+				<Dialog.Description class="text-destructive font-bold my-4">
+					{form?.error}
+				</Dialog.Description>
+				<form
+					action="?/editProfile"
+					method="POST"
+					use:enhance={() => {
+						return async ({ update }) => {
+							await update();
+
+							if (form?.error === undefined) {
+								invalidateAll();
+								formOpened = false;
+							}
+						};
+					}}
+				>
+					<input type="hidden" name="role" value={user?.role || ''} />
 
 					<div class="flex flex-col items-start gap-3 pb-7">
 						<div class="flex w-full flex-col gap-1.5">

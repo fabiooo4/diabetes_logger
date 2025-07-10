@@ -36,3 +36,31 @@ export async function getLatestPatientChange(
       return null;
     });
 }
+
+export async function getAllLogs(token: string | undefined): Promise<MedicChangeLog[] | []> {
+  if (!token) {
+    console.error('No token provided for getting all logs');
+    return [];
+  }
+
+  return fetch(PUBLIC_API_BASE + '/medicChangeLog', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token
+    }
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to get all logs: ' + response.statusText);
+      }
+
+      return response ? response.json() : [];
+    })
+    .then((data: MedicChangeLog[]) => {
+      return data;
+    })
+    .catch(() => {
+      return [];
+    });
+}

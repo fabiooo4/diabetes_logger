@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { DateField } from 'bits-ui';
-	import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date';
+	import { CalendarDate, getLocalTimeZone, parseDate, today } from '@internationalized/date';
+	import type { User } from '$lib/types';
 
-	let date: CalendarDate | undefined = $state(undefined);
+	let { user }: { user?: User } = $props();
+
+	let date: CalendarDate | undefined = $state(
+		user?.patient?.birthDate ? parseDate(user.patient.birthDate) : undefined
+	);
 </script>
 
 <div class="flex flex-col gap-4">
@@ -12,6 +17,7 @@
 			type="text"
 			name="patientFirstName"
 			class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+			value={user ? user.patient?.firstName : undefined}
 		/>
 	</div>
 
@@ -21,6 +27,7 @@
 			type="text"
 			name="patientLastName"
 			class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+			value={user ? user.patient?.lastName : undefined}
 		/>
 	</div>
 

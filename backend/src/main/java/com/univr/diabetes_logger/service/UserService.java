@@ -93,10 +93,12 @@ public class UserService implements CrudService<User> {
 
     Patient patient = user.getPatient();
     Medic medic = user.getMedic();
-    if (patient != null && existingUser.getPatient() == null) {
+    if (patient != null && existingUser.getPatient() != null && medic == null) {
       existingUser.updatePatient(patient);
-    } else if (medic != null && existingUser.getMedic() == null) {
+    } else if (medic != null && existingUser.getMedic() != null && patient == null) {
       existingUser.updateMedic(medic);
+    } else if (patient != null && medic != null && existingUser.getRole() != Role.ADMIN) {
+      throw new IllegalArgumentException("Only one of patient or medic can be updated");
     }
 
     return repository.save(existingUser);
@@ -159,12 +161,23 @@ public class UserService implements CrudService<User> {
         props.put("token", jwtService.generateToken(logged_user.getEmail(), logged_user.getRole()));
       } else {
         // User is not verified, return a message
-        props.put("", "User is not verified, wait for Admin to accept you");
+        props.put("verification", "User is not verified, wait for Admin to accept you");
       }
 
       return props;
     }
 
     throw new RuntimeException("Invalid credentials");
+  }
+
+  public User verifyPendingUser(Integer id) {
+    User user = this.getById(id).orElseThrow();
+
+    if (user.isVerified()) {
+      throw new IllegalArgumentException("User is already verified");
+    }
+
+    user.setVerified(true);
+    return repository.save(user);
   }
 }
