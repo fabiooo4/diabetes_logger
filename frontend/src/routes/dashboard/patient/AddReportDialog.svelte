@@ -12,14 +12,29 @@
 		ZonedDateTime
 	} from '@internationalized/date';
 	import X from 'phosphor-svelte/lib/X';
+	import Asterisk from 'phosphor-svelte/lib/Asterisk';
+	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
+
+	let { form }: { form?: { error: string } } = $props();
 
 	let date: CalendarDate = $state(today(getLocalTimeZone()));
 	let time: ZonedDateTime = $state(now(getLocalTimeZone()));
 	let beforeMeal: boolean = $state(false);
+
+	let formOpened = $state(false);
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open={formOpened}>
 	<Dialog.Trigger
+		onclick={() => {
+      date = today(getLocalTimeZone());
+      time = now(getLocalTimeZone());
+
+			if (form) {
+				form = undefined;
+			}
+		}}
 		class="rounded-input bg-dark text-background
 	  shadow-mini hover:bg-dark/95 focus-visible:ring-foreground focus-visible:ring-offset-background inline-flex
 	  h-12 items-center justify-center px-[11px] text-[15px] font-semibold whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-[0.98]"
@@ -39,10 +54,23 @@
 				Create new report
 			</Dialog.Title>
 			<Separator.Root class="bg-muted -mx-5 mt-5 mb-6 block h-px" />
-			<Dialog.Description class="text-foreground-alt text-sm">
-				Create a new report to track your diabetes.
+			<Dialog.Description class="text-destructive font-bold">
+				{form?.error}
 			</Dialog.Description>
-			<form action="?/createReport" method="POST">
+			<form
+				action="?/createReport"
+				method="POST"
+				use:enhance={() => {
+					return async ({ update }) => {
+						await update();
+
+						if (form?.error === undefined) {
+              invalidateAll();
+							formOpened = false;
+						}
+					};
+				}}
+			>
 				<div class="flex flex-col items-start gap-1 pt-7 pb-11">
 					<div class="flex w-full flex-row items-start gap-2">
 						<DatePicker.Root
@@ -52,10 +80,11 @@
 							bind:value={date}
 						>
 							<div class="flex w-full max-w-[232px] flex-col gap-1.5">
-								<DatePicker.Label class="block text-sm font-medium select-none"
-									>Date</DatePicker.Label
-								>
-								<input type="hidden" name="date" value={date.toString()} />
+								<DatePicker.Label class="relative block w-fit text-sm font-medium select-none"
+									>Date
+									<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+								</DatePicker.Label>
+								<input type="hidden" name="date" value={date ? date.toString() : undefined} />
 								<DatePicker.Input
 									class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover flex w-full max-w-[232px] items-center border px-2 py-3 text-sm tracking-[0.01em] transition-all select-none"
 								>
@@ -149,8 +178,10 @@
 						</DatePicker.Root>
 						<TimeField.Root bind:value={time} hideTimeZone={true}>
 							<div class="flex w-full max-w-[280px] flex-col gap-1.5">
-								<TimeField.Label class="block text-sm font-medium select-none">Time</TimeField.Label
-								>
+								<TimeField.Label class="relative block w-fit text-sm font-medium select-none"
+									>Time
+									<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+								</TimeField.Label>
 								<TimeField.Input
 									name="time"
 									class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] transition-all select-none "
@@ -192,7 +223,10 @@
 						<Label.Root class="text-sm font-medium">Before meal</Label.Root>
 					</div>
 
-					<Label.Root class="text-sm font-medium">Glycemia level</Label.Root>
+					<Label.Root class="relative text-sm font-medium"
+						>Glycemia level
+						<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+					</Label.Root>
 					<div class="relative w-full">
 						<input
 							id="glycemiaLevel"
@@ -225,7 +259,10 @@
 						></textarea>
 					</div>
 
-					<Label.Root class="text-sm font-medium">Medicine</Label.Root>
+					<Label.Root class="relative text-sm font-medium"
+						>Medicine
+						<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+					</Label.Root>
 					<div class="relative w-full">
 						<input
 							id="medicine"
@@ -235,7 +272,10 @@
 						/>
 					</div>
 
-					<Label.Root for="amount" class="text-sm font-medium">Medicine amount</Label.Root>
+					<Label.Root for="amount" class="relative text-sm font-medium"
+						>Medicine amount
+						<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+					</Label.Root>
 					<div class="relative w-full">
 						<input
 							id="amount"

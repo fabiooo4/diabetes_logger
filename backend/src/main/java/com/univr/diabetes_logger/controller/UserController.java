@@ -35,17 +35,17 @@ public class UserController {
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody User user) {
     if (user.getEmail() == null || user.getEmail().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email field is required");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email field is required");
     }
 
     if (user.getPassword() == null || user.getPassword().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Password field is required");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password field is required");
     }
 
     try {
       return ResponseEntity.ok(userService.verify(user));
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Incorrect username or password");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect username or password");
     }
   }
 
@@ -60,21 +60,21 @@ public class UserController {
     }
 
     if (user.getEmail() == null || user.getEmail().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email field is required");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email field is required");
     }
     if (user.getPassword() == null || user.getPassword().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Password field is required");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password field is required");
     }
 
     if (user.getPatient() != null && user.getMedic() == null) {
       if (user.getPatient().getFirstName() == null || user.getPatient().getFirstName().isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient name field is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient name field is required");
       }
       if (user.getPatient().getLastName() == null || user.getPatient().getLastName().isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient last name field is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient last name field is required");
       }
       if (user.getPatient().getBirthDate() == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient birth date field is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient birth date field is required");
       }
 
       Patient patient = patientService.create(user.getPatient());
@@ -82,17 +82,17 @@ public class UserController {
       user.setPatient(patient);
     } else if (user.getMedic() != null && user.getPatient() == null) {
       if (user.getMedic().getFirstName() == null || user.getMedic().getFirstName().isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medic name field is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic name field is required");
       }
       if (user.getMedic().getLastName() == null || user.getMedic().getLastName().isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medic last name field is required");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic last name field is required");
       }
 
       Medic medic = medicService.create(user.getMedic());
       medic.setUser(user);
       user.setMedic(medic);
     } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Either patient or medic must be provided");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Either patient or medic must be provided");
     }
 
     User created = userService.create(user);

@@ -77,19 +77,9 @@ export async function getAllPatientReports(
 
 export async function createReport(
   token: string | undefined,
-  report: Omit<Report, 'id' | 'patient'>,
+  report: Partial<Omit<Report, 'id' | 'patient'>>,
   userId: number | undefined
-): Promise<Report | null> {
-  if (!token) {
-    console.error('No token provided for creating report');
-    return null;
-  }
-
-  if (userId == undefined) {
-    console.error('No userId provided for creating report');
-    return null;
-  }
-
+): Promise<Response> {
   return fetch(PUBLIC_API_BASE + '/reports/user/' + userId, {
     method: 'POST',
     headers: {
@@ -98,36 +88,13 @@ export async function createReport(
     },
     body: JSON.stringify(report)
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to create report: ' + response.status);
-      }
-      return response.json();
-    })
-    .then((data: Report) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error('Error creating report:', error);
-      return null;
-    });
 }
 
 export async function editReport(
   token: string | undefined,
-  report: Omit<Report, 'patient'>,
+  report: Partial<Omit<Report, 'patient'>>,
   userId: number | undefined
-): Promise<Report | null> {
-  if (!token) {
-    console.error('No token provided for editing report');
-    return null;
-  }
-
-  if (userId == undefined) {
-    console.error('No userId provided for editing report');
-    return null;
-  }
-
+): Promise<Response> {
   return fetch(PUBLIC_API_BASE + '/reports/user/' + userId + "/" + report.id, {
     method: 'PUT',
     headers: {
@@ -136,19 +103,6 @@ export async function editReport(
     },
     body: JSON.stringify(report)
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to edit report: ' + response.status);
-      }
-      return response.json();
-    })
-    .then((data: Report) => {
-      return data;
-    })
-    .catch((error) => {
-      console.error('Error editing report:', error);
-      return null;
-    });
 }
 
 export async function deleteReport(

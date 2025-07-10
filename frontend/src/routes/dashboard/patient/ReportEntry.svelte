@@ -14,13 +14,17 @@
 	import CalendarBlank from 'phosphor-svelte/lib/CalendarBlank';
 	import CaretLeft from 'phosphor-svelte/lib/CaretLeft';
 	import CaretRight from 'phosphor-svelte/lib/CaretRight';
+	import Asterisk from 'phosphor-svelte/lib/Asterisk';
+	import { enhance } from '$app/forms';
 
-	let { report, role }: { report: Report; role: Role } = $props();
+	let { report, role, form }: { report: Report; role: Role; form?: { error: string } } = $props();
 
 	let dateStr = report.dateTime.split('T')[0];
 	let date: CalendarDate = $state(parseDate(dateStr));
 	let time: CalendarDateTime = $state(parseDateTime(report.dateTime));
 	let beforeMeal: boolean = $state(report.beforeMeal);
+
+	let disabled = $state(report.symptoms === '' && report.notes === '');
 </script>
 
 <div
@@ -78,6 +82,11 @@
 
 						<Dialog.Root>
 							<Dialog.Trigger
+								onclick={() => {
+									if (form) {
+										form.error = '';
+									}
+								}}
 								class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
 							>
 								<PencilSimple class="text-foreground size-[18px]" />
@@ -95,10 +104,10 @@
 										Edit report
 									</Dialog.Title>
 									<Separator.Root class="bg-muted -mx-5 mt-5 mb-6 block h-px" />
-									<!-- <Dialog.Description class="text-foreground-alt mb-6 text-sm">
-Are you sure you want to delete this report? This action cannot be undone.
-</Dialog.Description> -->
-									<form action="?/editReport" method="POST">
+									<Dialog.Description class="text-destructive font-bold">
+										{form?.error}
+									</Dialog.Description>
+									<form action="?/editReport" method="POST" use:enhance>
 										<input type="hidden" name="reportId" value={report.id} />
 										<div class="flex flex-col items-start gap-1 pt-7 pb-11">
 											<div class="flex w-full flex-row items-start gap-2">
@@ -109,9 +118,13 @@ Are you sure you want to delete this report? This action cannot be undone.
 													bind:value={date}
 												>
 													<div class="flex w-full max-w-[232px] flex-col gap-1.5">
-														<DatePicker.Label class="block text-sm font-medium select-none"
-															>Date</DatePicker.Label
-														>
+														<DatePicker.Label
+															class="relative block w-fit text-sm font-medium select-none"
+															>Date
+															<Asterisk
+																class="text-destructive absolute -top-0 -right-3 size-[13px]"
+															/>
+														</DatePicker.Label>
 														<input type="hidden" name="date" value={date.toString()} />
 														<DatePicker.Input
 															class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover flex w-full max-w-[232px] items-center border px-2 py-3 text-sm tracking-[0.01em] transition-all select-none"
@@ -210,9 +223,13 @@ Are you sure you want to delete this report? This action cannot be undone.
 												</DatePicker.Root>
 												<TimeField.Root bind:value={time} hideTimeZone={true}>
 													<div class="flex w-full max-w-[280px] flex-col gap-1.5">
-														<TimeField.Label class="block text-sm font-medium select-none"
-															>Time</TimeField.Label
-														>
+														<TimeField.Label
+															class="relative block w-fit text-sm font-medium select-none"
+															>Time
+															<Asterisk
+																class="text-destructive absolute -top-0 -right-3 size-[13px]"
+															/>
+														</TimeField.Label>
 														<TimeField.Input
 															name="time"
 															class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover data-invalid:border-destructive flex w-full items-center border px-2 py-3 text-sm tracking-[0.01em] transition-all select-none "
@@ -254,7 +271,10 @@ Are you sure you want to delete this report? This action cannot be undone.
 												<Label.Root class="text-sm font-medium">Before meal</Label.Root>
 											</div>
 
-											<Label.Root class="text-sm font-medium">Glycemia level</Label.Root>
+											<Label.Root class="relative text-sm font-medium"
+												>Glycemia level
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<input
 													id="glycemiaLevel"
@@ -290,7 +310,10 @@ Are you sure you want to delete this report? This action cannot be undone.
 												></textarea>
 											</div>
 
-											<Label.Root class="text-sm font-medium">Medicine</Label.Root>
+											<Label.Root class="relative text-sm font-medium"
+												>Medicine
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<input
 													id="medicine"
@@ -301,9 +324,10 @@ Are you sure you want to delete this report? This action cannot be undone.
 												/>
 											</div>
 
-											<Label.Root for="amount" class="text-sm font-medium"
-												>Medicine amount</Label.Root
-											>
+											<Label.Root for="amount" class="relative text-sm font-medium"
+												>Medicine amount
+												<Asterisk class="text-destructive absolute -top-0 -right-3 size-[13px]" />
+											</Label.Root>
 											<div class="relative w-full">
 												<input
 													id="amount"
@@ -337,6 +361,7 @@ Are you sure you want to delete this report? This action cannot be undone.
 					</div>
 				{/if}
 				<Accordion.Trigger
+					{disabled}
 					class="flex w-full flex-1 items-center justify-between transition-all select-none [&[data-state=open]>span>svg]:rotate-180"
 				>
 					<div class="flex w-full flex-row items-center gap-x-8">
@@ -371,11 +396,13 @@ Are you sure you want to delete this report? This action cannot be undone.
 						</div>
 					</div>
 
-					<span
-						class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
-					>
-						<CaretDown class="size-[18px] transition-transform duration-200" />
-					</span>
+					{#if !disabled}
+						<span
+							class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
+						>
+							<CaretDown class="size-[18px] transition-transform duration-200" />
+						</span>
+					{/if}
 				</Accordion.Trigger>
 			</Accordion.Header>
 			<Accordion.Content

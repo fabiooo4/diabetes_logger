@@ -31,41 +31,31 @@ export const actions: Actions = {
     // Merge date and time into a single dateTime string
     const date = form.get('date') as string;
     const time = form.get('time') as string;
-    if (typeof date !== 'string' || typeof time !== 'string') {
-      return fail(400, { error: 'Invalid date or time format' });
+
+    let dateTime: string | undefined;
+    if (date == null || time == null || date === '' || time === '') {
+      dateTime = undefined;
+    } else {
+      dateTime = parseDateTime(date + 'T' + time).toString();
     }
 
-    const dateTime = parseDateTime(date + 'T' + time).toString();
-
-    if (dateTime == null) {
-      return fail(400, { error: 'Invalid date or time format' });
-    }
-
-    const report: Omit<Report, 'id' | 'patient'> = {
-      glycemiaLevel: parseFloat(form.get('glycemiaLevel') as string),
+    const report: Partial<Omit<Report, 'id' | 'patient'>> = {
+      glycemiaLevel: parseFloat(form.get('glycemiaLevel') as string)
+        ? parseFloat(form.get('glycemiaLevel') as string)
+        : undefined,
       beforeMeal: form.get('beforeMeal') === 'true',
       dateTime: dateTime,
       symptoms: form.get('symptoms') as string,
       notes: form.get('notes') as string,
       medicine: form.get('medicine') as string,
       amount: parseFloat(form.get('amount') as string)
+        ? parseFloat(form.get('amount') as string)
+        : undefined
     };
 
-    if (
-      report.dateTime == null ||
-      isNaN(report.glycemiaLevel) ||
-      isNaN(report.amount) ||
-      report.medicine == null ||
-      report.beforeMeal == null
-    ) {
-      return fail(400, { error: 'Invalid form data' });
-    }
-
     const res = await createReport(token, report, locals.user?.id);
-
-    if (res == null) {
-      console.error('Failed to create report');
-      return fail(500, { error: 'Failed to create report' });
+    if (!res.ok) {
+      return fail(res.status, { error: await res.text() });
     }
   },
 
@@ -81,43 +71,32 @@ export const actions: Actions = {
     // Merge date and time into a single dateTime string
     const date = form.get('date') as string;
     const time = form.get('time') as string;
-    if (typeof date !== 'string' || typeof time !== 'string') {
-      return fail(400, { error: 'Invalid date or time format' });
+
+    let dateTime: string | undefined;
+    if (date == null || time == null || date === '' || time === '') {
+      dateTime = undefined;
+    } else {
+      dateTime = parseDateTime(date + 'T' + time).toString();
     }
 
-    const dateTime = parseDateTime(date + 'T' + time).toString();
-
-    if (dateTime == null) {
-      return fail(400, { error: 'Invalid date or time format' });
-    }
-
-    const report: Omit<Report, 'patient'> = {
+    const report: Partial<Omit<Report, 'patient'>> = {
       id: parseInt(form.get('reportId') as string),
-      glycemiaLevel: parseFloat(form.get('glycemiaLevel') as string),
+      glycemiaLevel: parseFloat(form.get('glycemiaLevel') as string)
+        ? parseFloat(form.get('glycemiaLevel') as string)
+        : undefined,
       beforeMeal: form.get('beforeMeal') === 'true',
       dateTime: dateTime,
       symptoms: form.get('symptoms') as string,
       notes: form.get('notes') as string,
       medicine: form.get('medicine') as string,
       amount: parseFloat(form.get('amount') as string)
+        ? parseFloat(form.get('amount') as string)
+        : undefined
     };
 
-    if (
-      isNaN(report.id) ||
-      report.dateTime == null ||
-      isNaN(report.glycemiaLevel) ||
-      isNaN(report.amount) ||
-      report.medicine == null ||
-      report.beforeMeal == null
-    ) {
-      return fail(400, { error: 'Invalid form data' });
-    }
-
     const res = await editReport(token, report, locals.user?.id);
-
-    if (res == null) {
-      console.error('Failed to create report');
-      return fail(500, { error: 'Failed to edit report' });
+    if (!res.ok) {
+      return fail(res.status, { error: await res.text() });
     }
   },
 

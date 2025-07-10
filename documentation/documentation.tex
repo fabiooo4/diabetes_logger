@@ -513,16 +513,18 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
   \begin{itemize}
     \item UsersController: 
     \begin{itemize}
+      \item \textbf{POST /login}
+      \item \textbf{POST /register}
       \item \textbf{GET+PATCH /users/\{loggedId\}}
     \end{itemize}
     \item ReportsController: \begin{itemize}
       \item \textbf{GET+POST+PUT+DELETE /reports/user/\{loggedId\}/\{id\}}
-      \item \textbf{GET /reports/user/\{loggedId\}}
+      \item \textbf{GET+POST /reports/user/\{loggedId\}}
     \end{itemize}
     \item NotificationsController: 
     \begin{itemize}
-      \item \textbf{GET+DELETE+PATCH /notifications/user/\{userId\}/\{loggedId\}}
-      \item \textbf{GET+PATCH /notifications/user/\{userId\}}
+      \item \textbf{GET+DELETE+PATCH /notifications/user/\{loggedId\}/\{id\}}
+      \item \textbf{GET+PATCH /notifications/user/\{loggedId\}}
     \end{itemize}
   \end{itemize}
 
@@ -530,23 +532,25 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
   \begin{itemize}
     \item UsersController:
     \begin{itemize}
+      \item \textbf{POST /login}
+      \item \textbf{POST /register}
       \item \textbf{GET+PATCH /users/\{loggedId\}} 
     \end{itemize}
     \item ReportsController:
     \begin{itemize}
-      \item \textbf{GET /reports/\{anyUserId\}}
-      \item \textbf{GET /reports/patient/\{anyPatientId\}}
       \item \textbf{GET /reports}
+      \item \textbf{GET /reports/\{id\}}
+      \item \textbf{GET /reports/patient/\{anyPatientId\}}
     \end{itemize}
     \item NotificationsController:
     \begin{itemize}
-      \item \textbf{GET+DELETE+PATCH /notifications/user/\{userId\}/\{loggedId\}}
-      \item \textbf{GET+PATCH /notifications/user/\{userId\}}
+      \item \textbf{GET+DELETE+PATCH /notifications/user/\{loggedId\}/\{id\}}
+      \item \textbf{GET+PATCH /notifications/user/\{loggedId\}}
     \end{itemize}
     \item TherapiesController:
     \begin{itemize}
       \item \textbf{GET+POST /therapies}
-      \item \textbf{GET+PUT /therapies/\{userId\}}
+      \item \textbf{GET+PUT /therapies/\{id\}}
     \end{itemize}
     \item PatientsController:
     \begin{itemize}
@@ -556,7 +560,9 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
     \end{itemize}
     \item MedicChangeLogController:
     \begin{itemize}
+      \item \textbf{GET /medicChangeLog/\{id\}}
       \item \textbf{GET /medicChangeLog/patient/\{patientId\}}
+      \item \textbf{GET /medicChangeLog/medic/\{medicId\}}
     \end{itemize}
   \end{itemize}
 \end{itemize}

@@ -104,8 +104,6 @@ public class SecurityConfiguration {
                   .requestMatchers(HttpMethod.GET, "/medicChangeLog/{id}", "/medicChangeLog/medic/{medicId}",
                           "/medicChangeLog/patient/{patientId}")
                   .hasAnyAuthority("MEDIC", "ADMIN")
-                  .requestMatchers(HttpMethod.POST, "/medicchangelog")
-                  .hasAnyAuthority("MEDIC", "ADMIN")
                   // MedicChangeLog --------------------------------------
               ;
 

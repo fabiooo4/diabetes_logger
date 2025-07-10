@@ -69,27 +69,27 @@ public class ReportController {
   @PostMapping("user/{userId}")
   public ResponseEntity<?> createUserReport(@RequestBody Report report, @PathVariable Integer userId,
       UriComponentsBuilder uriBuilder) {
+    if (report.getDateTime() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date and Time are required");
+    }
+
+    if (report.getGlycemiaLevel() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Glycemia Level is required");
+    }
+
+    if (report.getBeforeMeal() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Before Meal is required");
+    }
+
+    if (report.getMedicine() == null || report.getMedicine().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine is required");
+    }
+
+    if (report.getAmount() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Amount is required");
+    }
+
     Report created = reportService.createOnUser(report, userId).orElseThrow();
-
-    if(created.getGlycemiaLevel() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Glycemia Level is required");
-    }
-
-    if(created.getBeforeMeal() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Before Meal is required");
-    }
-
-    if(created.getDateTime() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DateTime is required");
-    }
-
-    if(created.getMedicine() == null || report.getMedicine().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
-    }
-
-    if(created.getAmount() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required");
-    }
 
     var uri = uriBuilder.path("/reports/user/{userId}/{id}").buildAndExpand(userId, created.getId()).toUri();
     return ResponseEntity.created(uri).body(created);
@@ -97,27 +97,27 @@ public class ReportController {
 
   @PostMapping
   public ResponseEntity<?> createReport(@RequestBody Report report, UriComponentsBuilder uriBuilder) {
+    if (report.getDateTime() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date and Time are required");
+    }
+
+    if (report.getGlycemiaLevel() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Glycemia Level is required");
+    }
+
+    if (report.getBeforeMeal() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Before Meal is required");
+    }
+
+    if (report.getMedicine() == null || report.getMedicine().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine is required");
+    }
+
+    if (report.getAmount() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Amount is required");
+    }
+
     Report created = reportService.create(report);
-
-    if(report.getGlycemiaLevel() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Glycemia Level is required");
-    }
-
-    if(report.getBeforeMeal() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Before Meal is required");
-    }
-
-    if(report.getDateTime() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DateTime is required");
-    }
-
-    if(report.getMedicine() == null || report.getMedicine().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
-    }
-
-    if(report.getAmount() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required");
-    }
 
     var uri = uriBuilder.path("/reports/{id}").buildAndExpand(created.getId()).toUri();
     return ResponseEntity.created(uri).body(created);
@@ -125,25 +125,24 @@ public class ReportController {
 
   @PutMapping("user/{userId}/{id}")
   public ResponseEntity<?> updateUserReport(@RequestBody Report report, @PathVariable Integer id) {
-
-    if(report.getGlycemiaLevel() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Glycemia Level is required");
+    if (report.getDateTime() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date and Time are required");
     }
 
-    if(report.getBeforeMeal() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Before Meal is required");
+    if (report.getGlycemiaLevel() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Glycemia Level is required");
     }
 
-    if(report.getDateTime() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DateTime is required");
+    if (report.getBeforeMeal() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Before Meal is required");
     }
 
-    if(report.getMedicine() == null || report.getMedicine().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+    if (report.getMedicine() == null || report.getMedicine().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine is required");
     }
 
-    if(report.getAmount() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required");
+    if (report.getAmount() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Amount is required");
     }
 
     return ResponseEntity.ok(reportService.updateOnUser(id, report));
@@ -152,24 +151,24 @@ public class ReportController {
   @PutMapping("/{id}")
   public ResponseEntity<?> updateReport(@RequestBody Report report, @PathVariable Integer id) {
 
-    if(report.getGlycemiaLevel() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Glycemia Level is required");
+    if (report.getDateTime() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date and Time are required");
     }
 
-    if(report.getBeforeMeal() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Before Meal is required");
+    if (report.getGlycemiaLevel() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Glycemia Level is required");
     }
 
-    if(report.getDateTime() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("DateTime is required");
+    if (report.getBeforeMeal() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Before Meal is required");
     }
 
-    if(report.getMedicine() == null || report.getMedicine().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+    if (report.getMedicine() == null || report.getMedicine().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medicine is required");
     }
 
-    if(report.getAmount() == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required");
+    if (report.getAmount() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Amount is required");
     }
 
     return ResponseEntity.ok(reportService.update(id, report));

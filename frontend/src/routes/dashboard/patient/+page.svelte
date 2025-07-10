@@ -5,17 +5,19 @@
 	import TherapyCard from './TherapyCard.svelte';
 
 	let {
-		data
+		data,
+		form
 	}: {
 		data: {
 			user: User;
 			reports: Promise<Report[]>;
 			notifications: Promise<Notification[]>;
 		};
+		form?: { error: string };
 	} = $props();
 </script>
 
-<main class="flex h-full w-full flex-col items-center p-4 gap-8">
+<main class="flex h-full w-full flex-col items-center gap-8 p-4">
 	<div class="flex w-full flex-col">
 		<div
 			class="bg-background-alt shadow-card border-muted grid w-full grid-cols-2 gap-8 rounded-xl border p-8"
@@ -26,12 +28,9 @@
 		</div>
 	</div>
 
-	<div class="flex w-full h-full flex-col">
-		<div
-			class="bg-background-alt shadow-card border-muted w-full gap-8 rounded-xl border p-8"
-		>
-      <PatientReports reports={data.reports} />
+	<div class="flex h-full w-full flex-col">
+		<div class="bg-background-alt shadow-card border-muted w-full gap-8 rounded-xl border p-8">
+			<PatientReports reports={data.reports} {form}/>
 		</div>
 	</div>
-
 </main>

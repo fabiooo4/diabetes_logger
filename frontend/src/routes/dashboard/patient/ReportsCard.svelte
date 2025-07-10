@@ -3,7 +3,11 @@
 	import { ScrollArea } from 'bits-ui';
 	import ReportEntry from './ReportEntry.svelte';
 
-	let { reports, role }: { reports: Promise<Report[]>, role: Role } = $props();
+	let {
+		reports,
+		role,
+		form
+	}: { reports: Promise<Report[]>; role: Role; form?: { error: string } } = $props();
 </script>
 
 <ScrollArea.Root
@@ -18,7 +22,7 @@
 					<p class="text-muted-foreground">No reports available.</p>
 				{:else}
 					{#each reports.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()) as report}
-						<ReportEntry {report} {role} />
+						<ReportEntry {report} {role} {form} />
 					{/each}
 				{/if}
 			</div>
