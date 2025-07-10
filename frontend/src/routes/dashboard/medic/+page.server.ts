@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { editPatient, getAllPatients } from '$lib/api/patients';
 import { fail } from '@sveltejs/kit';
-import type { Medic, Patient } from '$lib/types';
+import type { Patient } from '$lib/types';
 
 export const load: PageServerLoad = ({ locals, cookies }) => {
   let token = cookies.get('token');
@@ -33,9 +33,9 @@ export const actions: Actions = {
     > = {
       id: parseInt(form.get('patientId') as string),
 
-      riskFactor: form.get('riskFactor') as string,
-      previousPatologies: form.get('previousPatologies') as string,
-      medicNotes: form.get('medicNotes') as string,
+      riskFactor: form.get('riskFactor') as string == '' ? undefined : form.get('riskFactor') as string,
+      previousPatologies: form.get('previousPatologies') as string == '' ? undefined : form.get('previousPatologies') as string,
+      medicNotes: form.get('medicNotes') as string == '' ? undefined : form.get('medicNotes') as string,
       referralMedic: !isNaN(referralMedicId)
         ? {
           id: referralMedicId

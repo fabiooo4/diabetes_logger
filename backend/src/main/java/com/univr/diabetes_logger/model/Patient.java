@@ -1,6 +1,7 @@
 package com.univr.diabetes_logger.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -198,38 +199,26 @@ public class Patient {
     String ret = "Modified: ";
     String notModified = ret;
 
-    if (patient.getFirstName() != null && !patient.getFirstName().equals(this.firstName)) {
-      ret += "first name, ";
-    }
-
-    if (patient.getLastName() != null && !patient.getLastName().equals(this.lastName)) {
-      ret += "last name, ";
-    }
-
-    if (patient.getBirthDate() != null && !patient.getBirthDate().equals(this.birthDate)) {
-      ret += "Birthdate, ";
-    }
-
-    if (patient.getReferralMedic() != null && !patient.getReferralMedic().equals(this.getReferralMedic())) {
+    if ((patient.getReferralMedic() == null && this.getReferralMedic() != null)
+        || (this.getReferralMedic() == null && patient.getReferralMedic() != null)
+        || (patient.getReferralMedic() != null && this.getReferralMedic() != null
+            && !Objects.equals(patient.getReferralMedic().getId(), this.getReferralMedic().getId()))) {
       ret += "referral medic, ";
     }
 
-    if (patient.getTherapy() != null && !patient.getTherapy().equals(this.therapy)) {
+    if (!Objects.equals(patient.getTherapy(), this.getTherapy())) {
       ret += "therapy, ";
     }
 
-    if (patient.getRiskFactor() != null && !patient.getRiskFactor().equals(this.riskFactor)) {
+    if (!Objects.equals(patient.getRiskFactor(), this.getRiskFactor())) {
       ret += "risk factor, ";
     }
-    System.out.println(patient);
 
-    if (patient.getPreviousPatologies() != null && !patient.getPreviousPatologies().isEmpty()
-        && !patient.getPreviousPatologies().equals(this.previousPatologies)) {
+    if (!Objects.equals(patient.getPreviousPatologies(), this.getPreviousPatologies())) {
       ret += "previous patologies, ";
     }
 
-    if (patient.getMedicNotes() != null && !patient.getMedicNotes().isEmpty()
-        && !patient.getMedicNotes().equals(this.medicNotes)) {
+    if (!Objects.equals(patient.getMedicNotes(), this.getMedicNotes())) {
       ret += "medic notes, ";
     }
 

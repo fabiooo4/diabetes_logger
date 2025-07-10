@@ -18,10 +18,6 @@
 	let referralMedic: Medic | null = $state(patient.referralMedic ? patient.referralMedic : null);
 	let referralMedicId: number | null = $derived(referralMedic ? referralMedic.id : null);
 
-	$effect(() => {
-		$inspect(referralMedic, referralMedicId);
-	});
-
 	async function getReports() {
 		fetch('/dashboard/medic', {
 			method: 'POST',
@@ -109,7 +105,7 @@
 											<input
 												id="riskFactor"
 												class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
-												type="number"
+												type="text"
 												placeholder="Enter the risk factor"
 												value={patient.riskFactor}
 												name="riskFactor"
