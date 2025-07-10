@@ -10,7 +10,7 @@
 		<div
 			class="bg-background-alt shadow-card border-muted w-full gap-8 rounded-xl border p-8"
 		>
-      <PatientsCard patients={data.patients} />
+      <PatientsCard patients={data.patients} user={data.user} />
 		</div>
 	</div>
 </main>

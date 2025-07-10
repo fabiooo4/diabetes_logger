@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Patient } from '$lib/types';
+	import type { Patient, User } from '$lib/types';
 	import { ScrollArea } from 'bits-ui';
 	import PatientEntry from './PatientEntry.svelte';
 
-	let { patients }: { patients: Promise<Patient[]> } = $props();
+	let { patients, user }: { patients: Promise<Patient[]>, user: User } = $props();
 </script>
 
 <div class="flex flex-col gap-y-8">
@@ -23,7 +23,7 @@
             <p class="text-muted-foreground">No reports available.</p>
           {:else}
             {#each patients as patient}
-              <PatientEntry {patient} />
+              <PatientEntry {patient} {user} />
             {/each}
           {/if}
         </div>

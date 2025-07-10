@@ -508,6 +508,7 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
   \begin{itemize}
     \item \textbf{GET+POST+PUT+DELETE/**}
   \end{itemize}
+
   \item Pazienti:
   \begin{itemize}
     \item UsersController: 
@@ -524,6 +525,7 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
       \item \textbf{GET+PATCH /notifications/user/\{userId\}}
     \end{itemize}
   \end{itemize}
+
   \item Medici:
   \begin{itemize}
     \item UsersController:
@@ -549,7 +551,8 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
     \item PatientsController:
     \begin{itemize}
       \item \textbf{GET /patients}
-      \item \textbf{GET+PATCH /patients/\{userId\}}
+      \item \textbf{GET /patients/\{anyPatientId\}}
+      \item \textbf{PUT /patients/medic/\{medicId\}/\{anyPatientId\}}
     \end{itemize}
     \item MedicChangeLogController:
     \begin{itemize}

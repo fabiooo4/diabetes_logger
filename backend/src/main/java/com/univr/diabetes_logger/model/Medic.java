@@ -68,6 +68,9 @@ public class Medic {
   }
 
   public String getEmail() {
+    if (this.getUser() == null) {
+      return null;
+    }
     return this.getUser().getEmail();
   }
 
