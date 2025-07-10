@@ -3,6 +3,9 @@ package com.univr.diabetes_logger.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
@@ -42,12 +45,14 @@ public class User {
   @Column(name = "verified")
   private boolean verified;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, optional = true, orphanRemoval = true)
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private Patient patient;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, optional = true, orphanRemoval = true)
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private Medic medic;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -64,8 +69,8 @@ public class User {
 
   public void updatePatient(Patient patient) {
     if (this.patient == null && this.medic == null) {
-      this.patient = patient;
-    } else {
+      setPatient(patient);
+    } else if (this.patient != null && this.medic == null) {
       String firstName = patient.getFirstName();
       if (firstName != null && !firstName.isEmpty() && !firstName.equals(this.patient.getFirstName())) {
         this.patient.setFirstName(firstName);
@@ -93,8 +98,8 @@ public class User {
 
   public void updateMedic(Medic medic) {
     if (this.medic == null && this.patient == null) {
-      this.medic = medic;
-    } else {
+      setMedic(medic);
+    } else if (this.medic != null && this.patient == null) {
       String firstName = medic.getFirstName();
       if (firstName != null && !firstName.isEmpty() && !firstName.equals(this.medic.getFirstName())) {
         this.medic.setFirstName(firstName);

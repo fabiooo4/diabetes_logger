@@ -1,6 +1,7 @@
 package com.univr.diabetes_logger.service;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -27,6 +28,11 @@ public class UserService implements CrudService<User> {
 
   @Autowired
   private AuthenticationManager authManager;
+
+  @Autowired
+  private PatientService patientService;
+  @Autowired
+  private MedicService medicService;
 
   @Autowired
   private JwtService jwtService;
@@ -93,10 +99,12 @@ public class UserService implements CrudService<User> {
 
     Patient patient = user.getPatient();
     Medic medic = user.getMedic();
-    if (patient != null && existingUser.getPatient() == null) {
+    if (patient != null && existingUser.getPatient() != null && medic == null) {
       existingUser.updatePatient(patient);
-    } else if (medic != null && existingUser.getMedic() == null) {
+    } else if (medic != null && existingUser.getMedic() != null && patient == null) {
       existingUser.updateMedic(medic);
+    } else if (patient != null && medic != null && existingUser.getRole() != Role.ADMIN) {
+      throw new IllegalArgumentException("Only one of patient or medic can be updated");
     }
 
     return repository.save(existingUser);

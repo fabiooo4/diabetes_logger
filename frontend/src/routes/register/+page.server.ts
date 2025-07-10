@@ -20,7 +20,8 @@ export const actions: Actions = {
 		} else if (user.role == 'MEDIC') {
 			user.medic = {
 				firstName: form.get('medicFirstName') as string,
-				lastName: form.get('medicLastName') as string
+				lastName: form.get('medicLastName') as string,
+        email: user.email
 			};
 		}
 

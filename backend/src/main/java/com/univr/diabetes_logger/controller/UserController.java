@@ -103,6 +103,7 @@ public class UserController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Either patient or medic must be provided");
     }
 
+    user.setVerified(false);
     User created = userService.create(user);
 
     var uri = uriBuilder.path("/users/{id}").buildAndExpand(created.getId()).toUri();
@@ -138,13 +139,90 @@ public class UserController {
   }
 
   @PutMapping("/users/{id}")
-  public User updateUser(@PathVariable Integer id, @RequestBody User user) {
-    return userService.update(id, user);
+  public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User user) {
+    if (user.getEmail() == null || user.getEmail().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email field is required");
+    }
+    if (user.getRole() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Role field is required");
+    }
+    if (user.getRole() != User.Role.ADMIN && user.getRole() != User.Role.MEDIC && user.getRole() != User.Role.PATIENT) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid role");
+    }
+    if (user.getRole() == User.Role.PATIENT) {
+      if (user.getPatient() == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All patient fields are required for PATIENT role");
+      }
+      if (user.getPatient().getFirstName() == null || user.getPatient().getFirstName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient name field is required");
+      }
+      if (user.getPatient().getLastName() == null || user.getPatient().getLastName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient last name field is required");
+      }
+      if (user.getPatient().getBirthDate() == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient birth date field is required");
+      }
+    } else if (user.getRole() == User.Role.MEDIC) {
+      if (user.getMedic() == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All medic fields are required for MEDIC role");
+      }
+      if (user.getMedic().getFirstName() == null || user.getMedic().getFirstName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic name field is required");
+      }
+      if (user.getMedic().getLastName() == null || user.getMedic().getLastName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic last name field is required");
+      }
+    }
+
+    try {
+      return ResponseEntity.ok(userService.update(id, user));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
   }
 
   @PatchMapping("/users/{id}")
-  public User patchUser(@PathVariable Integer id, @RequestBody User user) {
-    return userService.patch(id, user);
+  public ResponseEntity<?> patchUser(@PathVariable Integer id, @RequestBody User user) {
+    if (user.getEmail() == null || user.getEmail().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email field is required");
+    }
+    if (user.getRole() == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Role field is required");
+    }
+    if (user.getRole() != User.Role.ADMIN && user.getRole() != User.Role.MEDIC && user.getRole() != User.Role.PATIENT) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid role");
+    }
+    if (user.getRole() == User.Role.PATIENT) {
+      if (user.getPatient() == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All patient fields are required for PATIENT role");
+      }
+      if (user.getPatient().getFirstName() == null || user.getPatient().getFirstName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient name field is required");
+      }
+      if (user.getPatient().getLastName() == null || user.getPatient().getLastName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient last name field is required");
+      }
+      if (user.getPatient().getBirthDate() == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Patient birth date field is required");
+      }
+    } else if (user.getRole() == User.Role.MEDIC) {
+      if (user.getMedic() == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All medic fields are required for MEDIC role");
+      }
+      if (user.getMedic().getFirstName() == null || user.getMedic().getFirstName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic name field is required");
+      }
+      if (user.getMedic().getLastName() == null || user.getMedic().getLastName().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic last name field is required");
+      }
+    }
+
+    try {
+      return ResponseEntity.ok(userService.patch(id, user));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
   }
 
   @DeleteMapping("/users/{id}")

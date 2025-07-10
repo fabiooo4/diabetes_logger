@@ -3,7 +3,7 @@
 	import { Separator } from 'bits-ui';
 	import EditProfile from './EditProfile.svelte';
 
-	let { data }: { data: { user: User } } = $props();
+	let { data, form }: { data: { user: User }; form?: {error: string} } = $props();
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center">
@@ -58,6 +58,6 @@
 			class="bg-border my-4 shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[1px]"
 		/>
 
-		<EditProfile user={data.user} />
+		<EditProfile user={data.user} {form} />
 	</div>
 </div>
