@@ -1,5 +1,6 @@
 package com.univr.diabetes_logger.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,14 @@ public class UserController {
 
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody User user, UriComponentsBuilder uriBuilder) {
+
+    Iterable<User> users = userService.getAll();
+    for (User u : users) {
+      if(u.getEmail().equals(user.getEmail())) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already registered");
+      }
+    }
+
     if (user.getEmail() == null || user.getEmail().isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email field is required");
     }

@@ -1,8 +1,10 @@
 package com.univr.diabetes_logger.controller;
 
 import com.univr.diabetes_logger.model.Therapy;
+import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.service.TherapyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,8 +38,16 @@ public class TherapyController {
   }
 
   @PostMapping
-  public ResponseEntity<Therapy> createTherapy(@RequestBody Therapy therapy, UriComponentsBuilder uriBuilder) {
+  public ResponseEntity<?> createTherapy(@RequestBody Therapy therapy, UriComponentsBuilder uriBuilder) {
     Therapy created = therapyService.create(therapy);
+
+    Iterable<Therapy> therapies = therapyService.getAll();
+    for (Therapy t : therapies) {
+      if(t.getMedicine().equals(therapy.getMedicine()) && t.getDailyIntake().equals(therapy.getDailyIntake())
+      && t.getDirections().equals(therapy.getDirections()) && t.getAmount().equals(therapy.getAmount())) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Therapy is already registered");
+      }
+    }
 
     var uri = uriBuilder.path("/therapies/{id}").buildAndExpand(created.getId()).toUri();
     return ResponseEntity.created(uri).body(created);

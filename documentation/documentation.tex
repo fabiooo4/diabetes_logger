@@ -515,11 +515,13 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
       \item \textbf{GET+PATCH /users/\{loggedId\}}
     \end{itemize}
     \item ReportsController: \begin{itemize}
-      \item \textbf{GET+POST+PUT+DELETE /reports/\{loggedId\}}
+      \item \textbf{GET+POST+PUT+DELETE /reports/user/\{loggedId\}/\{id\}}
+      \item \textbf{GET /reports/user/\{loggedId\}}
     \end{itemize}
     \item NotificationsController: 
     \begin{itemize}
-      \item \textbf{GET+DELETE /notifications/\{loggedId\}}
+      \item \textbf{GET+DELETE+PATCH /notifications/user/\{userId\}/\{loggedId\}}
+      \item \textbf{GET+PATCH /notifications/user/\{userId\}}
     \end{itemize}
   \end{itemize}
   \item Medici:
@@ -531,22 +533,27 @@ Stiliamo ora un breve elenco degli endpoints a cui possono accedere i vari ruoli
     \item ReportsController:
     \begin{itemize}
       \item \textbf{GET /reports/\{anyUserId\}}
-      \item \textbf{GET /reports/\{anyPatientId\}}
-      \item \textbf{GET /reports/}
+      \item \textbf{GET /reports/patient/\{anyPatientId\}}
+      \item \textbf{GET /reports}
     \end{itemize}
     \item NotificationsController:
     \begin{itemize}
-      \item \textbf{GET+DELETE /notifications/\{loggedId\}}
+      \item \textbf{GET+DELETE+PATCH /notifications/user/\{userId\}/\{loggedId\}}
+      \item \textbf{GET+PATCH /notifications/user/\{userId\}}
     \end{itemize}
     \item TherapiesController:
     \begin{itemize}
-      \item \textbf{GET+POST+PUT+DELETE /therapies}
-      \item \textbf{GET /therapies/\{userId\}}
+      \item \textbf{GET+POST /therapies}
+      \item \textbf{GET+PUT /therapies/\{userId\}}
     \end{itemize}
     \item PatientsController:
     \begin{itemize}
       \item \textbf{GET /patients}
       \item \textbf{GET+PATCH /patients/\{userId\}}
+    \end{itemize}
+    \item MedicChangeLogController:
+    \begin{itemize}
+      \item \textbf{GET /medicChangeLog/patient/\{patientId\}}
     \end{itemize}
   \end{itemize}
 \end{itemize}
