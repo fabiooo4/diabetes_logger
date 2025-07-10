@@ -82,7 +82,7 @@ public class SecurityConfiguration {
                   // Patients --------------------------------------------
                   .requestMatchers(HttpMethod.GET, "/patients", "/patients/{id}")
                   .hasAnyAuthority("MEDIC", "ADMIN")
-                  .requestMatchers(HttpMethod.PUT, "/patients/{id}")
+                  .requestMatchers(HttpMethod.PUT, "/patients/medic/{medicId}/{patientId}")
                   .hasAnyAuthority("MEDIC", "ADMIN")
                   // Patients --------------------------------------------
                   //

@@ -17,7 +17,7 @@ import com.univr.diabetes_logger.service.PatientService;
 @RestController
 @RequestMapping(path = "/patients")
 public class PatientController {
-  @Autowired 
+  @Autowired
   private PatientService patientService;
 
   public PatientController(PatientService patientService) {
@@ -44,21 +44,21 @@ public class PatientController {
   public ResponseEntity<?> createPatient(@RequestBody Patient patient, UriComponentsBuilder uriBuilder) {
     Patient created = patientService.create(patient);
 
-    if(patient.getTherapy() != null) {
+    if (patient.getTherapy() != null) {
 
-      if(patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
+      if (patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
       }
 
-      if(patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
+      if (patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
       }
 
-      if(patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
+      if (patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
       }
 
-      if(patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
+      if (patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
       }
     }
@@ -69,26 +69,52 @@ public class PatientController {
   @PutMapping("/{id}")
   public ResponseEntity<?> updatePatient(@PathVariable Integer id, @RequestBody Patient patient) {
 
-    if(patient.getTherapy() != null) {
+    if (patient.getTherapy() != null) {
 
-      if(patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
+      if (patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
       }
 
-      if(patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
+      if (patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
       }
 
-      if(patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
+      if (patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
       }
 
-      if(patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
+      if (patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
       }
     }
 
     return ResponseEntity.ok(patientService.update(id, patient));
+  }
+
+  @PutMapping("/medic/{medicId}/{patientId}")
+  public ResponseEntity<?> updatePatient(@PathVariable Integer medicId, @PathVariable Integer patientId,
+      @RequestBody Patient patient) {
+
+    if (patient.getTherapy() != null) {
+
+      if (patient.getTherapy().getMedicine() == null || patient.getTherapy().getMedicine().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine is required");
+      }
+
+      if (patient.getTherapy().getAmount() == null || patient.getTherapy().getAmount() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount is required or amount is negative");
+      }
+
+      if (patient.getTherapy().getDailyIntake() == null || patient.getTherapy().getDailyIntake() < 0) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dailyIntake is required or is negative");
+      }
+
+      if (patient.getTherapy().getDirections() == null || patient.getTherapy().getDirections().isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Directions is required");
+      }
+    }
+
+    return ResponseEntity.ok(patientService.medicUpdate(medicId, patientId, patient));
   }
 
   @DeleteMapping("/{id}")

@@ -87,11 +87,6 @@ public class Patient {
       setBirthDate(birthDate);
     }
 
-    Medic referralMedic = patient.getReferralMedic();
-    if (referralMedic != null) {
-      this.referralMedic.updateMedic(referralMedic);
-    }
-
     // The following are nullable
     Therapy therapy = patient.getTherapy();
     if (therapy != null) {
@@ -106,6 +101,7 @@ public class Patient {
       setTherapy(null);
     }
 
+    setReferralMedic(patient.getReferralMedic());
     setPreviousPatologies(patient.getPreviousPatologies());
     setRiskFactor(patient.getRiskFactor());
     setMedicNotes(patient.getMedicNotes());

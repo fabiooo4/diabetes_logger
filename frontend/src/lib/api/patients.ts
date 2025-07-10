@@ -27,9 +27,10 @@ export async function getAllPatients(token: string | undefined): Promise<Patient
 
 export async function editPatient(
   token: string | undefined,
+  medicId: number | undefined,
   patient: Pick<
-    Partial<Patient>,
-    'id' | 'riskFactor' | 'previousPatologies' | 'medicNotes' | 'therapy'
+    NestedPartial<Patient>,
+    'id' | 'riskFactor' | 'previousPatologies' | 'medicNotes' | 'therapy' | 'referralMedic'
   >,
 ): Promise<Report | null> {
   if (!token) {
@@ -37,7 +38,12 @@ export async function editPatient(
     return null;
   }
 
-  return fetch(PUBLIC_API_BASE + '/patients/' + patient.id, {
+  if (!medicId) {
+    console.error('No medic ID provided for editing patient');
+    return null;
+  }
+
+  return fetch(PUBLIC_API_BASE + '/patients/medic/' + medicId + '/' + patient.id, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

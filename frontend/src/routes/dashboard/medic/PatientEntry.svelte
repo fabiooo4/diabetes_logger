@@ -1,19 +1,26 @@
 <script lang="ts">
-	import type { Patient, Report, MedicChangeLog } from '$lib/types';
+	import type { Patient, Report, MedicChangeLog, Medic, User } from '$lib/types';
 	import CaretDown from 'phosphor-svelte/lib/CaretDown';
-	import { Accordion, Checkbox, Dialog, Label, Separator } from 'bits-ui';
+	import { Accordion, Button, Checkbox, Dialog, Label, Separator } from 'bits-ui';
 	import PencilSimple from 'phosphor-svelte/lib/PencilSimple';
 	import Check from 'phosphor-svelte/lib/Check';
 	import Minus from 'phosphor-svelte/lib/Minus';
 	import X from 'phosphor-svelte/lib/X';
 	import ReportsCard from '../patient/ReportsCard.svelte';
+	import Trash from 'phosphor-svelte/lib/Trash';
 
-	let { patient }: { patient: Patient } = $props();
+	let { patient, user }: { patient: Patient; user: User } = $props();
 
 	let hasTherapy = $state(patient.therapy !== null);
 
 	let reports: Promise<Report[]> = $state(Promise.resolve([]));
 	let lastModified: MedicChangeLog | null = $state(null);
+	let referralMedic: Medic | null = $state(patient.referralMedic ? patient.referralMedic : null);
+	let referralMedicId: number | null = $derived(referralMedic ? referralMedic.id : null);
+
+	$effect(() => {
+		$inspect(referralMedic, referralMedicId);
+	});
 
 	async function getReports() {
 		fetch('/dashboard/medic', {
@@ -131,6 +138,42 @@
 												value={patient.medicNotes}
 												name="medicNotes"
 											></textarea>
+										</div>
+
+										<input
+											type="hidden"
+											id="referralMedicId"
+											name="referralMedicId"
+											bind:value={referralMedicId}
+										/>
+										<Label.Root class="text-sm font-medium">Referral medic</Label.Root>
+										<div class="flex w-full flex-row items-center gap-x-2">
+											<div class="relative w-full">
+												<input
+													class="h-input rounded-input border-border-input bg-background text-foreground focus-within:border-border-input-hover focus-within:shadow-date-field-focus hover:border-border-input-hover w-full items-center border px-2 py-3 text-sm tracking-[0.01em] ring-transparent transition-all select-none"
+													disabled
+													placeholder="No referral medic assigned"
+													value={referralMedic
+														? `${referralMedic.firstName} ${referralMedic.lastName}`
+														: ''}
+												/>
+											</div>
+											<button
+												type="button"
+												onclick={() => (referralMedic = null)}
+												class="hover:bg-dark-10 inline-flex size-8 items-center justify-center rounded-[7px] bg-transparent transition-all"
+											>
+												<Trash class="text-destructive size-[18px]" />
+											</button>
+											<Button.Root
+												type="button"
+												onclick={() => (referralMedic = user.medic)}
+												class="rounded-input bg-dark text-background shadow-mini hover:bg-dark/95 h-input
+                          inline-flex w-1/4 items-center justify-center px-[21px] text-[15px]
+                          font-semibold active:scale-[0.98] active:transition-all"
+											>
+												Assign yourself
+											</Button.Root>
 										</div>
 
 										<div class="my-3 flex items-center space-x-3">
@@ -253,13 +296,15 @@
 								{new Date(patient.birthDate).toLocaleDateString()}
 							</p>
 						</div>
-						<div class="flex flex-row gap-x-1">
-							<h1 class="text-foreground-alt">Referral medic:</h1>
-							<p>
-								{patient.referralMedic.firstName}
-								{patient.referralMedic.lastName}
-							</p>
-						</div>
+						{#if patient.referralMedic}
+							<div class="flex flex-row gap-x-1">
+								<h1 class="text-foreground-alt">Referral medic:</h1>
+								<p>
+									{patient.referralMedic.firstName}
+									{patient.referralMedic.lastName}
+								</p>
+							</div>
+						{/if}
 						{#if patient.riskFactor}
 							<div class="flex flex-row gap-x-1">
 								<h1 class="text-foreground-alt gap-x-1">Risk Factor:</h1>
@@ -342,8 +387,9 @@
 
 					{#if lastModified != null}
 						<p class="text-foreground-alt text-xs">
-							Last modified by: {lastModified.medic.firstName} {lastModified.medic.lastName}, at {new Date(lastModified.timestamp).toLocaleString()}
-              {lastModified.action}
+							Last modified by: {lastModified.medic.firstName}
+							{lastModified.medic.lastName}, at {new Date(lastModified.timestamp).toLocaleString()}
+							{lastModified.action}
 						</p>
 					{/if}
 				</div>
