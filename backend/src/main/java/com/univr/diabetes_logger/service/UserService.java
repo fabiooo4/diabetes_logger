@@ -1,7 +1,6 @@
 package com.univr.diabetes_logger.service;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -28,11 +27,6 @@ public class UserService implements CrudService<User> {
 
   @Autowired
   private AuthenticationManager authManager;
-
-  @Autowired
-  private PatientService patientService;
-  @Autowired
-  private MedicService medicService;
 
   @Autowired
   private JwtService jwtService;

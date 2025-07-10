@@ -1,7 +1,6 @@
 package com.univr.diabetes_logger.controller;
 
 import com.univr.diabetes_logger.model.Therapy;
-import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.service.TherapyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
