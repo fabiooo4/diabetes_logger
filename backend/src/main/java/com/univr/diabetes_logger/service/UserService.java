@@ -159,7 +159,7 @@ public class UserService implements CrudService<User> {
         props.put("token", jwtService.generateToken(logged_user.getEmail(), logged_user.getRole()));
       } else {
         // User is not verified, return a message
-        props.put("", "User is not verified, wait for Admin to accept you");
+        props.put("verification", "User is not verified, wait for Admin to accept you");
       }
 
       return props;

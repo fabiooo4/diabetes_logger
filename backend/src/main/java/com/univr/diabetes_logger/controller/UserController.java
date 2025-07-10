@@ -2,6 +2,7 @@ package com.univr.diabetes_logger.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,14 @@ public class UserController {
     }
 
     try {
-      return ResponseEntity.ok(userService.verify(user));
+      Properties props = userService.verify(user);
+
+      if (props.containsKey("verification")) {
+        return ResponseEntity.accepted().body("User is not verified yet. Please wait for verification.");
+      } else {
+        return ResponseEntity.ok(props);
+      }
+
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect username or password");
     }
@@ -54,7 +62,7 @@ public class UserController {
 
     Iterable<User> users = userService.getAll();
     for (User u : users) {
-      if(u.getEmail().equals(user.getEmail())) {
+      if (u.getEmail().equals(user.getEmail())) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already registered");
       }
     }

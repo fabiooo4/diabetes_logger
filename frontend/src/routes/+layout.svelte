@@ -44,7 +44,7 @@
 	<header
 		class="bg-background-alt shadow-card top-0 flex w-full flex-row items-center gap-4 border-b px-4 py-2"
 	>
-		{#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error || page.url.pathname === '/dashboard/profile/changedProfile'}
+		{#if page.url.pathname.startsWith('/login') || page.url.pathname === '/register' || page.error || page.url.pathname === '/dashboard/profile/changedProfile'}
 			<h1 class="text-foreground text-lg font-bold">Diabetes Logger</h1>
 		{:else}
 			<!-- Profile -->
@@ -120,7 +120,7 @@
 									goto('/logout');
 								}}
 							>
-								<div class="flex items-center text-destructive">
+								<div class="text-destructive flex items-center">
 									<SignOut class="text-destructive mr-2 size-5" />
 									Logout
 								</div>
