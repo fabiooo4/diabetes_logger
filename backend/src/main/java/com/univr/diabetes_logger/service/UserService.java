@@ -175,4 +175,15 @@ public class UserService implements CrudService<User> {
 
     throw new RuntimeException("Invalid credentials");
   }
+
+  public User verifyPendingUser(Integer id) {
+    User user = this.getById(id).orElseThrow();
+
+    if (user.isVerified()) {
+      throw new IllegalArgumentException("User is already verified");
+    }
+
+    user.setVerified(true);
+    return repository.save(user);
+  }
 }

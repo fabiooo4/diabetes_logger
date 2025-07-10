@@ -121,10 +121,8 @@ public class UserController {
   }
 
   @PatchMapping("/users/pending/{userId}")
-  public User updatePendingUser(@PathVariable Integer userId) {
-    User existing = userService.getById(userId).orElseThrow();
-    existing.setVerified(true);
-    return userService.update(userId, existing);
+  public User verifyPendingUser(@PathVariable Integer userId) {
+    return userService.verifyPendingUser(userId);
   }
 
   @GetMapping("/users/{id}")

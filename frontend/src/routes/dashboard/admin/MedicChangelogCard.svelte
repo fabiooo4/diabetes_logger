@@ -1,35 +1,29 @@
 <script lang="ts">
-	import type { User } from '$lib/types';
+	import type { MedicChangeLog } from '$lib/types';
 	import { ScrollArea } from 'bits-ui';
-	import UserEntry from './UserEntry.svelte';
-	import AddUserDialog from './AddUserDialog.svelte';
+	import LogEntry from './LogEntry.svelte';
 
-	let {
-		users,
-		currentUser,
-		form
-	}: { users: Promise<User[]>; currentUser: User; form?: { error: string } } = $props();
+	let { changelog }: { changelog: Promise<MedicChangeLog[]> } = $props();
 </script>
 
 <div class="flex flex-col gap-y-8">
 	<div class="flex w-full flex-row items-center justify-between">
-		<h1 class="text-2xl font-bold">Users</h1>
-		<AddUserDialog {form} />
+		<h1 class="text-2xl font-bold h-12">Medic changelog</h1>
 	</div>
 
 	<ScrollArea.Root
 		class="border-muted bg-background shadow-card relative overflow-hidden rounded-[10px] border px-4 py-4"
 	>
 		<ScrollArea.Viewport class="h-full max-h-183 w-full">
-			{#await users}
-				<p>Loading users...</p>
-			{:then users}
+			{#await changelog}
+				<p>Loading changelog...</p>
+			{:then changelog}
 				<div class="flex flex-col gap-y-2">
-					{#if users.filter((user) => user.id !== currentUser.id && user.verified).length === 0}
-						<p class="text-muted-foreground">No users available.</p>
+					{#if changelog.length === 0}
+						<p class="text-muted-foreground">No logs available.</p>
 					{:else}
-						{#each users.filter((user) => user.id !== currentUser.id && user.verified) as user}
-							<UserEntry {user} {form} />
+						{#each changelog as log}
+							<LogEntry {log} />
 						{/each}
 					{/if}
 				</div>

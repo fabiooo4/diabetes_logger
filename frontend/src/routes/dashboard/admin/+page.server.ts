@@ -2,15 +2,19 @@ import type { Actions, PageServerLoad } from './$types';
 import { createUser, deleteUser, editUser, getAllUsers, verifyUser } from '$lib/api/users';
 import { fail } from '@sveltejs/kit';
 import type { Role, User } from '$lib/types';
+import { getAllLogs } from '$lib/api/medicChangeLog';
+import { perEnvironmentPlugin } from 'vite';
 
 export const load: PageServerLoad = ({ locals, cookies }) => {
   let token = cookies.get('token');
 
   let userList = getAllUsers(token);
+  let changelog = getAllLogs(token);
 
   return {
     user: locals.user,
-    userList: userList
+    userList,
+    changelog, 
   };
 };
 
