@@ -82,3 +82,16 @@ export async function editUser(
     body: JSON.stringify(user)
   });
 }
+
+export async function deleteUser(
+  userId: number | undefined,
+  token: string | undefined
+): Promise<Response> {
+  return fetch(PUBLIC_API_BASE + '/users/' + userId, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token
+    }
+  });
+}
