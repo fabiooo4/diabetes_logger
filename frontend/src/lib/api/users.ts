@@ -95,3 +95,30 @@ export async function deleteUser(
     }
   });
 }
+
+export async function getAllPendingUsers(
+  token: string | undefined
+): Promise<User[]> {
+  return fetch(PUBLIC_API_BASE + '/users/pending', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token
+    }
+  })
+    .then((response) => {
+      if (!response.ok) {
+        console.error('Failed to fetch pending users:', response.statusText);
+        throw new Error('Failed to fetch pending users: ' + response.statusText);
+      }
+
+      return response.json();
+    })
+    .then((data: User[]) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error('Error fetching pending users:', error);
+      return [];
+    });
+}

@@ -12,6 +12,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import NotificationsButton from './NotificationsButton.svelte';
+	import VerificationRequestsButton from './dashboard/admin/VerificationRequestsButton.svelte';
 
 	let {
 		children,
@@ -146,6 +147,10 @@
 			{#if page.url.pathname !== '/login' && page.url.pathname !== '/register' && !page.error && data.user != null && data.user.role != 'ADMIN'}
 				<NotificationsButton notifications={data.notifications} userId={data.user?.id} />
 			{/if}
+
+      {#if page.url.pathname.startsWith('/dashboard/admin') && data.user.role === 'ADMIN'}
+        <VerificationRequestsButton />
+      {/if}
 
 			<!-- Dark Mode Toggle -->
 			{#if page.url.pathname === '/login' || page.url.pathname === '/register' || page.error || data.user == null}

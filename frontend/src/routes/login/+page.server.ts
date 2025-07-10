@@ -14,7 +14,7 @@ export const actions: Actions = {
 
     if (res.status === 202) {
       // User is present, but not verified
-      redirect(302, 'verification');
+      redirect(302, '/login/verification');
     }
 
     const { token, userId }: { token: string; userId: number } = await res.json();
