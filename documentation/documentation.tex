@@ -97,6 +97,10 @@ per semplificare il diagramma.
 Una volta che il paziente si è autenticato ed è entrato all'interno della sua area riservata, egli può
 inserire i dati giornalieri relativi alla sua glicemia (prima e dopo ogni pasto); per fare questo
 ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali altre patologie o terapie.
+Diamo per scontato che il paziente possa visualizzare 
+la lista delle sue rilevazioni.
+Abbiamo deciso inoltre di rendere modificabili le rilevazioni in modo che il 
+paziente possa correggere eventuali errori di inserimento.
 
 \subsubsection{Inserimento dei dati giornalieri}
 
@@ -114,7 +118,8 @@ ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali alt
       \end{itemize}
     \item Il paziente conferma l'inserimento dei dati
   \end{enumerate}
-  \textbf{Postcondizioni}: La rilevazione è inserita 
+  \textbf{Postcondizioni}: La rilevazione è inserita e viene inviata una notifica
+  a tutti i medici se i valori della glicemia sono fuori dalla soglia di sicurezza.
 \end{mdframed}
 \noindent
 Andiamo a specificare come viene gestito \textbf{l'inserimento dei dati} del paziente: i dati glicemici sono quelli
@@ -163,7 +168,7 @@ Il medico una volta che ha acceduto alla sua area riservata può visualizzare i 
     \item Il medico conferma le modifiche
     \item Il sistema aggiorna i dati del paziente
   \end{enumerate}
-  \textbf{Postcondizioni}: La modifica è effettuata\\
+  \textbf{Postcondizioni}: La modifica è effettuata ed è salvata nella lista delle tracce\\
   \textbf{Sequenza alternativa 1}: il medico può in qualunque momento decidere di annullare le modifiche
   e ritornare alla lista dei pazienti\\
   \textbf{Postcondizioni}: La modifica non è effettuata
@@ -291,7 +296,7 @@ ragioni di sicurezza.
     \item Il medico accede alla sua area riservata
     \item Il medico accede alla pagina di visualizzazione dei pazienti
     \item Il medico seleziona il paziente di cui vuole visualizzare la traccia
-    \item Il medico accede alla schermata di visualizzazione della traccia dell'utente
+    \item Il medico visualizza la traccia
   \end{enumerate}
   \textbf{Postcondizioni}: nessuna
 \end{mdframed}
@@ -317,6 +322,8 @@ già autenticato e che non ci siano errori di autenticazione.
 \end{figure}
 
 \subsubsection{Attività del paziente}
+Come prima, diamo per scontato che nell'interfaccia di base il paziente 
+possa visualizzare anche la lista delle sue rilevazioni.
 
 \begin{figure}[H]
   \begin{center}
@@ -425,7 +432,6 @@ Seguono i diagrammi UML delle classi del Model e del Controllore, che rappresent
   \end{center}
   \caption{Diagramma UML delle classi del Model con relativi endpoints} 
 \end{figure}
-\noindent
 \begin{figure}[H]
   \begin{center}
     \includegraphics[width=1\textwidth]{uml.pdf}
@@ -434,6 +440,8 @@ Seguono i diagrammi UML delle classi del Model e del Controllore, che rappresent
   \label{fig:controller}
 \end{figure}
 \noindent
+A questo UML abbiamo aggiunto anche gli endpoints delle API
+relativi ad ogni funzione.
 
 \subsection{Comunicazione e gestione delle richieste}
 
@@ -445,7 +453,7 @@ Per gestire la comunicazione tra le componenti del software sono state effettuat
   un interfaccia \textit{CrudService} che contiene i metodi CRUD (Create, Read, Update, Delete) che ogni servizio implementa.
   \item Per la comunicazione tra il Controller e la View, sono stati utilizzati i \textit{REST Controller} di Spring Boot, 
   che permettono di gestire le richieste HTTP e di restituire le risposte in formato JSON.
-  \item Per la comunicazione tra il Model e la View in realtà, non c'è una comunicazione diretta, ma il Controller
+  \item Per la comunicazione tra il Model e la View in realtà, non c'è un collegamento diretto, ma il Controller
   si occupa di prendere i dati dal Model e passarli alla View tramite le richieste HTTP. Questo ci permette 
   di poter decidere quando vogliamo di cambiare modalità di View senza dover modificare il Model.
 \end{itemize}
@@ -462,13 +470,10 @@ Ora andremo a vedere quali sono i pattern implementati nel software e come sono 
   \item È stato utilizzato molteplici volte il \textbf{pattern Observer} grazie alle dipendenze fornite da Spring Boot 
   tramite annotazioni come \textit{@ManyToOne} e \textit{@OneToMany}: quindi quando un oggetto viene modificato,
   tutti gli oggetti che dipendono da esso vengono notificati e aggiornati automaticamente.
-  \item Per gestire l'autenticazione e la sicurezza degli endpoints, è stato utilizzato il \textbf{pattern Security} di Spring Boot,
-  che permette di gestire l'autenticazione e l'autorizzazione degli utenti. Tuttavia, in concomitanza abbiamo dovuto usare 
-  il \textbf{pattern Adapter} per adattare le nostre classi di autenticazione a quelle di Spring Boot e alle nostre esigenze
-  (più approfondimenti sul pattern adapter nella sezione \textit{Autenticazione e autorizzazione}).
-  \item Il \textbf{pattern Factory Method} è stato utilizzato per comporre le classi del Model come le repository
-  e tutto il service layer (che implementano l'interfaccia \textit{CrudService}) e implementano i loro metodi in base 
-  alle esigenze del progetto.
+  \item Abbiamo utilizzato il \textbf{DAO (Data Access Object) Pattern} dove il nostro Data Access Object Interface
+  è il \textit{CrudService} che contiene i metodi CRUD che ogni servizio deve implementare.
+  Mentre invece il \textit{DAO Concrete} sono i nostri servizi che implementano l'interfaccia \textit{CrudService} e contengono la logica di business.
+  I nostri Value Object sono le entità del Model.
   \item A sua volta, all'interno della configurazione per la sicurezza, è stato utilizzato il \textbf{Filter Pattern}
   dove una serie di filtri (autenticazione, autorizzazione, ecc.) processano la richiesta in sequenza.
 \end{itemize}
@@ -487,7 +492,7 @@ l'autenticazione e l'autorizzazione degli utenti.
 \noindent
 Di seguito sono riportate le classi principali che compongono la configurazione della sicurezza:
 \begin{itemize}
-  \item La classe \textbf{WebConfig} si occupa di configurare le impostazioni di sicurezza del web, come i CORS e le risorse statiche.
+  \item La classe \textbf{WebConfig} si occupa di configurare le impostazioni di sicurezza del web come i CORS.
   Nel nostro caso ci permette di effettuare richieste dallo stesso IP del server, ma su porte diverse (per esempio, il frontend).
   \item La classe \textbf{JwtFilter} si occupa di filtrare le richieste HTTP e di verificare se l'utente è autenticato tramite un token JWT.
   I token JWT (JSON Web Token) sono un modo per rappresentare le informazioni di autenticazione in modo sicuro e compatto.
@@ -568,10 +573,9 @@ e sono defiiniti nel modo seguente:
 \begin{itemize}
   \item \textbf{loggedId}: è l'id dell'utente che è autenticato
   con un JWT token valido.
-  \item \textbf{anyUserId}: è l'id di un qualsiasi utente
   \item \textbf{anyPatientId}: è l'id di un qualsiasi paziente, quindi può 
   essere un paziente che non è l'utente autenticato
-  \item \textbf{userId}: è l'id di un utente qualsiasi, può essere anche un utente non autenticato
+  \item \textbf{anyUserId}: è l'id di un utente qualsiasi, può essere anche un utente non autenticato
 \end{itemize}
 
 \subsubsection{Model: repository e service layer}
@@ -586,11 +590,11 @@ Questi layer sono:
   \item \textbf{Repository}: è il package che contiene le interfacce dei repository, che sono utilizzate per interagire con il database. 
   Abbiamo utilizzato JPA (Jakarta Persistance API) Repository di Spring Boot, che ci ha permesso di immagazinare e ottenere i dati da un 
   database relazionale. 
-  Le interfacce dei repository estendono \textit{JpaRepository} e forniscono i metodi per effettuare le operazioni CRUD sui dati.
+  Le interfacce dei repository estendono \textit{JpaRepository} e implementa automaticante i metodi per effettuare le operazioni CRUD sui dati.
   \item \textbf{Service}: è il package che contiene le classi dei servizi, che sono utilizzate per gestire la logica di business del software. 
   Infatti, le classi dei servizi implementano l'interfaccia \textit{CrudService} che contiene i metodi CRUD che ogni servizio deve implementare.
   I servizi astraggono e ampliano le funzionalità della repository.
-  I servizi sono utilizzati dai controller per gestire le richieste degli utenti e interagire con i repository.
+  I servizi sono utilizzati dai controller per gestire le richieste degli utenti e interagire con il database.
 \end{itemize}
 Il controller (vedi figura \ref{fig:controller}) come già stato detto, utilizza il Model per 
 gestire le richieste degli utenti e interagire con i dati. 
