@@ -15,8 +15,6 @@ export async function login(email: string, password: string): Promise<Response> 
 export async function register(
 	user: NestedRequiredBy<User, 'email' | 'password' | 'role'>
 ): Promise<Response> {
-	console.log('Registering user:', user);
-
 	return fetch(PUBLIC_API_BASE + '/register', {
 		method: 'POST',
 		headers: {

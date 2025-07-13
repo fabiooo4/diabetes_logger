@@ -39,7 +39,6 @@ ensure_mysql() {
 setup_database() {
   echo -n "Setting up database '${db_name}' and user '${db_user}'... "
   mysql --protocol=tcp -h "${db_host}" -P "${db_port}" -u root -p << SQL
-DROP DATABASE \`${db_name}\`;
 CREATE DATABASE IF NOT EXISTS \`${db_name}\`;
 CREATE USER IF NOT EXISTS '${db_user}'@'localhost' IDENTIFIED BY '${db_pass}';
 GRANT ALL PRIVILEGES ON \`${db_name}\`.* TO '${db_user}'@'localhost';

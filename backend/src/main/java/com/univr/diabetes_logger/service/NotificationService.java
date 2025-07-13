@@ -107,7 +107,7 @@ public class NotificationService implements CrudService<Notification> {
   }
 
   // Run this every fixed amount of time
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 30)
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1)
   public void checkMissingReports() {
     List<Report> reports = reportRepository.findAll();
     List<Patient> patients = patientRepository.findAll();
@@ -122,8 +122,9 @@ public class NotificationService implements CrudService<Notification> {
 
       if (mostRecent.isPresent()) {
         if (mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
-          NotifyAllMedics(
-              patient.getFirstName() + " " + patient.getLastName() + " has not submitted a report in the last 3 days!");
+          notificationRepository.save(new Notification(patient.getFirstName() + " " + patient.getLastName() +
+                  " has not submitted a report in the last 3 days!", false, LocalDateTime.now(),
+                  patient.getReferralMedic().getUser()));
         }
       }
     }
@@ -137,7 +138,7 @@ public class NotificationService implements CrudService<Notification> {
     }
   }
 
-  public void NotifyAllMedics(String message) {
+  public void notifyAllMedics(String message) {
     for (Medic medic : medicRepository.findAll()) {
       notificationRepository.save(new Notification(message,
           false, LocalDateTime.now(), medic.getUser()));

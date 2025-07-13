@@ -107,23 +107,19 @@ ha bisogno di inserire dati quali: sintomi, rilevazione glicemica, eventuali alt
   \begin{enumerate}[nosep]
     \item Il paziente accede alla sua home page
     \item Il paziente entra dentro l'area di inserimento dei dati giornalieri
-    \item  Il paziente inserisce il dato della sua glicemia prima pasto e dopo pasto
+    \item  Il paziente inserisce i dati della sua rilevazione inclusa data e ora:
       \begin{itemize}
-        \item  Il paziente può aprire un ulteriore finestra per inserire i sintomi, le terapie e le patologie, con oppurtuna data 
-        \item  Può anche inserire le assunzioni di insulina o qualsiasi farmaco prescritto dal diabetologo, specificandone giorno, ora, farmaco e quantità assunta
+        \item  Può inserire i sintomi e patalogie
+        \item  Può anche inserire le assunzioni di insulina o qualsiasi farmaco prescritto dal diabetologo specificandone farmaco e quantità assunta
       \end{itemize}
-    \item Il paziente inserisce la data e ora di rilevazione
     \item Il paziente conferma l'inserimento dei dati
   \end{enumerate}
   \textbf{Postcondizioni}: La rilevazione è inserita 
 \end{mdframed}
 \noindent
 Andiamo a specificare come viene gestito \textbf{l'inserimento dei dati} del paziente: i dati glicemici sono quelli
-che il paziente inserisce giornalmente e obbligatori per inviare le rilevazioni. Dopo aver inserito i dati, l'utente può anche:
-\begin{itemize}
-  \item inserire specifiche sulla patalogia, terapia o sintomi
-  \item inserire le assunzioni di insulina o qualsiasi altro farmo prescritto dal diabetologo
-\end{itemize}
+che il paziente inserisce giornalmente per inviare le rilevazioni. L'utente può anche inserire sintomi 
+o patologie.
 
 \begin{figure}[H]
   \centering
@@ -162,7 +158,7 @@ Il medico una volta che ha acceduto alla sua area riservata può visualizzare i 
     \item Il medico può decidere tra le seguenti opzioni:
       \begin{itemize}
         \item Aggiungere o modificare la terapia del paziente
-        \item Aggiungere o modificare le note di un paziente
+        \item Aggiungere o modificare le note (Fattore di rischio, patologie, ecc.)
       \end{itemize}
     \item Il medico conferma le modifiche
     \item Il sistema aggiorna i dati del paziente
@@ -183,7 +179,7 @@ Il medico una volta che ha acceduto alla sua area riservata può visualizzare i 
 
 \subsection{Ricezione delle notifiche}
 
-Il paziente può ricevere notifiche dal sistema; se il pazienta si dimentica di assumere i farmaci
+Il paziente e il medico possono ricevere notifiche dal sistema; se il paziente si dimentica di assumere i farmaci
 il sistema può inviare una notifica per ricordarglielo. 
 
 \begin{mdframed}

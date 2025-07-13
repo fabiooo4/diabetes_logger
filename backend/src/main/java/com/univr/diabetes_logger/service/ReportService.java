@@ -62,14 +62,14 @@ public class ReportService implements CrudService<Report> {
   }
 
   private void notifyCritical(String fullName, int glycemia) {
-    notificationService.NotifyAllMedics(
+    notificationService.notifyAllMedics(
         "ATTENTION, " + fullName +
             " has surpassed the glycemia level threshold with a level of " +
             glycemia + ", URGENT CHECK");
   }
 
   private void notifyWarning(String fullName, int glycemia) {
-    notificationService.NotifyAllMedics(
+    notificationService.notifyAllMedics(
         fullName + " has surpassed the glycemia " +
             "level threshold with a level of " + glycemia);
   }
