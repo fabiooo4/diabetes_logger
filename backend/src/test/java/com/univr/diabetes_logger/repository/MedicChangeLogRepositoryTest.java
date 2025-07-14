@@ -25,18 +25,31 @@ public class MedicChangeLogRepositoryTest {
   @Autowired
   private MedicChangeLogRepository medicChangeLogRepository;
 
+  @Autowired
+  private MedicRepository medicRepository;
+
+  @Autowired
+  private PatientRepository patientRepository;
+
+  @Autowired
+  private UserRepository userRepository;
+
   @Test
   @Order(1)
   @Rollback(value = false)
   public void createMedicChangeLogTest() {
 
     // Action
-    Medic medic = new Medic(new User("medic@gmail.com", "medic", Role.MEDIC, true),
-        "name", "lastname");
+    User medicUser = userRepository.save(new User("medic@gmail.com", "medic", Role.MEDIC, true));
 
-    Patient patient = new Patient(new User("testmail", "pass", User.Role.PATIENT, true),
-        "TestFirstName", "TestLastName",
+    Medic medic = new Medic(medicUser,
+        "name", "lastname");
+    medic = medicRepository.save(medic);
+
+    User patientUser = userRepository.save(new User("testmail", "pass", User.Role.PATIENT, true));
+    Patient patient = new Patient(patientUser, "TestFirstName", "TestLastName",
         LocalDate.of(2000, 1, 1), medic);
+    patient = patientRepository.save(patient);
 
     MedicChangeLog medicChangeLog = new MedicChangeLog(medic, patient, "Modified x",
         LocalDateTime.of(2018, 12, 1, 12, 0));

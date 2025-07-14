@@ -2,7 +2,6 @@ package com.univr.diabetes_logger.service;
 
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.Report;
-import com.univr.diabetes_logger.repository.MedicRepository;
 import com.univr.diabetes_logger.repository.ReportRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.User;
-import com.univr.diabetes_logger.model.User.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

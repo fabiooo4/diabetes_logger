@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
+
 import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.User;
@@ -18,12 +19,18 @@ import com.univr.diabetes_logger.model.User.Role;
 
 /**
  * PatientRepositoryTest
-*/
+ */
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PatientRepositoryTest {
   @Autowired
   private PatientRepository patientRepository;
+
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private MedicRepository medicRepository;
 
   @Test
   @Order(1)
@@ -31,10 +38,12 @@ public class PatientRepositoryTest {
   public void createPatientTest() {
 
     // Action
-    Patient patient = new Patient(new User("testmail", "pass", Role.PATIENT,true),
-            "TestFirstName", "TestLastName",
-        LocalDate.of(2000, 1, 1), new Medic(new User("medicmail",
-            "pass", Role.MEDIC, true), "TestMedic", "lastname"));
+    User patientUser = userRepository.save(new User("testmail", "pass", Role.PATIENT, true));
+    User medicUser = userRepository.save(new User("medicmail", "pass", Role.MEDIC, true));
+    Medic medic = medicRepository.save(new Medic(medicUser, "TestMedic", "lastname"));
+
+    Patient patient = new Patient(patientUser, "TestFirstName", "TestLastName", LocalDate.of(2000, 1, 1),
+        medic);
     patientRepository.save(patient);
 
     // Verify
