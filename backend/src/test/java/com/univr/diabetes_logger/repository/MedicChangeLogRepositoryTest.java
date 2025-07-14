@@ -2,7 +2,6 @@ package com.univr.diabetes_logger.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,77 +22,80 @@ import com.univr.diabetes_logger.model.User.Role;
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MedicChangeLogRepositoryTest {
-    @Autowired
-    private MedicChangeLogRepository medicChangeLogRepository;
+  @Autowired
+  private MedicChangeLogRepository medicChangeLogRepository;
 
-    @Test
-    @Order(1)
-    @Rollback(value = false)
-    public void createMedicChangeLogTest() {
+  @Test
+  @Order(1)
+  @Rollback(value = false)
+  public void createMedicChangeLogTest() {
 
-        // Action
-        Medic medic = new Medic(new User("medic@gmail.com", "medic", Role.MEDIC, true),
-                "name", "lastname");
-        Patient patient = new Patient(new User("testmail", "pass", User.Role.PATIENT,true),
-                "TestFirstName", "TestLastName",
-                LocalDate.of(2000, 1, 1), new Medic(new User("medicmail",
-                "pass", User.Role.MEDIC, true), "TestMedic", "lastname"));
-        MedicChangeLog medicChangeLog = new MedicChangeLog(medic, patient, "Modified x",
-                LocalDateTime.of(2018, 12, 1, 12, 0));
+    // Action
+    Medic medic = new Medic(new User("medic@gmail.com", "medic", Role.MEDIC, true),
+        "name", "lastname");
 
-        // Verify
-        System.out.println(medicChangeLog);
-        assertThat(medicChangeLog.getId()).isNotNull();
-    }
+    Patient patient = new Patient(new User("testmail", "pass", User.Role.PATIENT, true),
+        "TestFirstName", "TestLastName",
+        LocalDate.of(2000, 1, 1), medic);
 
-    @Test
-    @Order(2)
-    public void getLogByIdTest() {
-        // Action
-        MedicChangeLog found = medicChangeLogRepository.findById(1).get();
+    MedicChangeLog medicChangeLog = new MedicChangeLog(medic, patient, "Modified x",
+        LocalDateTime.of(2018, 12, 1, 12, 0));
 
-        // Verify
-        System.out.println(found);
-        assertThat(found.getId()).isEqualTo(1);
-    }
+    medicChangeLogRepository.save(medicChangeLog);
 
-    @Test
-    @Order(3)
-    public void getAllMedicChangeLogTest() {
-        // Action
-        List<MedicChangeLog> mcl = medicChangeLogRepository.findAll();
+    // Verify
+    System.out.println(medicChangeLog);
+    assertThat(medicChangeLog.getId()).isNotNull();
+  }
 
-        // Verify
-        System.out.println(mcl);
-        assertThat(mcl.size()).isGreaterThan(0);
-    }
+  @Test
+  @Order(2)
+  public void getLogByIdTest() {
+    // Action
+    MedicChangeLog found = medicChangeLogRepository.findById(1).get();
 
-    @Test
-    @Order(4)
-    @Rollback(value = false)
-    public void updateMedicChangeLogTest() {
-        // Action
-        MedicChangeLog mcl = medicChangeLogRepository.findById(1).get();
-        mcl.setAction("Update");
-        mcl.setTimestamp(LocalDateTime.of(2018, 12, 1, 12, 0));
-        MedicChangeLog updated = medicChangeLogRepository.save(mcl);
+    // Verify
+    System.out.println(found);
+    assertThat(found.getId()).isEqualTo(1);
+  }
 
-        // Verify
-        System.out.println(updated);
-        assertThat(updated.getAction()).isEqualTo("Update");
-        assertThat(updated.getTimestamp()).isEqualTo(LocalDateTime.of(2018, 12, 1, 12, 0));
-    }
+  @Test
+  @Order(3)
+  public void getAllMedicChangeLogTest() {
+    // Action
+    List<MedicChangeLog> mcl = medicChangeLogRepository.findAll();
 
-    @Test
-    @Order(5)
-    @Rollback(value = false)
-    public void deleteChangeLogTest() {
-        // Action
-        MedicChangeLog patient = medicChangeLogRepository.findById(1).get();
-        medicChangeLogRepository.delete(patient);
+    // Verify
+    System.out.println(mcl);
+    assertThat(mcl.size()).isGreaterThan(0);
+  }
 
-        // Verify
-        MedicChangeLog deleted = medicChangeLogRepository.findById(1).orElse(null);
-        assertThat(deleted).isNull();
-    }
+  @Test
+  @Order(4)
+  @Rollback(value = false)
+  public void updateMedicChangeLogTest() {
+    // Action
+    MedicChangeLog mcl = medicChangeLogRepository.findById(1).get();
+    mcl.setAction("Update");
+    mcl.setTimestamp(LocalDateTime.of(2018, 12, 1, 12, 0));
+    MedicChangeLog updated = medicChangeLogRepository.save(mcl);
+
+    // Verify
+    System.out.println(updated);
+    assertThat(updated.getAction()).isEqualTo("Update");
+    assertThat(updated.getTimestamp()).isEqualTo(LocalDateTime.of(2018, 12, 1, 12, 0));
+  }
+
+  @Test
+  @Order(5)
+  @Rollback(value = false)
+  public void deleteChangeLogTest() {
+    // Action
+    MedicChangeLog patient = medicChangeLogRepository.findById(1).get();
+    medicChangeLogRepository.delete(patient);
+
+    // Verify
+    MedicChangeLog deleted = medicChangeLogRepository.findById(1).orElse(null);
+    assertThat(deleted).isNull();
+  }
 }

@@ -5,7 +5,9 @@ import com.univr.diabetes_logger.model.Medic;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.model.User;
 import com.univr.diabetes_logger.model.User.Role;
+import com.univr.diabetes_logger.service.JwtService;
 import com.univr.diabetes_logger.service.PatientService;
+import com.univr.diabetes_logger.service.UserService;
 
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
@@ -39,6 +41,10 @@ public class PatientControllerTest {
 
   @MockitoBean
   private PatientService patientService;
+  @MockitoBean
+  private UserService userService;
+  @MockitoBean
+  private JwtService jwtService;
 
   @Autowired
   private ObjectMapper objectMapper;

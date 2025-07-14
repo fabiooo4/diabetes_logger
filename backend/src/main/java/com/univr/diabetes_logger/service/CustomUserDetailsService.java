@@ -20,7 +20,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   public CustomUserDetails loadUserByUsername(String email) throws NoSuchElementException {
-    User user = userRepository.findByEmail(email).orElseThrow();
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new NoSuchElementException("User not found with email: " + email));
 
     return new CustomUserDetails(user);
   }

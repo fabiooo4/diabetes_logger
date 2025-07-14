@@ -28,7 +28,7 @@ public class LoadDatabase {
       NotificationService notificationService, ReportService reportService,
       MedicChangeLogService medicChangeLogService) {
     return args -> {
-       log.info("Clearing database");
+       /* log.info("Clearing database");
 
        medicChangeLogRepository.deleteAll();
        medicChangeLogRepository.flush();
@@ -94,7 +94,7 @@ public class LoadDatabase {
        false, LocalDateTime.of(2025, 7,
        21, 20, 13), medic_user));
 
-       log.info("Preloading notifications " + notif);
+       log.info("Preloading notifications " + notif); */
     };
   }
 }
