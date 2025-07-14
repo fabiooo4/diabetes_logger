@@ -42,7 +42,7 @@ public class ReportServiceTest {
                 LocalDate.of(2000, 1, 1), new Medic(new User("medicmail",
                 "pass", User.Role.MEDIC, true), "TestMedic", "lastname"));
         report = new Report(120, true, "None", "None",
-                LocalDateTime.now(), "Insuline", 3, patient);
+                LocalDateTime.now(), "Insuline", 3., patient);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ReportServiceTest {
         report.setDateTime(LocalDateTime.of(2000, 1,1,10,10,10));
         report.setSymptoms("Ciao");
         report.setNotes("Ciao");
-        report.setAmount(3);
+        report.setAmount(3.);
         report.setMedicine("No");
         given(reportRepository.save(report)).willReturn(report);
 
