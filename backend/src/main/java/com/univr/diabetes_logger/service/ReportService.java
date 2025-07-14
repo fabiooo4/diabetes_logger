@@ -173,7 +173,7 @@ public class ReportService implements CrudService<Report> {
       existingReport.setMedicine(medicine);
     }
 
-    Integer amount = report.getAmount();
+    Double amount = report.getAmount();
     if (amount != null) {
       existingReport.setAmount(amount);
     }

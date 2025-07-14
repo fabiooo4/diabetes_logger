@@ -35,7 +35,7 @@ public class ReportRepositoryTest {
                 LocalDate.of(2000, 1, 1), new Medic(new User("medicmail",
                 "pass", User.Role.MEDIC, true), "TestMedic", "lastname"));
         Report report = new Report(120, true, "None", "None",
-                LocalDateTime.now(), "Insuline", 3, patient);
+                LocalDateTime.now(), "Insuline", 3., patient);
         reportRepository.save(report);
 
         // Verify
@@ -76,7 +76,7 @@ public class ReportRepositoryTest {
         report.setDateTime(LocalDateTime.of(2000, 1,1,10,10,10));
         report.setSymptoms("Ciao");
         report.setNotes("Ciao");
-        report.setAmount(3);
+        report.setAmount(3.);
         report.setMedicine("No");
         Report updated = reportRepository.save(report);
 

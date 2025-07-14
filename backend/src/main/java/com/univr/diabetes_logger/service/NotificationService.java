@@ -123,8 +123,8 @@ public class NotificationService implements CrudService<Notification> {
       if (mostRecent.isPresent()) {
         if (mostRecent.get().getDateTime().isBefore(LocalDateTime.now().minusDays(3))) {
           notificationRepository.save(new Notification(patient.getFirstName() + " " + patient.getLastName() +
-                  " has not submitted a report in the last 3 days!", false, LocalDateTime.now(),
-                  patient.getReferralMedic().getUser()));
+              " has not submitted a report in the last 3 days!", false, LocalDateTime.now(),
+              patient.getReferralMedic().getUser()));
         }
       }
     }

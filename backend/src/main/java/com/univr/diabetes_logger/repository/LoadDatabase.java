@@ -87,7 +87,7 @@ public class LoadDatabase {
        Report report = reportService.create(new Report(120, false,
        "Stomachache", "None", LocalDateTime.of(LocalDate.of(2000, 1, 1),
        LocalTime.of(1, 1, 1)),
-       "Insuline", 100, patient1));
+       "Insuline", 100., patient1));
        log.info("Preloading report " + report);
 
        Notification notif = notificationService.create(new Notification("Ok.",
