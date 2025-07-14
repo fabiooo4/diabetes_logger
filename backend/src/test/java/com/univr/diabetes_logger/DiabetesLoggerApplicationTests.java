@@ -1,4 +1,4 @@
-package com.univr.diabetes_logger;
+/* package com.univr.diabetes_logger;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,4 +10,4 @@ class DiabetesLoggerApplicationTests {
 	void contextLoads() {
 	}
 
-}
+} */

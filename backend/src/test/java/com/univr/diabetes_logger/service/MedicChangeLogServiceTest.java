@@ -3,7 +3,6 @@ package com.univr.diabetes_logger.service;
 import com.univr.diabetes_logger.model.MedicChangeLog;
 import com.univr.diabetes_logger.model.Patient;
 import com.univr.diabetes_logger.repository.MedicChangeLogRepository;
-import com.univr.diabetes_logger.repository.MedicRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

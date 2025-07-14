@@ -1,8 +1,6 @@
 package com.univr.diabetes_logger.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
 import java.util.List;
 
 import com.univr.diabetes_logger.model.Therapy;

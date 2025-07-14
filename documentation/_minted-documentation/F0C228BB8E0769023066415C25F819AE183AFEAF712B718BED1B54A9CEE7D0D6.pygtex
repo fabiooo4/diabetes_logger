@@ -5,16 +5,36 @@
 \PYG{+w}{  }\PYG{n+nd}{@Autowired}
 \PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{PatientRepository}\PYG{+w}{ }\PYG{n}{patientRepository}\PYG{p}{;}
 
+\PYG{+w}{  }\PYG{n+nd}{@Autowired}
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{UserRepository}\PYG{+w}{ }\PYG{n}{userRepository}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nd}{@Autowired}
+\PYG{+w}{  }\PYG{k+kd}{private}\PYG{+w}{ }\PYG{n}{MedicRepository}\PYG{+w}{ }\PYG{n}{medicRepository}\PYG{p}{;}
+
 \PYG{+w}{  }\PYG{n+nd}{@Test}
 \PYG{+w}{  }\PYG{n+nd}{@Order}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
 \PYG{+w}{  }\PYG{n+nd}{@Rollback}\PYG{p}{(}\PYG{n}{value}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k+kc}{false}\PYG{p}{)}
 \PYG{+w}{  }\PYG{k+kd}{public}\PYG{+w}{ }\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{createPatientTest}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 
 \PYG{+w}{    }\PYG{c+c1}{// Action}
-\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{patient}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Patient}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}testmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}pass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{PATIENT}\PYG{p}{,}\PYG{k+kc}{true}\PYG{p}{),}
-\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}TestFirstName\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}TestLastName\PYGZdq{}}\PYG{p}{,}
-\PYG{+w}{        }\PYG{n}{LocalDate}\PYG{p}{.}\PYG{n+na}{of}\PYG{p}{(}\PYG{l+m+mi}{2000}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Medic}\PYG{p}{(}\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}medicmail\PYGZdq{}}\PYG{p}{,}
-\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}pass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{MEDIC}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{),}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}TestMedic\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lastname\PYGZdq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n}{User}\PYG{+w}{ }\PYG{n}{patientUser}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{userRepository}\PYG{p}{.}\PYG{n+na}{save}\PYG{p}{(}
+\PYG{+w}{      }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}testmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}pass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{PATIENT}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{User}\PYG{+w}{ }\PYG{n}{medicUser}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{userRepository}\PYG{p}{.}\PYG{n+na}{save}\PYG{p}{(}
+\PYG{+w}{      }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{User}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}medicmail\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}pass\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Role}\PYG{p}{.}\PYG{n+na}{MEDIC}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{Medic}\PYG{+w}{ }\PYG{n}{medic}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{medicRepository}\PYG{p}{.}\PYG{n+na}{save}\PYG{p}{(}
+\PYG{+w}{      }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Medic}\PYG{p}{(}\PYG{n}{medicUser}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}TestMedic\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}lastname\PYGZdq{}}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n}{Patient}\PYG{+w}{ }\PYG{n}{patient}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{k}{new}\PYG{+w}{ }\PYG{n}{Patient}\PYG{p}{(}
+\PYG{+w}{      }\PYG{n}{patientUser}\PYG{p}{,}
+\PYG{+w}{      }\PYG{l+s}{\PYGZdq{}TestFirstName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{      }\PYG{l+s}{\PYGZdq{}TestLastName\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{      }\PYG{n}{LocalDate}\PYG{p}{.}\PYG{n+na}{of}\PYG{p}{(}\PYG{l+m+mi}{2000}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{),}
+\PYG{+w}{      }\PYG{n}{medic}
+\PYG{+w}{    }\PYG{p}{);}
+
 \PYG{+w}{    }\PYG{n}{patientRepository}\PYG{p}{.}\PYG{n+na}{save}\PYG{p}{(}\PYG{n}{patient}\PYG{p}{);}
 
 \PYG{+w}{    }\PYG{c+c1}{// Verify}

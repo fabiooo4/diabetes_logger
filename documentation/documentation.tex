@@ -630,12 +630,18 @@ Per testare il software sono stati utilizzati diversi tipi di test, tra cui:
 \begin{itemize}
   \item Revisione del codice: il codice è stato revisionato da entrambi i membri del team per garantire che fosse scritto 
   in modo che rispettasse le specifiche del progetto e che fosse facilmente comprensibile.
+
   \item Verifica della consistenza: sono stati effettuati test per verificare che il software fosse coerente con le specifiche del progetto e che
-  funzionasse come previsto, tramite i Bean @WebMvcTest di Spring Boot che permettono di testare i controller e le loro interazioni con il Model.
+  funzionasse come previsto, tramite i test di Spring Boot che permettono di testare i componenti e le loro interazioni.
   Questo tipo di test è automatizzato grazie all'API di JUnit. 
-  \item È stato usato @DataJpaTest per testare le interazioni con il database e verificare che le operazioni CRUD funzionassero correttamente.
-  \item È stato fatto gran uso di Postman per testare le API REST del software, verificando che le richieste HTTP restituissero i risultati attesi.
+
+  \item È stato usato @DataJpaTest per testare le interazioni con un database di test e verificare che le operazioni CRUD funzionassero correttamente.
+
+  \item È stato fatto gran uso di Postman per testare tutti i controller del software che
+    espongono degli endpoint, verificando che le richieste HTTP restituissero i risultati attesi.
+
   \item Il software è stato testato dagli sviluppatori
+
   \item Il software è stato testato da un utente generico
 \end{itemize}
 
@@ -649,13 +655,20 @@ cercare di trovare eventuali bug o errori di logica, in modo da correggerli prim
 Abbiamo dato più attenzione specialmente agli use case del paziente e del medico (insieme a quello che
 può fare solo l'amministratore), in quanto sono le funzionalità principali del software.
 
-\subsection{Test con @WebMvcTest e @DataJpaTest}
+\subsection{Test dei service e dei repository}
 
-Per testare il software sono stati utilizzati i Bean di Spring Boot @WebMvcTest e @DataJpaTest, che permettono di testare i controller 
-e le interazioni con un database di test salvato in memoria. Quello che segue 
+I test del codice sono satati inseriti nell'apposita cartella test e sono degli unit test
+che verificano il corretto funzionamento dei Repository e dei Service.
+Per testare il software è stata utilizzata l'annotazione di Spring Boot @DataJpaTest,
+che permette di testare le interazioni con un database di test salvato in memoria. Quello che segue 
 è un esempio di test per il repository del paziente, che verifica le operazioni CRUD (Create, Read, Update, Delete).
 Le funzioni con il tag @Test sono i test veri e propri e ad ogni test è stato assegnato un ordine tramite l'annotazione @Order.
 Effettuiamo l'azione e verifichiamo che il risultato sia quello atteso, utilizzando le asserzioni di JUnit.
+
+La stessa cosa è stata fatta per tutti i repository e i service del Model, mentre invece
+per il controller non sono stati fatti degli unit test, siccome non è stato possibile
+creare un token JWT di test valido per le richieste HTTP; ma tutti i controller sono
+stati testati manualmente tramite Postman, come vedremo nella sezione successiva.
 
 \begin{minted}{java}  
 @DataJpaTest
@@ -664,16 +677,36 @@ public class PatientRepositoryTest {
   @Autowired
   private PatientRepository patientRepository;
 
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private MedicRepository medicRepository;
+
   @Test
   @Order(1)
   @Rollback(value = false)
   public void createPatientTest() {
 
     // Action
-    Patient patient = new Patient(new User("testmail", "pass", Role.PATIENT,true),
-            "TestFirstName", "TestLastName",
-        LocalDate.of(2000, 1, 1), new Medic(new User("medicmail",
-            "pass", Role.MEDIC, true), "TestMedic", "lastname"));
+    User patientUser = userRepository.save(
+      new User("testmail", "pass", Role.PATIENT, true)
+    );
+    User medicUser = userRepository.save(
+      new User("medicmail", "pass", Role.MEDIC, true)
+    );
+    Medic medic = medicRepository.save(
+      new Medic(medicUser, "TestMedic", "lastname")
+    );
+
+    Patient patient = new Patient(
+      patientUser,
+      "TestFirstName",
+      "TestLastName",
+      LocalDate.of(2000, 1, 1),
+      medic
+    );
+
     patientRepository.save(patient);
 
     // Verify
@@ -734,161 +767,10 @@ public class PatientRepositoryTest {
 }
 \end{minted}
 \noindent
-Il prossimo codice invece è preso dal test di un controller, più precisamente il controller dei pazienti.
-\begin{minted}{java}
-@WebMvcTest(PatientController.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PatientControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+\subsection{Test dei controller}
 
-  @MockitoBean
-  private PatientService patientService;
-
-  @Autowired
-  private ObjectMapper objectMapper;
-
-  private Patient patient;
-
-  @BeforeEach
-  public void setup() {
-    patient = new Patient(new User("usermail", "pass1", Role.PATIENT,true),
-            "Nome", "Cognome", LocalDate.of(2000, 1, 1),
-        new Medic(new User("medicmail", "medicpass", Role.MEDIC, true),
-                "FirstName", "LastName"));
-    patient.setId(1); // Set a mock ID for testing
-  }
-
-  // Post Controller
-  @Test
-  @Order(1)
-  public void createPatientTest() throws Exception {
-    // precondition
-    given(patientService.create(any(Patient.class))).willReturn(patient);
-
-    // action
-    ResultActions response = mockMvc.perform(post("/patients")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(patient)));
-
-    // verify
-    response.andDo(print()).andExpect(status().isCreated())
-        .andExpect(jsonPath("$.firstName",
-            is(patient.getFirstName())))
-        .andExpect(jsonPath("$.lastName",
-            is(patient.getLastName())))
-        .andExpect(jsonPath("$.birthDate",
-            is(patient.getBirthDate())))
-        .andExpect(jsonPath("$.referralMedic.id", 
-        is(patient.getReferralMedic().getId())));
-  }
-
-  // Get Controller
-  @Test
-  @Order(2)
-  public void getAllPatientsTest() throws Exception {
-    // precondition
-    List<Patient> patientsList = new ArrayList<>();
-    patientsList.add(patient);
-    patientsList
-        .add(
-                new Patient(new User("testmail", "testpass", 
-                        Role.PATIENT,true), "test",
-                        "test", LocalDate.of(2000, 1, 1),
-                new Medic(new User("testmedicmail", "testpass", Role.MEDIC, true),
-                        "testMedic", "lastname")));
-    given(patientService.getAll()).willReturn(patientsList);
-
-    // action
-    ResultActions response = mockMvc.perform(get("/patients"));
-
-    // verify
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.size()",
-            is(patientsList.size())));
-  }
-
-  @Test
-  @Order(3)
-  public void getPatientByIdTest() throws Exception {
-    // precondition
-    given(patientService.getById(patient.getId())).willReturn(Optional.of(patient));
-
-    // action
-    ResultActions response = mockMvc.perform(get("/patients/{id}", patient.getId()));
-
-    // verify
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.firstName",
-            is(patient.getFirstName())))
-        .andExpect(jsonPath("$.lastName",
-            is(patient.getLastName())))
-        .andExpect(jsonPath("$.birthDate",
-            is(patient.getBirthDate())))
-        .andExpect(jsonPath("$.referralMedic.id", 
-        is(patient.getReferralMedic().getId())));
-  }
-
-  // Put Controller
-  @Test
-  @Order(4)
-  public void updatePatientTest() throws Exception {
-    // precondition
-    patient.setFirstName("UpdatedFirst");
-    patient.setLastName("UpdatedLast");
-    given(patientService.update(any(Integer.class), 
-    any(Patient.class))).willReturn(patient);
-
-    // action
-    ResultActions response = mockMvc.perform(put("/patients/{id}", patient.getId())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(patient)));
-
-    // verify
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.firstName",
-            is(patient.getFirstName())))
-        .andExpect(jsonPath("$.lastName",
-            is(patient.getLastName())))
-        .andExpect(jsonPath("$.birthDate",
-            is(patient.getBirthDate())))
-        .andExpect(jsonPath("$.referralMedic.id", 
-        is(patient.getReferralMedic().getId())));
-  }
-
-  // Delete Controller
-  @Test
-  @Order(5)
-  public void deletePatientTest() throws Exception {
-    // precondition
-    given(patientService.delete(patient.getId())).willReturn(patient);
-
-    // action
-    ResultActions response = mockMvc.perform(delete("/patients/{id}", patient.getId()));
-
-    // verify
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.firstName",
-            is(patient.getFirstName())))
-        .andExpect(jsonPath("$.lastName",
-            is(patient.getLastName())))
-        .andExpect(jsonPath("$.birthDate",
-            is(patient.getBirthDate())))
-        .andExpect(jsonPath("$.referralMedic.id", 
-        is(patient.getReferralMedic().getId())));
-  }
-
-}
-\end{minted}
-
-\subsection{Postman}
-
-Per \textbf{testare le API REST} del software, è stato utilizzato \textit{Postman}, un tool che permette di inviare richieste HTTP 
+Per \textbf{testare le API REST} del software, cioè quello che i controller espongono, è stato utilizzato \textit{Postman}, un tool che permette di inviare richieste HTTP 
 e di visualizzare le risposte. Ne è stato fatto un uso intensivo per testare le API del software,
 poiché per testare le API REST è necessario inviare richieste HTTP e verificare le risposte.
 Il nostro environment di Postman permette di simulare l'autenticazione degli utenti e di verificarne 
