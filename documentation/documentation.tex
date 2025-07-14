@@ -128,7 +128,7 @@ o patologie.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{sdPaziente}
+  \includegraphics[width=0.9\textwidth]{sdPaziente}
   \caption{Sequence Diagram della rilevazione del paziente}
   \label{fig:sdPaziente}
 \end{figure}
@@ -206,8 +206,8 @@ il sistema può inviare una notifica per ricordarglielo.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{sdNotifList.pdf}
-  \caption{Sequence Diagram della notifica con lista}
+  \includegraphics[width=0.8\textwidth]{sdNotifList.pdf}
+  \caption{Sequence Diagram della ricezione delle notifiche}
   \label{fig:sdNotifList}
 \end{figure}
 \noindent
@@ -219,6 +219,7 @@ Il sistema invia delle notifiche ai seguenti attori:
   \item \textbf{A tutti i medici}: per segnalare i pazienti che registrano
     livelli di glicemia sopra le soglie indicate.
 \end{itemize}
+Ogni volta che le notifiche vengono visualizzate vengono automaticamente segnate come lette.
 
 \subsection{Casi d'uso dell'amministratore}
 
@@ -474,8 +475,6 @@ Ora andremo a vedere quali sono i pattern implementati nel software e come sono 
   è il \textit{CrudService} che contiene i metodi CRUD che ogni servizio deve implementare.
   Mentre invece il \textit{DAO Concrete} sono i nostri servizi che implementano l'interfaccia \textit{CrudService} e contengono la logica di business.
   I nostri Value Object sono le entità del Model.
-  \item A sua volta, all'interno della configurazione per la sicurezza, è stato utilizzato il \textbf{Filter Pattern}
-  dove una serie di filtri (autenticazione, autorizzazione, ecc.) processano la richiesta in sequenza.
 \end{itemize}
 
 \subsubsection{Autenticazione e autorizzazione}
