@@ -107,7 +107,8 @@ public class NotificationService implements CrudService<Notification> {
   }
 
   // Run this every fixed amount of time
-  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1)
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1) // TODO: Only for testing
+  // @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 1)
   public void checkMissingReports() {
     List<Report> reports = reportRepository.findAll();
     List<Patient> patients = patientRepository.findAll();
@@ -130,7 +131,8 @@ public class NotificationService implements CrudService<Notification> {
     }
   }
 
-  @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 8)
+  @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 1) // TODO: Only for testing
+  // @Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 8)
   public void remindPatients() {
     for (Patient patient : patientRepository.findAll()) {
       notificationRepository.save(new Notification("Remember to write your daily report!",

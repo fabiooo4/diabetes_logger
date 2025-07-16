@@ -20,7 +20,7 @@
 	<ScrollArea.Root
 		class="border-muted bg-background shadow-card relative overflow-hidden rounded-[10px] border px-4 py-4"
 	>
-		<ScrollArea.Viewport class="h-full max-h-183 w-full">
+		<ScrollArea.Viewport class="h-full max-h-165 w-full">
 			{#await users}
 				<p>Loading users...</p>
 			{:then users}

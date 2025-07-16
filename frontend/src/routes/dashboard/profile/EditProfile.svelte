@@ -88,6 +88,7 @@
 								<input
 									type={showPassword ? 'text' : 'password'}
 									name="password"
+                  placeholder="Leave empty to keep the old password"
 									class="h-input rounded-card-sm border-border-input bg-background placeholder:text-foreground-alt/50 hover:border-dark-40 focus-within:border-border-input-hover focus-within:shadow-date-field-focus inline-flex w-full items-center border px-4 text-base ring-transparent transition-all focus:outline-hidden sm:text-sm"
 								/>
 								<button tabindex="-1" type="button" onclick={() => (showPassword = !showPassword)}>

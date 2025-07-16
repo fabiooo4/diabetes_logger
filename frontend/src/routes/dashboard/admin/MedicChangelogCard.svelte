@@ -8,7 +8,7 @@
 
 <div class="flex flex-col gap-y-8">
 	<div class="flex w-full flex-row items-center justify-between">
-		<h1 class="text-2xl font-bold h-12">Medic changelog</h1>
+		<h1 class="h-12 text-2xl font-bold">Medic changelog</h1>
 	</div>
 
 	<ScrollArea.Root
@@ -22,7 +22,7 @@
 					{#if changelog.length === 0}
 						<p class="text-muted-foreground">No logs available.</p>
 					{:else}
-						{#each changelog as log}
+						{#each changelog.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as log}
 							<LogEntry {log} />
 						{/each}
 					{/if}
