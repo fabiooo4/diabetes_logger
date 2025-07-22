@@ -1,9 +1,5 @@
 package com.univr.diabetes_logger.repository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import com.univr.diabetes_logger.model.*;
 import com.univr.diabetes_logger.service.*;
 import org.slf4j.Logger;

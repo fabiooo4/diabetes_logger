@@ -39,6 +39,12 @@ and one for macOS:
 ```bash
 ./startmac.sh
 ```
+Before running it, you need to install the following tools via brew or other package manager for MacOs:
+```bash
+brew install msql
+brew install maven
+brew install node
+```
 
 Before running the project, you need to install the frontend dependencies:
 ```bash
